@@ -208,7 +208,8 @@
                 <label for="inputCity">Kota</label>
                 <input type="text" id="inputCity" value="Mojokerto" readonly class="bg-gray-100 cursor-default">
             </div>
-        </div>
+            
+            </div>
 
         <div id="shifts-container" class="space-y-6">
             <div class="shift-block" data-shift="Pagi1">
@@ -289,7 +290,7 @@
                     </div>
                     <div class="input-group">
                         <label>Rincian Keterangan MCU (Per baris)</label>
-                        <textarea id="mcuKetPagi1" rows="2" placeholder="Contoh:&#10;Tn X MCU surat sehat"></textarea>
+                        <textarea id="mcuKetPagi1" rows="2" placeholder="Contoh:&#10;1. Tn X MCU surat sehat"></textarea>
                     </div>
                     <div class="input-group">
                         <label>Rujukan dari Puskesmas (Per baris)</label>
@@ -590,6 +591,20 @@
             <div id="copyMessage" class="mt-2 text-sm text-center text-green-700 font-medium hidden">Berhasil disalin!</div>
         </div>
 
+        <div class="mt-6 pt-4 border-t border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3 text-center">Tautan Cepat</h3>
+            <div class="flex flex-col md:flex-row gap-3">
+                <button id="navBtn1" class="flex-1 bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-4 rounded-xl transition duration-150 shadow-md">
+                    <span role="img" aria-label="emoji" class="mr-1">💻</span> Laporan Bulanan
+                </button>
+                <button id="navBtn2" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl transition duration-150 shadow-md">
+                    <span role="img" aria-label="emoji" class="mr-1">📑</span> Kalkulator Medis
+                </button>
+                <button id="navBtn3" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl transition duration-150 shadow-md">
+                    <span role="img" aria-label="emoji" class="mr-1">🔗</span> Coming Soon
+                </button>
+            </div>
+        </div>
         <div class="mt-8 border-t pt-6">
             <div id="changelogHeader" class="flex justify-between items-center cursor-pointer mb-2">
                 <h2 class="text-xl font-semibold text-gray-800">Changelog Aplikasi</h2>
@@ -600,6 +615,9 @@
                 <ul class="list-disc list-inside text-gray-600 space-y-2 pl-4">
                     <li class="font-semibold">Versi Terbaru</li>
                     <ul class="list-circle list-inside ml-4 text-sm space-y-1">
+                        <li>[29 Nov 2025] **Platform Baru**: Aplikasi sekarang sepenuhnya berbasis website dan tidak memerlukan penggunaan *local file* lagi.</li>
+                        <li>[29 Nov 2025] **Tautan Cepat Diperbarui**: Memperbarui URL untuk tombol 'Laporan Bulanan' (ke `https://igdrsdh.github.io/Laporan-Bulanan/`) dan 'Kalkulator Medis' (ke `https://igdrsdh.github.io/Multitool-IGD/`).</li>
+                        <li>[29 Nov 2025] **Perbaikan Salin Laporan**: Mengganti metode *copy* ke `document.execCommand('copy')` untuk kompatibilitas yang lebih baik.</li>
                         <li>[29 Nov 2025] **Perbaikan Tampilan Mode Gelap**: Penyesuaian warna teks untuk semua label, judul kecil, dan judul besar (h3) agar lebih kontras dan terbaca di Mode Gelap (Dark Mode).</li>
                         <li>[29 Nov 2025] **Tampilan Rapi**: Semua shift kini tertutup secara default saat aplikasi dibuka.</li>
                         <li>[28 Nov 2025] **Changelog**: Bagian Changelog dibuat menjadi *dropdown* yang dapat disembunyikan.</li>
@@ -1061,6 +1079,13 @@
 
             // 1. Reset semua input text, number, dan textarea
             allInputs.forEach(input => {
+                // --- FIX: JANGAN RESET inputCity, PASTIKAN NILAINYA ADALAH 'Mojokerto' ---
+                if (input.id === 'inputCity') {
+                    input.value = 'Mojokerto'; // Tetapkan kembali nilai default
+                    return; // Lewati sisa loop untuk elemen ini
+                }
+                // -------------------------------------------------------------------------
+                
                 if (input.type === 'number') {
                     input.value = '0'; // Reset input number ke 0
                 } else if (input.tagName === 'SELECT') {
@@ -1079,9 +1104,6 @@
                 }
             });
 
-            // 3. Reset input data umum (inputCity kini dibuat 'readonly' dan paten di HTML)
-            // document.getElementById('inputCity').value = 'Mojokerto'; // Dihapus karena sudah paten/readonly
-            
             // --- Hapus data dari Local Storage ---
             localStorage.removeItem('igdReportData');
             // ------------------------------------
@@ -1162,6 +1184,21 @@
 
             // 3. Jalankan generasi laporan pertama kali untuk menampilkan format awal
             generateReport();
+
+            // --- FUNGSI BARU: TOMBOL NAVIGASI (3 TOMBOL) ---
+            document.getElementById('navBtn1').addEventListener('click', () => {
+                // GANTI DENGAN URL WEBSITE 1
+                window.open('https://igdrsdh.github.io/Laporan-Bulanan/', '_blank'); 
+            });
+            document.getElementById('navBtn2').addEventListener('click', () => {
+                // GANTI DENGAN URL WEBSITE 2
+                window.open('https://igdrsdh.github.io/Multitool-IGD/', '_blank'); 
+            });
+            document.getElementById('navBtn3').addEventListener('click', () => {
+                // GANTI DENGAN URL WEBSITE 3
+                window.open('https://link-website-3.com', '_blank'); 
+            });
+            // ------------------------------------------
         }
     </script>
 </body>
