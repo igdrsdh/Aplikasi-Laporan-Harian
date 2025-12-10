@@ -147,7 +147,6 @@
 
         /* ===========================================
            PERBAIKAN TAMBAHAN UNTUK TEKS GELAP
-           (Rawat Inap, Rawat Jalan, Rincian Pembayaran, BPJS, UMUM, dll)
         =========================================== */
 
         /* Semua judul kecil di dalam section shift */
@@ -182,6 +181,11 @@
         .dark h3 {
             color: #f8fafc !important; /* Putih lembut */
         }
+        
+        /* DARK MODE UNTUK PESAN WARNING DOKTER */
+        .dark .bg-red-100 { background-color: #450a0a !important; } /* Merah sangat gelap */
+        .dark .border-red-400 { border-color: #7f1d1d !important; } /* Border merah gelap */
+        .dark .text-red-700 { color: #fecaca !important; } /* Teks merah sangat terang */
 
 
     </style>
@@ -235,9 +239,15 @@
                                 <input type="text" id="drExtraPagi1" value="" placeholder="(Pengganti)" title="Nama dokter pengganti/tambahan (misal: Budi) akan ditambahkan dalam kurung()">
                             </div>
                         </div>
-                        <div class="input-group">
-                            <label>Jumlah Pasien</label>
-                            <input type="text" disabled id="displayJmlPagi1" value="0" class="bg-gray-200">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="input-group">
+                                <label>Jumlah Pasien</label>
+                                <input type="text" disabled id="displayJmlPagi1" value="0" class="bg-gray-200">
+                            </div>
+                            <div class="input-group">
+                                <label>Rawat Inap (MRS)</label>
+                                <input type="text" disabled id="displayMrsPagi1" value="0" class="bg-gray-200">
+                            </div>
                         </div>
                     </div>
                     <h3 class="text-base font-semibold pt-2 text-sky-700 border-t pt-3">Rincian Kedatangan Pasien</h3>
@@ -326,9 +336,15 @@
                                 <input type="text" id="drExtraPagi2" value="" placeholder="(Pengganti)" title="Nama dokter pengganti/tambahan (misal: Budi) akan ditambahkan dalam kurung()">
                             </div>
                         </div>
-                        <div class="input-group">
-                            <label>Jumlah Pasien</label>
-                            <input type="text" disabled id="displayJmlPagi2" value="0" class="bg-gray-200">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="input-group">
+                                <label>Jumlah Pasien</label>
+                                <input type="text" disabled id="displayJmlPagi2" value="0" class="bg-gray-200">
+                            </div>
+                            <div class="input-group">
+                                <label>Rawat Inap (MRS)</label>
+                                <input type="text" disabled id="displayMrsPagi2" value="0" class="bg-gray-200">
+                            </div>
                         </div>
                     </div>
                     <h3 class="text-base font-semibold pt-2 text-sky-700 border-t pt-3">Rincian Kedatangan Pasien</h3>
@@ -417,9 +433,15 @@
                                 <input type="text" id="drExtraSiang" value="" placeholder="(Pengganti)" title="Nama dokter pengganti/tambahan (misal: Budi) akan ditambahkan dalam kurung()">
                             </div>
                         </div>
-                        <div class="input-group">
-                            <label>Jumlah Pasien</label>
-                            <input type="text" disabled id="displayJmlSiang" value="0" class="bg-gray-200">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="input-group">
+                                <label>Jumlah Pasien</label>
+                                <input type="text" disabled id="displayJmlSiang" value="0" class="bg-gray-200">
+                            </div>
+                            <div class="input-group">
+                                <label>Rawat Inap (MRS)</label>
+                                <input type="text" disabled id="displayMrsSiang" value="0" class="bg-gray-200">
+                            </div>
                         </div>
                     </div>
                     <h3 class="text-base font-semibold pt-2 text-sky-700 border-t pt-3">Rincian Kedatangan Pasien</h3>
@@ -508,9 +530,15 @@
                                 <input type="text" id="drExtraMalam" value="" placeholder="(Pengganti)" title="Nama dokter pengganti/tambahan (misal: Budi) akan ditambahkan dalam kurung()">
                             </div>
                         </div>
-                        <div class="input-group">
-                            <label>Jumlah Pasien</label>
-                            <input type="text" disabled id="displayJmlMalam" value="0" class="bg-gray-200">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="input-group">
+                                <label>Jumlah Pasien</label>
+                                <input type="text" disabled id="displayJmlMalam" value="0" class="bg-gray-200">
+                            </div>
+                            <div class="input-group">
+                                <label>Rawat Inap (MRS)</label>
+                                <input type="text" disabled id="displayMrsMalam" value="0" class="bg-gray-200">
+                            </div>
                         </div>
                     </div>
                     <h3 class="text-base font-semibold pt-2 text-sky-700 border-t pt-3">Rincian Kedatangan Pasien</h3>
@@ -585,10 +613,14 @@
             <h2 class="text-xl font-semibold text-gray-800 mb-2">Hasil Laporan Siap Salin</h2>
             <textarea id="outputReport" class="w-full h-64 bg-gray-100 text-gray-800 p-4 border border-gray-300 rounded-xl font-mono text-sm resize-none" readonly placeholder="Laporan yang sudah terformat akan muncul di sini dan diperbarui secara otomatis saat Anda memasukkan data." style="white-space: pre;"></textarea>
             
+            <div id="doctorWarningMessage" class="mt-3 p-3 bg-red-100 border border-red-400 text-red-700 rounded-xl font-medium hidden">
+                ⚠️ **Peringatan!** Anda belum memasukkan nama dokter untuk shift berikut: <span id="missingDoctorsList"></span>
+            </div>
+            
             <button id="copyBtn" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl mt-3 transition duration-150 shadow-lg hover:shadow-xl" disabled>
                 <span role="img" aria-label="emoji" class="mr-1">📋</span> Salin Laporan ke Clipboard
             </button>
-            <div id="copyMessage" class="mt-2 text-sm text-center text-green-700 font-medium hidden">Berhasil disalin!</div>
+            <div id="copyMessage" class="mt-2 text-sm text-center font-medium hidden">Berhasil disalin!</div>
         </div>
 
         <div class="mt-6 pt-4 border-t border-gray-200">
@@ -615,10 +647,14 @@
                 <ul class="list-disc list-inside text-gray-600 space-y-2 pl-4">
                     <li class="font-semibold">Versi Terbaru</li>
                     <ul class="list-circle list-inside ml-4 text-sm space-y-1">
+                        <li>[10 Des 2025] **Penambahan kolom Rawat Inap (MRS) di samping Jumlah Pasien pada input tiap shift.</li>
+                        <li>[10 Des 2025] **Menambahkan fitur notifikasi peringatan jika user belum mengisi nama dokter tiap shift.</li>
+                        <li>[10 Des 2025] **Tombol salin tidak akan berfungsi jika nama dokter belum diisi.
+                    </ul>
+                    <li class="font-semibold">Versi Sebelumnya</li>
+                    <ul class="list-circle list-inside ml-4 text-sm space-y-1">
                         <li>[29 Nov 2025] **Penambahan link di tombol tautan cepat ketiga (Data Gdrive IGD RS Dian Husada).</li>
-                        <li>[29 Nov 2025] **Perbaikan kolom kota sekarang dipatenkan, tidak perlu diketik.we
-                          
-                        </li>
+                        <li>[29 Nov 2025] **Perbaikan kolom kota sekarang dipatenkan, tidak perlu diketik.
                         <li>[29 Nov 2025] **Platform Baru**: Aplikasi sekarang sepenuhnya berbasis website dan tidak memerlukan penggunaan *local file* lagi.</li>
                         <li>[29 Nov 2025] **Tautan Cepat Diperbarui**: Memperbarui URL untuk tombol 'Laporan Bulanan' (ke `https://igdrsdh.github.io/Laporan-Bulanan/`) dan 'Kalkulator Medis' (ke `https://igdrsdh.github.io/Multitool-IGD/`).</li>
                         <li>[29 Nov 2025] **Perbaikan Salin Laporan**: Mengganti metode *copy* ke `document.execCommand('copy')` untuk kompatibilitas yang lebih baik.</li>
@@ -648,8 +684,9 @@
         // Fungsi utilitas untuk mengambil nilai input, mengembalikan 0 jika kosong atau bukan angka
         function getNum(id) {
             const val = document.getElementById(id).value;
-            // Mengubah string menjadi integer. Jika gagal (mis. string kosong), hasilnya 0
-            return parseInt(val) || 0; 
+            // FIX KRITIS: Menggunakan Number() untuk konversi yang aman ke 0 jika input kosong ("")
+            // Penggunaan Number(val) || 0; akan mengubah null/""/invalid string menjadi 0.
+            return Number(val) || 0; 
         }
 
         // Fungsi utilitas untuk mengambil nilai teks, mengembalikan string kosong jika kosong
@@ -682,20 +719,55 @@
             // Jika keduanya kosong
             return '';
         }
-        // ----------------------------------------------------------------------------------
+        
+        // --- FUNGSI BARU: VALIDASI APAKAH DOKTER SUDAH DIISI ---
+        function isDoctorFilled(shift) {
+            const drElement = document.getElementById(`dr${shift}`);
+            const drExtraElement = document.getElementById(`drExtra${shift}`);
+            
+            const drName = drElement ? drElement.value.trim() : '';
+            const drExtra = drExtraElement ? drExtraElement.value.trim() : '';
+
+            // Dianggap diisi jika salah satu (select atau input teks pengganti) tidak kosong
+            return drName !== '' || drExtra !== '';
+        }
+        // --------------------------------------------------------
 
         // Fungsi untuk memastikan teks rincian STATUS AKHIR memiliki format yang tepat (dengan newline di depan jika ada teks)
         function formatRincianStatusAkhir(text) {
             // Jika ada teks, tambahkan baris kosong di awal (\n) untuk memisahkan dari label
             return text ? `\n${text}` : '';
         }
+        
+        // --- FUNGSI BARU: MENAMPILKAN TOAST NOTIFICATION ---
+        /**
+         * Menampilkan notifikasi singkat (toast) di elemen #copyMessage.
+         * @param {string} message - Pesan yang akan ditampilkan.
+         * @param {string} [colorClass='text-green-700'] - Kelas Tailwind CSS untuk warna teks (misalnya, 'text-red-700', 'text-blue-700').
+         */
+        function showNotification(message, colorClass = 'text-green-700') {
+            const copyMessage = document.getElementById('copyMessage');
+            copyMessage.textContent = message;
+            
+            // Hapus semua kelas warna yang mungkin ada
+            copyMessage.classList.remove('hidden', 'text-green-700', 'text-blue-700', 'text-red-700', 'bg-red-100'); 
+            copyMessage.classList.add(colorClass);
+            
+            // Tampilkan notifikasi
+            copyMessage.classList.remove('hidden');
+            
+            // Sembunyikan setelah 3 detik
+            setTimeout(() => {
+                copyMessage.classList.add('hidden');
+            }, 3000);
+        }
+        // -----------------------------------------------------
 
-        // document.getElementById('generateBtn').addEventListener('click', generateReport); // BARIS INI DIHAPUS
         document.getElementById('copyBtn').addEventListener('click', copyReport);
         
         // Event Listener untuk Tombol Reset (dengan Konfirmasi)
         document.getElementById('resetBtn').addEventListener('click', function() {
-            // Tampilkan dialog konfirmasi
+            // Tampilkan dialog konfirmasi (tetap menggunakan konfirmasi standar untuk high-risk action)
             const isConfirmed = window.confirm("Yakin ingin menghapus semua data input? Tindakan ini tidak dapat dibatalkan.");
 
             // Jika pengguna menekan OK (true), baru jalankan fungsi reset
@@ -759,23 +831,16 @@
                     }
                 }
                 
-                // Tambahkan notifikasi singkat setelah berhasil memuat data
-                const copyMessage = document.getElementById('copyMessage');
-                copyMessage.textContent = 'Data sesi sebelumnya berhasil dimuat!';
-                copyMessage.classList.remove('hidden');
-                copyMessage.classList.remove('text-green-700'); 
-                copyMessage.classList.add('text-blue-700'); // Warna notifikasi berbeda
-                setTimeout(() => {
-                    copyMessage.classList.add('hidden');
-                    copyMessage.classList.remove('text-blue-700');
-                    copyMessage.classList.add('text-green-700'); // Kembalikan ke default
-                }, 4000);
+                // --- PENGGUNAAN FUNGSI BARU showNotification ---
+                showNotification('Data sesi sebelumnya berhasil dimuat!', 'text-blue-700');
 
 
             } catch (e) {
                 console.error("Gagal memuat data dari Local Storage:", e);
                 // Hapus data yang rusak
                 localStorage.removeItem('igdReportData'); 
+                // Tampilkan notifikasi gagal
+                showNotification('Gagal memuat data sesi sebelumnya (Data rusak).', 'text-red-700');
             }
         }
         
@@ -791,6 +856,7 @@
             // Array of shift names
             const shifts = ['Pagi1', 'Pagi2', 'Siang', 'Malam'];
             const shiftData = {};
+            const missingDoctors = []; // Array untuk menampung shift yang kekurangan dokter
 
             let totalKunjungan = 0;
             let totalMRS = 0;
@@ -806,18 +872,28 @@
             // ------------------------------------------
 
             shifts.forEach(shift => {
-                // Mode of Arrival
+                // **LOGIKA VALIDASI DOKTER**
+                if (!isDoctorFilled(shift)) {
+                    // Ambil Judul Shift dari Header
+                    const headerText = document.getElementById(`header${shift}`).textContent.trim();
+                    // Gunakan regex untuk membersihkan emoji dan spasi berlebihan
+                    const cleanShiftName = headerText.replace(/[\uD800-\uDBFF\uDC00-\uDFFF\s]+/g, ' ').trim(); 
+                    missingDoctors.push(cleanShiftName);
+                }
+
+                // Mode of Arrival (FIX KRITIS: Perbaiki inkonsistensi penamaan ID)
+                // Contoh: pkmRJPagi1, pkmRJPagi2, pkmRJSiang, pkmRJMalam
                 const pkmRI = getNum(`pkmRI${shift}`);
-                const pkmRJ = getNum(`pkmRJ${shift}`); // Menggunakan pkmRJ${shift}
+                const pkmRJ = getNum(`pkmRJ${shift}`); 
                 
                 const rujukRI = getNum(`rujukRI${shift}`);
                 const rujukRJ = getNum(`rujukRJ${shift}`);
                 const labRI = getNum(`labRI${shift}`);
-                const labRJ = getNum(`labRJ${shift}`); // Menggunakan labRJ${shift}
+                const labRJ = getNum(`labRJ${shift}`);
                 const desaRI = getNum(`desaRI${shift}`);
                 const desaRJ = getNum(`desaRJ${shift}`);
                 const sendiriRI = getNum(`sendiriRI${shift}`);
-                const sendiriRJ = getNum(`sendiriRJ${shift}`); // Menggunakan sendiriRJ${shift}
+                const sendiriRJ = getNum(`sendiriRJ${shift}`);
                 
                 // Keterangan Teks (Raw)
                 const bpjsKetRaw = getStr(`bpjsKet${shift}`);
@@ -832,15 +908,22 @@
 
 
                 // Calculated Totals
+                // FIX KRITIS: Pastikan semua hasil getNum() dijumlahkan. Karena getNum sudah di-fix, ini aman.
                 const shiftMRS = pkmRI + rujukRI + labRI + desaRI + sendiriRI;
                 const shiftRJ = pkmRJ + rujukRJ + labRJ + desaRJ + sendiriRJ;
                 const shiftJml = shiftMRS + shiftRJ;
                 
-                // Update display fields (FITUR OTOMATIS: JUMLAH PASIEN)
-                const displayElement = document.getElementById(`displayJml${shift}`);
-                if (displayElement) {
-                    displayElement.value = shiftJml;
+                // Update display fields (FITUR OTOMATIS: JUMLAH PASIEN DAN MRS)
+                const displayJmlElement = document.getElementById(`displayJml${shift}`);
+                if (displayJmlElement) {
+                    displayJmlElement.value = shiftJml;
                 }
+                // Update display Rawat Inap (MRS)
+                const displayMrsElement = document.getElementById(`displayMrs${shift}`);
+                if (displayMrsElement) {
+                    displayMrsElement.value = shiftMRS;
+                }
+                // -----------------------------------------------------------
 
                 // Collect all data for the shift.
                 shiftData[shift] = {
@@ -885,11 +968,11 @@
 
                 // --- LOGIKA AKUMULASI DENGAN PEMISAHAN SHIFT BARU ---
                 if (shift === 'Pagi1') {
-                    totalDiniHariPx += shiftJml;
-                    totalDiniHariMRS += shiftMRS;
+                    totalDiniHariPx = shiftJml; // FIX: Ganti += menjadi = agar tidak terakumulasi
+                    totalDiniHariMRS = shiftMRS; // FIX: Ganti += menjadi = agar tidak terakumulasi
                 } else if (shift === 'Pagi2') {
-                    totalPagiPx += shiftJml;
-                    totalPagiMRS += shiftMRS;
+                    totalPagiPx = shiftJml;
+                    totalPagiMRS = shiftMRS;
                 } else if (shift === 'Siang') {
                     totalSiangPx = shiftJml;
                     totalSiangMRS = shiftMRS;
@@ -899,13 +982,33 @@
                 }
                 // ----------------------------------------------------
             });
+            
+            // **LOGIKA MENAMPILKAN PERINGATAN DAN MENGATUR TOMBOL SALIN**
+            const doctorWarningMessage = document.getElementById('doctorWarningMessage');
+            const missingDoctorsList = document.getElementById('missingDoctorsList');
+            const copyBtn = document.getElementById('copyBtn');
+
+            if (missingDoctors.length > 0) {
+                // Tampilkan pesan peringatan
+                missingDoctorsList.textContent = missingDoctors.join(', ');
+                doctorWarningMessage.classList.remove('hidden');
+                // Nonaktifkan tombol salin
+                copyBtn.disabled = true; 
+            } else {
+                // Sembunyikan pesan dan aktifkan tombol salin (jika ada data)
+                doctorWarningMessage.classList.add('hidden');
+                // Aktifkan tombol salin hanya jika ada data yang diisi
+                copyBtn.disabled = (totalKunjungan === 0 && !city && !dateStr);
+            }
+            // **AKHIR LOGIKA PERINGATAN**
+
 
             // --- 7. Proses Penyusunan Laporan ---
             let report = '';
             
             // Header Laporan
             report += "LAPORAN JAGA IGD\n\n";
-            report += `${city || 'Kota'}${city ? ', ' : ''}Hari ${dateStr || 'Waktu'} Jam ${timeStr || '' }\n\n`;
+            report += `${city || 'Kota'}${city ? ', ' : ''}Hari ${dateStr || 'Tanggal'} Jam ${timeStr || '' }\n\n`;
             
             // Total Kunjungan (Menggunakan variabel yang telah dipisahkan)
             report += `TOTAL KUNJUNGAN IGD ${totalKunjungan} PASIEN\n`;
@@ -919,6 +1022,13 @@
             function generateShiftReport(shiftKey, shiftTitle, timeRange) {
                 const data = shiftData[shiftKey];
                 
+                // Jika shiftJml-nya 0 dan dokter tidak diisi, abaikan blok ini
+                if (data.jml === 0 && data.dr === '') {
+                    // Namun, kita harus memastikan bahwa ini tidak memotong baris laporan lain. 
+                    // Karena struktur laporan adalah: TOTAL -> Pagi1 -> Pagi2 -> Siang -> Malam,
+                    // Kita biarkan saja blok ini tercetak, tapi dengan nilai '-'
+                }
+
                 let block = `${shiftTitle}\n`;
                 block += `Jam ${timeRange}\n`;
                 block += `Dokter : ${data.dr || '-'}\n`; 
@@ -983,8 +1093,6 @@
 
             // Tampilkan laporan di Textarea
             document.getElementById('outputReport').value = report;
-            // Aktifkan tombol salin hanya jika ada data yang diisi
-            document.getElementById('copyBtn').disabled = (totalKunjungan === 0 && !city && !dateStr);
             
             // Pastikan pesan copy disembunyikan
             document.getElementById('copyMessage').classList.add('hidden');
@@ -993,7 +1101,6 @@
         // Fungsi untuk menyalin teks ke clipboard
         function copyReport() {
             const reportTextarea = document.getElementById('outputReport');
-            const copyMessage = document.getElementById('copyMessage');
             
             reportTextarea.select();
             reportTextarea.setSelectionRange(0, 99999);
@@ -1001,13 +1108,10 @@
             try {
                 // Menggunakan document.execCommand('copy') untuk kompatibilitas iframe
                 document.execCommand('copy'); 
-                copyMessage.textContent = 'Berhasil disalin!';
-                copyMessage.classList.remove('hidden');
-                setTimeout(() => copyMessage.classList.add('hidden'), 3000);
+                showNotification('Berhasil disalin!', 'text-green-700');
             } catch (err) {
                 console.error('Gagal menyalin:', err);
-                copyMessage.textContent = 'Gagal menyalin. Silakan salin manual.';
-                copyMessage.classList.remove('hidden');
+                showNotification('Gagal menyalin. Silakan salin manual.', 'text-red-700');
             }
         }
         
@@ -1078,7 +1182,7 @@
          * FUNGSI: Mereset semua input field ke nilai default/kosong
          */
         function resetAllInputs() {
-            // Pilih semua input dan textarea kecuali yang disabled (displayJml)
+            // Pilih semua input dan textarea kecuali yang disabled (displayJml dan displayMrs)
             const allInputs = document.querySelectorAll('input:not([disabled]), textarea, select');
 
             // 1. Reset semua input text, number, dan textarea
@@ -1099,12 +1203,16 @@
                 }
             });
 
-            // 2. Reset tampilan Jumlah Pasien (yang disabled)
+            // 2. Reset tampilan Jumlah Pasien dan Rawat Inap (yang disabled)
             const shifts = ['Pagi1', 'Pagi2', 'Siang', 'Malam'];
             shifts.forEach(shift => {
-                const displayElement = document.getElementById(`displayJml${shift}`);
-                if (displayElement) {
-                    displayElement.value = '0';
+                const displayJmlElement = document.getElementById(`displayJml${shift}`);
+                if (displayJmlElement) {
+                    displayJmlElement.value = '0';
+                }
+                const displayMrsElement = document.getElementById(`displayMrs${shift}`);
+                if (displayMrsElement) {
+                    displayMrsElement.value = '0';
                 }
             });
 
@@ -1115,17 +1223,8 @@
             // 4. Update laporan dan nonaktifkan tombol salin
             generateReport();
             
-            // 5. Tampilkan notifikasi (gunakan copyMessage field sebagai alert singkat)
-            const copyMessage = document.getElementById('copyMessage');
-            copyMessage.textContent = 'Semua data input telah dihapus!';
-            copyMessage.classList.remove('hidden');
-            copyMessage.classList.remove('text-green-700'); 
-            copyMessage.classList.add('text-red-700'); // Ganti warna untuk reset
-            setTimeout(() => {
-                copyMessage.classList.add('hidden');
-                copyMessage.classList.remove('text-red-700');
-                copyMessage.classList.add('text-green-700'); // Kembalikan ke warna default
-            }, 3000);
+            // 5. Tampilkan notifikasi toast
+            showNotification('Semua data input telah dihapus!', 'text-red-700');
         }
 
         /* ===========================================
@@ -1165,6 +1264,9 @@
             // --- MUAT DATA TERSIMPAN SAAT HALAMAN DIBUKA ---
             loadData();
             
+            // Sembunyikan pesan peringatan dokter saat pertama kali dimuat
+            document.getElementById('doctorWarningMessage').classList.add('hidden'); 
+
             // Tambahkan listener 'input' pada semua input teks/textarea, number, dan select 
             // agar laporan dan penyimpanan terupdate saat mengetik/memilih
             const allInputs = document.querySelectorAll('input, textarea, select');
