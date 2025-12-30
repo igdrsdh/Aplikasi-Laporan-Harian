@@ -145,7 +145,9 @@
             </div>
         </div>
     </div>
-
+    
+    <h2 class="text-xl font-semibold text-indigo-600" style="text-align: center; margin-bottom: 30px;">🎉Selamat Tahun Baru 2026🎉</h2>
+    
     <div class="max-w-2xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-2xl">
         <div class="space-y-6 mb-8 border-b pb-6">
             <h2 class="text-xl font-semibold text-sky-600">Data Umum</h2>
@@ -592,6 +594,11 @@
                 <ul class="list-disc list-inside text-gray-600 space-y-2 pl-4">
                     <li class="font-semibold">Update Terbaru</li>
                     <ul class="list-circle list-inside ml-4 text-sm space-y-1">
+                        <li>[30 Des 2025] **Perbaikan kalimat pada hasil laporan siap salin.</li>
+                        <li>[30 Des 2025] **Selamat tahun baru 🎉.</li>
+                    </ul>
+                    <li class="font-semibold">Update Sebelumnya</li>
+                    <ul class="list-circle list-inside ml-4 text-sm space-y-1">
                         <li>[26 Des 2025] **Perbaikan typo dan perubahan nama beberapa tombol.</li>
                         <li>[26 Des 2025] **Perubahan tampilan dan logo baru disamping judul.</li>
                     </ul>
@@ -600,26 +607,6 @@
                         <li>[10 Des 2025] **Penambahan kolom Rawat Inap (MRS) di samping Jumlah Pasien pada input tiap shift.</li>
                         <li>[10 Des 2025] **Menambahkan fitur notifikasi peringatan jika user belum mengisi nama dokter tiap shift.</li>
                         <li>[10 Des 2025] **Tombol salin tidak akan berfungsi jika nama dokter belum diisi.
-                    </ul>
-                    <li class="font-semibold">Update Sebelumnya</li>
-                    <ul class="list-circle list-inside ml-4 text-sm space-y-1">
-                        <li>[29 Nov 2025] **Penambahan link di tombol tautan cepat ketiga (Data Gdrive IGD RS Dian Husada).</li>
-                        <li>[29 Nov 2025] **Perbaikan kolom kota sekarang dipatenkan, tidak perlu diketik.
-                        <li>[29 Nov 2025] **Platform Baru**: Aplikasi sekarang sepenuhnya berbasis website dan tidak memerlukan penggunaan *local file* lagi.</li>
-                        <li>[29 Nov 2025] **Tautan Cepat Diperbarui**: Memperbarui URL untuk tombol 'Laporan Bulanan' (ke `https://igdrsdh.github.io/Laporan-Bulanan/`) dan 'Kalkulator Medis' (ke `https://igdrsdh.github.io/Multitool-IGD/`).</li>
-                        <li>[29 Nov 2025] **Perbaikan Salin Laporan**: Mengganti metode *copy* ke `document.execCommand('copy')` untuk kompatibilitas yang lebih baik.</li>
-                        <li>[29 Nov 2025] **Perbaikan Tampilan Mode Gelap**: Penyesuaian warna teks untuk semua label, judul kecil, dan judul besar (h3) agar lebih kontras dan terbaca di Mode Gelap (Dark Mode).</li>
-                        <li>[29 Nov 2025] **Tampilan Rapi**: Semua shift kini tertutup secara default saat aplikasi dibuka.</li>
-                        <li>[28 Nov 2025] **Changelog**: Bagian Changelog dibuat menjadi *dropdown* yang dapat disembunyikan.</li>
-                        <li>[28 Nov 2025] **Data Umum Disederhanakan**: Menghapus kolom input "Jam Laporan" dan mematenkan waktu laporan menjadi **00.00**.</li>
-                        <li>[28 Nov 2025] **Status Akhir Ditingkatkan**: Memisahkan rincian keterangan rujukan menjadi 'Rujukan dari Puskesmas' dan 'Rujuk ke Rumah Sakit Lain'.</li>
-                        <li>[28 Nov 2025] **Kedatangan Ditingkatkan**: Menambahkan rincian jumlah pasien 'Rujukan PKM (Rawat Inap/Rawat Jalan)' di bagian Kedatangan Pasien.</li>
-                    </ul>
-                    <li class="font-semibold mt-4">Update Sebelumnya</li>
-                    <ul class="list-circle list-inside ml-4 text-sm space-y-1">
-                        <li>[Awal] Fitur dasar pelaporan IGD per shift dengan penghitungan otomatis total pasien dan MRS.</li>
-                        <li>[Awal] Fitur simpan data otomatis menggunakan Local Storage.</li>
-                        <li>[Awal] Desain UI responsif dengan Tailwind CSS.</li>
                     </ul>
                 </ul>
             </div>
@@ -981,19 +968,19 @@
 
                 let block = `${shiftTitle}\n`;
                 block += `Jam ${timeRange}\n`;
-                block += `Dokter : ${data.dr || '-'}\n`; 
-                block += `Jumlah pasien : ${data.jml > 0 ? data.jml : '-'}\n`;
-                block += `MRS : ${data.mrs > 0 ? data.mrs : '-'}\n\n`;
+                block += `Dokter jaga : ${data.dr || '-'}\n`; 
+                block += `Jumlah kunjungan pasien : ${data.jml > 0 ? data.jml : '-'}\n`;
+                block += `Total pasien rawat inap : ${data.mrs > 0 ? data.mrs : '-'}\n\n`;
                 
                 // 1. KETERANGAN SUMMARY (BPJS/UMUM/RJ Count)
                 block += "Keterangan :\n";
-                block += `BPJS : ${data.bpjs > 0 ? data.bpjs : '-'}\n`;
-                block += `Umum : ${data.umum > 0 ? data.umum : '-'}\n`;
-                block += `Rawat jalan : ${data.rj > 0 ? data.rj : '-'}\n\n`;
+                block += `Pasien BPJS : ${data.bpjs > 0 ? data.bpjs : '-'}\n`;
+                block += `Pasien Umum : ${data.umum > 0 ? data.umum : '-'}\n`;
+                block += `Pasien Rawat jalan : ${data.rj > 0 ? data.rj : '-'}\n\n`;
 
                 // 2. RINCIAN KEDATANGAN
                 block += "Rincian jumlah pasien yang datang:\n";
-                block += `-Rujukan PKM:\n`;
+                block += `-Rujukan Puskesmas:\n`;
                 block += `\u2022 Rawat inap : ${data.pkmRI > 0 ? data.pkmRI : '-'}\n`;
                 block += `\u2022 Rawat jalan : ${data.pkmRJ > 0 ? data.pkmRJ : '-'}\n`;
                 
@@ -1024,9 +1011,9 @@
                 
                 // 4. RINCIAN STATUS AKHIR
                 block += "RINCIAN STATUS AKHIR\n";
-                block += `DOA :${data.doaKet || '-'}\n`;
-                block += `Meninggal :${data.meninggalKet || '-'}\n`;
-                block += `MCU :${data.mcuKet || '-'}\n`;
+                block += `DOA (Death On Arrival) :${data.doaKet || '-'}\n`;
+                block += `Meninggal di IGD :${data.meninggalKet || '-'}\n`;
+                block += `Medical Check Up :${data.mcuKet || '-'}\n`;
                 block += `Rujukan dari Puskesmas :${data.pkmRujukKet || '-'}\n`; 
                 block += `Rujuk ke Rumah Sakit Lain :${data.rsLainKet || '-'}\n`;
                 block += `Covid Rawat Jalan: -\n\n`; 
