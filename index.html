@@ -7,7 +7,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <!-- MENGHUBUNGKAN FONT BARU DARI GOOGLE FONTS -->
+      <!-- MENGHUBUNGKAN FONT BARU DARI GOOGLE FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap" rel="stylesheet">
@@ -29,7 +29,7 @@
           font-size: 1rem;
           display: flex;
           align-items: center;
-          justify-content: flex-end;
+          justify-content: flex-start;
           gap: 10px;
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
           transition: all 0.5s;
@@ -137,9 +137,39 @@
     </style>
   </head>
   <body class="p-4 md:p-8">
-    <button
-      id="darkToggle"
-      class="fixed top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-xl shadow-lg hover:opacity-90 z-50">🌓 Mode Gelap</button>
+    <!-- Kontainer Utama Tombol (Fixed di pojok kanan atas) -->
+    <div class="fixed top-4 right-4 flex items-center gap-1 z-50">
+        
+        <!-- Tombol Refresh -->
+        <button
+            id="refreshBtn"
+            class="bg-blue-500 text-white p-2 rounded-xl shadow-lg hover:bg-blue-500 transition flex items-center justify-center h-10 px-3 md:px-4"
+            title="Muat Ulang Halaman">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <span class="hidden md:inline ml-2 text-sm font-medium">Segarkan</span>
+        </button>
+
+        <!-- Tombol Dark Mode -->
+        <button
+            id="darkToggle"
+            class="
+                /* 1. WARNA BACKGROUND & TEKS (MODE GELAP) */
+                bg-white text-gray-800 border border-gray-50
+                hover:bg-gray-100 
+                
+                /* 2. WARNA BACKGROUND & TEKS (MODE TERANG) */
+                dark:bg-gray-100 dark:text-gray dark:border-gray-400
+                dark:hover:bg-gray-100
+
+                /* Layout & Estetika Dasar */
+                h-10 px-4 rounded-xl shadow-md hover:shadow-lg transition-all 
+                flex items-center justify-center text-sm font-medium">
+            <span id="icon">🌓</span>
+            <span class="hidden md:inline ml-2">Gelap/Terang</span>
+        </button>
+    </div>
 
     <div class="max-w-2xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-2xl">
       <div class="space-y-4 mb-6 border-b pb4">
@@ -150,15 +180,16 @@
             class="app-logo w-14 h-14 md:w-20 md:h-20 object-contain border-none"/>
           <div>
             <h1 class="text-2xl md:text-3xl font-extrabold text-gray-800 leading-tight">Laporan Jaga IGD</h1>
-            <p class="text-gray-500 text-sm font-medium">RS Dian Husada Versi 2.6.1</p>
+            <p class="text-gray-500 text-sm font-medium">RS Dian Husada Versi 2.6.2</p>
           </div>
         </div>
       </div>
 
-      <div
-        class="bg-gradient-to-r from-indigo-500 to-purple-600 p-4 rounded-xl mb-6 text-center text-white shadow-md">
-        <h2 class="text-xl font-bold">🎉 Selamat Tahun Baru 2026 🎉</h2>
-        <p class="text-xs opacity-80">selalu ada cerita setiap shift</p>
+      <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-4 rounded-xl mb-6 text-center text-white shadow-md">
+         <h2 class="text-xl font-bold">🎉 Selamat Tahun Baru 2026 🎉</h2>
+      <!-- ID ini penting untuk target JavaScript -->
+      <p id="quote-display" class="text-sm italic my-2">"..."</p>
+         <p class="text-xs opacity-80">Emergency Room Team</p>
       </div>
 
       <div 
@@ -190,7 +221,7 @@
       <div id="shifts-container" class="space-y-6">
         <div class="shift-block" data-shift="Pagi1">
           <div
-            class="shift-header cursor-pointer bg-slate-600"
+            class="shift-header cursor-pointer bg-gradient-to-r from-slate-600 to-slate-300"
             id="headerPagi1"
           >
             <span role="img" aria-label="emoji" class="mr-3 text-xl"></span>Shift Dini Hari (00.00 - 07.00)
@@ -396,7 +427,7 @@
 
         <div class="shift-block" data-shift="Pagi2">
           <div
-            class="shift-header bg-indigo-400 cursor-pointer"
+            class="shift-header cursor-pointer bg-gradient-to-r from-indigo-600 to-indigo-300"
             id="headerPagi2"
           >
             <span role="img" aria-label="emoji" class="mr-3 text-xl"></span>Shift Pagi (07.00 - 14.00)
@@ -602,7 +633,7 @@
 
         <div class="shift-block" data-shift="Siang">
           <div
-            class="shift-header bg-amber-500 cursor-pointer"
+            class="shift-header cursor-pointer bg-gradient-to-r from-amber-600 to-amber-300"
             id="headerSiang"
           >
             <span role="img" aria-label="emoji" class="mr-3 text-xl"></span>Shift Siang (14.00 - 21.00)
@@ -808,7 +839,7 @@
 
         <div class="shift-block" data-shift="Malam">
           <div
-            class="shift-header bg-fuchsia-400 cursor-pointer"
+            class="shift-header cursor-pointer bg-gradient-to-r from-fuchsia-600 to-fuchsia-300"
             id="headerMalam"
           >
             <span role="img" aria-label="emoji" class="mr-3 text-xl"></span>Shift Malam (21.00 - 00.00)
@@ -1115,41 +1146,20 @@
             <li class="font-semibold">Update Terbaru</li>
             <ul class="list-circle list-inside ml-4 text-sm space-y-1">
               <li>
-                [31 Des 2025] **Penambahan fitur auto update jika tersedia
-                pembaruan.
+                [02 Jan 2026] **Penyempurnaan UI / UX.
+                [02 Jan 2026] **Expressive mood.
               </li>
-              <li>[31 Des 2025] **Selamat Tahun Baru 2026</li>
+            <li class="font-semibold">Update Sebelumnya</li>
+            <ul class="list-circle list-inside ml-4 text-sm space-y-1">
+              <li>
+                [31 Des 2025] **Penambahan fitur auto update jika tersedia pembaruan.
+                [31 Des 2025] **Selamat Tahun Baru 2026.
+              </li>
             </ul>
             <li class="font-semibold">Update Sebelumnya</li>
             <ul class="list-circle list-inside ml-4 text-sm space-y-1">
               <li>
                 [30 Des 2025] **Perbaikan kalimat pada hasil laporan siap salin.
-              </li>
-            </ul>
-            <li class="font-semibold">Update Sebelumnya</li>
-            <ul class="list-circle list-inside ml-4 text-sm space-y-1">
-              <li>
-                [26 Des 2025] **Perbaikan typo dan perubahan nama beberapa
-                tombol.
-              </li>
-              <li>
-                [26 Des 2025] **Perubahan tampilan dan logo baru disamping
-                judul.
-              </li>
-            </ul>
-            <li class="font-semibold">Update Sebelumnya</li>
-            <ul class="list-circle list-inside ml-4 text-sm space-y-1">
-              <li>
-                [10 Des 2025] **Penambahan kolom Rawat Inap (MRS) di samping
-                Jumlah Pasien pada input tiap shift.
-              </li>
-              <li>
-                [10 Des 2025] **Menambahkan fitur notifikasi peringatan jika
-                user belum mengisi nama dokter tiap shift.
-              </li>
-              <li>
-                [10 Des 2025] **Tombol salin tidak akan berfungsi jika nama
-                dokter belum diisi.
               </li>
             </ul>
           </ul>
@@ -1520,6 +1530,10 @@
       window.onload = function() {
           applyDarkModePreference();
           loadData();
+          
+          // Jalankan random quote setiap 1 menit
+          shuffleQuote();
+          setInterval(shuffleQuote, 60000);
 
           // --- AKTIFKAN PENGECEKAN UPDATE GITHUB ---
           checkGitHubUpdate();
@@ -1543,6 +1557,64 @@
           document.getElementById('navBtn2').addEventListener('click', () => window.open('https://igdrsdh.github.io/Multitool-IGD/', '_blank'));
           document.getElementById('navBtn3').addEventListener('click', () => window.open('https://drive.google.com/drive/folders/1yKZu0DHZ0k084Q6p0FAW63Oc7Zy3e9ZF', '_blank'));
       }
+
+
+      // ------- List Quote Disini
+        const quotes = [
+        "Semangat shift ini, rejeki takkan tertukar.",
+        "Lelahnya hari ini adalah investasi masa depan.",
+        "Apapun shiftnya, kopi tetap kuncinya.",
+        "Satu shift lagi menuju liburan!",
+        "Rekan kerja yang asik adalah bonus gaji.",
+        "Fokus pada pasien, tetap jaga kesehatan sendiri.",
+        "Tahun baru, semangat baru, shift tetap seru!",
+        "Pasien sehat, pulang dengan hati yang kuat.",
+        "Shift malam bukan halangan untuk tetap bersinar.",
+        "Triage dengan tepat, kerja jadi lebih cepat.",
+        "Setiap diagnosa adalah langkah untuk menolong sesama.",
+        "Jaga kekompakan tim, karena kerja IGD adalah kerja bersama.",
+        "Tetap tenang di tengah hiruk pikuk ruang IGD.",
+        "Lelah boleh, menyerah jangan. Pasien butuh kita.",
+        "Kesehatanmu juga penting, jangan lupa makan di sela shift.",
+        "Senyum ramahmu adalah obat pertama bagi pasien.",
+        "Setiap shift punya cerita, jadikan cerita yang bermakna.",
+        "Bekerja di IGD adalah tentang kecepatan dan ketepatan.",
+        "Jadikan setiap lelah sebagai saksi kebaikanmu hari ini.",
+        "Semangat melayani, tulus dari dalam hati.",
+        "Shift pagi penuh energi, shift siang tetap berdedikasi.",
+        "Shift malam penuh waspada, demi nyawa yang berharga.",
+        "Keluarga menunggu di rumah, pulanglah dengan rasa bangga.",
+        "Ingatlah mengapa kamu memilih jalan ini: untuk menolong.",
+        "Ketelitian kita adalah keselamatan bagi mereka.",
+        "Jangan lupa bernapas sejenak.",
+        "Ingat selalu double check ya kak!.",
+        "Setiap infus yang terpasang adalah harapan yang menyala.",
+        "Terima kasih sudah bertahan dan berjuang di shift ini.",
+        "Kamu adalah pahlawan tanpa tanda jasa di balik pintu IGD.",
+        "Sudah dimakan bekalnya?🤭"
+      ];
+
+          // 2. Fungsi untuk mengacak quote
+            function shuffleQuote() {
+            const textElement = document.getElementById('quote-display');
+            if (textElement) {
+            const randomIdx = Math.floor(Math.random() * quotes.length);
+            textElement.innerText = `"${quotes[randomIdx]}"`;
+        }
+      }
+          // Mengambil elemen tombol berdasarkan ID
+             const refreshBtn = document.getElementById('refreshBtn');
+
+          // Menambahkan event listener 'click'
+             refreshBtn.addEventListener('click', () => {
+          // Memberikan konfirmasi agar data input tidak langsung hilang tanpa sengaja
+             const confirmRefresh = confirm("Segarkan halaman? Data yang belum tersimpan mungkin akan hilang.");
+    
+             if (confirmRefresh) {
+          // Perintah inti untuk reload halaman
+             window.location.reload();
+             }
+          });
     </script>
   </body>
 </html>
