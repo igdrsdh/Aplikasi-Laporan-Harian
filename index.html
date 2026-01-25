@@ -1425,8 +1425,8 @@
           function generateShiftReport(shiftKey, shiftTitle, timeRange) {
               const data = shiftData[shiftKey];
               let block = `${shiftTitle}\nJam ${timeRange}\nDokter jaga : ${data.dr || '-'}\n`;
-              block += `Jumlah kunjungan pasien : ${data.jml > 0 ? data.jml : '-'}\n`;
-              block += `Total pasien rawat inap : ${data.mrs > 0 ? data.mrs : '-'}\n\n`;
+              block += `Total kunjungan : ${data.jml > 0 ? data.jml : '-'}\n`;
+              block += `Total rawat inap : ${data.mrs > 0 ? data.mrs : '-'}\n\n`;
               block += "Keterangan :\n";
               block += `Pasien BPJS : ${data.bpjs > 0 ? data.bpjs : '-'}\n`;
               block += `Pasien Umum : ${data.umum > 0 ? data.umum : '-'}\n`;
@@ -1437,7 +1437,7 @@
               block += `-Bawa hasil lab : \n\u2022 Rawat inap : ${data.labRI > 0 ? data.labRI : '-'}\n\u2022 Rawat jalan : ${data.labRJ > 0 ? data.labRJ : '-'}\n`;
               block += `-Diantar siaga desa : \n\u2022 Rawat inap : ${data.desaRI > 0 ? data.desaRI : '-'}\n\u2022 Rawat jalan : ${data.desaRJ > 0 ? data.desaRJ : '-'}\n`;
               block += `-Datang sendiri : \n\u2022 Rawat inap : ${data.sendiriRI > 0 ? data.sendiriRI : '-'}\n\u2022 Rawat jalan : ${data.sendiriRJ > 0 ? data.sendiriRJ : '-'}\n\n`;
-              block += "RINCIAN KASUS PASIEN RAWAT JALAN\n";
+              block += "RINCIAN KASUS RAWAT JALAN\n";
               block += `BPJS:\n${data.bpjsKet || '- Tidak ada'}\n\nUMUM:\n${data.umumKet || '- Tidak ada'}\n\n`;
               block += "RINCIAN STATUS AKHIR\n";
               block += `DOA (Death On Arrival) :${data.doaKet || '-'}\n`;
