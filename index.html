@@ -628,7 +628,7 @@
           
           shifts.forEach(s => {
               const d = shiftData[s];
-              report += `${labels[s][0]}\nJam ${labels[s][1]} Wib\nDokter jaga : ${d.dr || '-'}\nTotal kunjungan : ${d.jml || '-'}\nTotal rawat inap : ${d.mrs || '-'}\n\nKeterangan :\nPasien BPJS : ${d.bpjs || '-'}\nPasien Umum : ${d.umum || '-'}\nPasien Rawat jalan : ${d.rj || '-'}\n\nRincian jumlah pasien yang datang:\n-Rujukan Puskesmas:\n\u2022 Rawat inap : ${d.pkmRI || '-'}\n\u2022 Rawat jalan : ${d.pkmRJ || '-'}\n-Bawa surat rujukan :\n\u2022 Rawat inap : ${d.rujukRI || '-'}\n\u2022 Rawat jalan : ${d.rujukRJ || '-'}\n-Bawa hasil lab : \n\u2022 Rawat inap : ${d.labRI || '-'}\n\u2022 Rawat jalan : ${d.labRJ || '-'}\n-Diantar siaga desa : \n\u2022 Rawat inap : ${d.desaRI || '-'}\n\u2022 Rawat jalan : ${d.desaRJMalam || '-'}\n-Datang sendiri : \n\u2022 Rawat inap : ${d.sendiriRI || '-'}\n\u2022 Rawat jalan : ${d.sendiriRJ || '-'}\n\nRINCIAN KASUS RAWAT JALAN\nBPJS:\n${d.bpjsKet || '- Tidak ada'}\n\nUMUM:\n${d.umumKet || '- Tidak ada'}\n\nRINCIAN STATUS AKHIR\nDOA (Death On Arrival) :${d.doaKet || '-'}\nMeninggal di IGD :${d.meninggalKet || '-'}\nMCU (Medical Check Up) :${d.mcuKet || '-'}\nRujukan dari Puskesmas :${d.pkmRujukKet || '-'}\nRujuk ke Rumah Sakit Lain :${d.rsLainKet || '-'}\nCovid Rawat Jalan: -\n\n`;
+              report += `${labels[s][0]}\nJam ${labels[s][1]} Wib\nDokter jaga : ${d.dr || '-'}\nTotal kunjungan : ${d.jml || '0'}\nTotal rawat inap : ${d.mrs || '0'}\n\nKeterangan :\nPasien BPJS : ${d.bpjs || '0'}\nPasien Umum : ${d.umum || '0'}\nPasien Rawat jalan : ${d.rj || '0'}\n\nRincian jumlah pasien yang datang:\n-Rujukan Puskesmas:\n\u2022 Rawat inap : ${d.pkmRI || '0'}\n\u2022 Rawat jalan : ${d.pkmRJ || '0'}\n-Bawa surat rujukan :\n\u2022 Rawat inap : ${d.rujukRI || '0'}\n\u2022 Rawat jalan : ${d.rujukRJ || '0'}\n-Bawa hasil lab : \n\u2022 Rawat inap : ${d.labRI || '0'}\n\u2022 Rawat jalan : ${d.labRJ || '0'}\n-Diantar siaga desa : \n\u2022 Rawat inap : ${d.desaRI || '0'}\n\u2022 Rawat jalan : ${d.desaRJMalam || '0'}\n-Datang sendiri : \n\u2022 Rawat inap : ${d.sendiriRI || '0'}\n\u2022 Rawat jalan : ${d.sendiriRJ || '0'}\n\nRINCIAN KASUS RAWAT JALAN\nBPJS:\n${d.bpjsKet || '- Tidak ada'}\n\nUMUM:\n${d.umumKet || '- Tidak ada'}\n\nRINCIAN STATUS AKHIR\nDOA (Death On Arrival) :${d.doaKet || '-'}\nMeninggal di IGD :${d.meninggalKet || '-'}\nMCU (Medical Check Up) :${d.mcuKet || '-'}\nRujukan dari Puskesmas :${d.pkmRujukKet || '-'}\nRujuk ke Rumah Sakit Lain :${d.rsLainKet || '-'}\nCovid Rawat Jalan: -\n\n`;
           });
           document.getElementById('outputReport').value = report;
       }
@@ -693,4 +693,3 @@
     </script>
   </body>
 </html>
-
