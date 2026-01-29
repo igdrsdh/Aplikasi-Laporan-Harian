@@ -483,15 +483,6 @@
         <div id="copyMessage" class="mt-2 text-sm text-center font-medium hidden"></div>
       </div>
 
-      <div class="mt-6 pt-4 border-t border-gray-200 text-center">
-        <h3 class="text-lg font-semibold text-gray-800 mb-3">Tautan Cepat</h3>
-        <div class="flex flex-col md:flex-row gap-3">
-          <button id="navBtn1" class="flex-1 bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-md">💻 Lap. Bulanan</button>
-          <button id="navBtn2" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-md">📑 Kalkulator</button>
-          <button id="navBtn3" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-md">🔗 GDrive</button>
-        </div>
-      </div>
-
       <div class="mt-8 border-t pt-6">
         <div id="changelogHeader" class="flex justify-between items-center cursor-pointer mb-2">
           <h2 class="text-xl font-semibold text-gray-800">Changelog Aplikasi</h2>
@@ -637,7 +628,7 @@
           
           shifts.forEach(s => {
               const d = shiftData[s];
-              report += `${labels[s][0]}\nJam ${labels[s][1]} Wib\nDokter jaga : ${d.dr || '-'}\nTotal kunjungan : ${d.jml || '-'}\nTotal rawat inap : ${d.mrs || '-'}\n\nKeterangan :\nPasien BPJS : ${d.bpjs || '-'}\nPasien Umum : ${d.umum || '-'}\nPasien Rawat jalan : ${d.rj || '-'}\n\nRincian jumlah pasien yang datang:\n-Rujukan Puskesmas:\n\u2022 Rawat inap : ${d.pkmRI || '-'}\n\u2022 Rawat jalan : ${d.pkmRJ || '-'}\n-Bawa surat rujukan :\n\u2022 Rawat inap : ${d.rujukRI || '-'}\n\u2022 Rawat jalan : ${d.rujukRJ || '-'}\n-Bawa hasil lab : \n\u2022 Rawat inap : ${d.labRI || '-'}\n\u2022 Rawat jalan : ${d.labRJ || '-'}\n-Diantar siaga desa : \n\u2022 Rawat inap : ${d.desaRI || '-'}\n\u2022 Rawat jalan : ${d.desaRJ || '-'}\n-Datang sendiri : \n\u2022 Rawat inap : ${d.sendiriRI || '-'}\n\u2022 Rawat jalan : ${d.sendiriRJ || '-'}\n\nRINCIAN KASUS RAWAT JALAN\nBPJS:\n${d.bpjsKet || '- Tidak ada'}\n\nUMUM:\n${d.umumKet || '- Tidak ada'}\n\nRINCIAN STATUS AKHIR\nDOA (Death On Arrival) :${d.doaKet || '-'}\nMeninggal di IGD :${d.meninggalKet || '-'}\nMCU (Medical Check Up) :${d.mcuKet || '-'}\nRujukan dari Puskesmas :${d.pkmRujukKet || '-'}\nRujuk ke Rumah Sakit Lain :${d.rsLainKet || '-'}\nCovid Rawat Jalan: -\n\n`;
+              report += `${labels[s][0]}\nJam ${labels[s][1]} Wib\nDokter jaga : ${d.dr || '-'}\nTotal kunjungan : ${d.jml || '-'}\nTotal rawat inap : ${d.mrs || '-'}\n\nKeterangan :\nPasien BPJS : ${d.bpjs || '-'}\nPasien Umum : ${d.umum || '-'}\nPasien Rawat jalan : ${d.rj || '-'}\n\nRincian jumlah pasien yang datang:\n-Rujukan Puskesmas:\n\u2022 Rawat inap : ${d.pkmRI || '-'}\n\u2022 Rawat jalan : ${d.pkmRJ || '-'}\n-Bawa surat rujukan :\n\u2022 Rawat inap : ${d.rujukRI || '-'}\n\u2022 Rawat jalan : ${d.rujukRJ || '-'}\n-Bawa hasil lab : \n\u2022 Rawat inap : ${d.labRI || '-'}\n\u2022 Rawat jalan : ${d.labRJ || '-'}\n-Diantar siaga desa : \n\u2022 Rawat inap : ${d.desaRI || '-'}\n\u2022 Rawat jalan : ${d.desaRJMalam || '-'}\n-Datang sendiri : \n\u2022 Rawat inap : ${d.sendiriRI || '-'}\n\u2022 Rawat jalan : ${d.sendiriRJ || '-'}\n\nRINCIAN KASUS RAWAT JALAN\nBPJS:\n${d.bpjsKet || '- Tidak ada'}\n\nUMUM:\n${d.umumKet || '- Tidak ada'}\n\nRINCIAN STATUS AKHIR\nDOA (Death On Arrival) :${d.doaKet || '-'}\nMeninggal di IGD :${d.meninggalKet || '-'}\nMCU (Medical Check Up) :${d.mcuKet || '-'}\nRujukan dari Puskesmas :${d.pkmRujukKet || '-'}\nRujuk ke Rumah Sakit Lain :${d.rsLainKet || '-'}\nCovid Rawat Jalan: -\n\n`;
           });
           document.getElementById('outputReport').value = report;
       }
@@ -696,9 +687,6 @@
           document.getElementById('refreshBtn').onclick = () => { if(confirm("Segarkan halaman?")) window.location.reload(); };
           document.getElementById('copyBtn').onclick = copyReport;
           document.getElementById('resetBtn').onclick = resetAllInputs;
-          document.getElementById('navBtn1').onclick = () => window.open('https://igdrsdh.github.io/Laporan-Bulanan/', '_blank');
-          document.getElementById('navBtn2').onclick = () => window.open('https://igdrsdh.github.io/Multitool-IGD/', '_blank');
-          document.getElementById('navBtn3').onclick = () => window.open('https://drive.google.com/drive/folders/1yKZu0DHZ0k084Q6p0FAW63Oc7Zy3e9ZF', '_blank');
           
           generateReport();
       };
