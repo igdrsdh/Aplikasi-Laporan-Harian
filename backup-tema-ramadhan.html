@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Laporan Jaga IGD</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+          --lebaran-green-dark: #064e3b;
+          --lebaran-green-primary: #059669;
+          --lebaran-green-light: #d1fae5;
+          --lebaran-gold: #d4af37;
+          --lebaran-accent: #f59e0b;
+      }
+      body {
+          font-family: 'Google Sans', sans-serif;
+          background-color: #f0f4f0;
+          transition: background-color 0.3s ease;
+      }
+      .shift-header {
+          color: white;
+          padding: 14px 18px;
+          border-radius: 0.75rem;
+          margin-top: 16px;
+          font-weight: 800;
+          font-size: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 10px;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s;
+          border-left: 5px solid var(--lebaran-gold);
+      }
+      .shift-header:hover { opacity: 0.95; transform: translateY(-1px); }
+      
+      .input-group label {
+          font-weight: 600;
+          color: #164e63;
+          display: block;
+          margin-bottom: 4px;
+      }
+      .input-group input, .input-group textarea, .input-group select {
+          padding: 10px;
+          border: 2px solid #cbd5e1;
+          border-radius: 0.75rem;
+          transition: all 0.2s;
+          background-color: white;
+          width: 100%;
+          color: #1e293b;
+      }
+      .input-group input:focus, .input-group textarea:focus, .input-group select:focus {
+          border-color: var(--lebaran-green-primary);
+          box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.2);
+          outline: none;
+      }
+      .input-row {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+      }
+      .doctor-inputs {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+      }
+      .doctor-inputs select,
+      .doctor-inputs input {
+          flex-grow: 1;
+          flex-basis: 0;
+          min-width: 0;
+      }
+
+      #doctorWarningMessage {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          border-left-width: 6px;
+          animation: pulse-red 2s infinite;
+      }
+      @keyframes pulse-red {
+          0% { border-left-color: #ef4444; }
+          50% { border-left-color: #fca5a5; }
+          100% { border-left-color: #ef4444; }
+      }
+
+      .dark {
+          background-color: #022c22 !important;
+          color: #f0fdf4 !important;
+      }
+      .dark body {
+          background-color: #022c22 !important;
+      }
+      .dark .max-w-2xl {
+          background-color: #064e3b !important;
+          color: #f0fdf4 !important;
+          border-top-color: #10b981 !important;
+      }
+      .dark .input-group label {
+          color: #6ee7b7 !important;
+      }
+      .dark .input-group input,
+      .dark .input-group textarea,
+      .dark .input-group select {
+          background-color: #065f46 !important;
+          border-color: #064e3b !important;
+          color: #ffffff !important;
+      }
+      .dark .input-group input::placeholder,
+      .dark .input-group textarea::placeholder {
+          color: #a7f3d0 !important;
+          opacity: 0.5;
+      }
+      .dark .bg-white {
+          background-color: #065f46 !important;
+      }
+      .dark .bg-emerald-50 {
+          background-color: #022c22 !important;
+          border-color: #059669 !important;
+      }
+      .dark .text-emerald-900, .dark .text-emerald-800, .dark .text-emerald-700 {
+          color: #ecfdf5 !important;
+      }
+      .dark .text-emerald-600 {
+          color: #34d399 !important;
+      }
+      .dark #outputReport {
+          background-color: #022c22 !important;
+          color: #d1fae5 !important;
+          border-color: #059669 !important;
+      }
+      .dark .doctor-inputs input {
+          background-color: #065f46 !important;
+      }
+      .dark h2 {
+          color: #10b981 !important;
+      }
+      .dark .border-emerald-200, .dark .border-emerald-100 {
+          border-color: #067a5a !important;
+      }
+      .dark .bg-emerald-50.cursor-default {
+          background-color: #064e3b !important;
+          color: #6ee7b7 !important;
+      }
+      .dark #darkToggle {
+          background-color: #065f46 !important;
+          color: #ffffff !important;
+          border-color: #059669 !important;
+      }
+
+      .app-logo {
+          filter: drop-shadow(0 0 4px rgba(0,0,0,0.1));
+      }
+    </style>
+  </head>
+  <body class="p-4 md:p-8">
+    <div class="fixed top-4 right-4 flex items-center gap-1 z-50">
+        <button
+            id="refreshBtn"
+            class="bg-emerald-700 text-white p-2 rounded-xl shadow-lg hover:bg-emerald-800 transition flex items-center justify-center h-10 px-3 md:px-4"
+            title="Muat Ulang Halaman">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <span class="hidden md:inline ml-2 text-sm font-medium">Segarkan</span>
+        </button>
+        <button
+            id="darkToggle"
+            class="bg-white text-emerald-900 border border-emerald-100 hover:bg-emerald-50 h-10 px-4 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center text-sm font-medium">
+            <span id="icon">🌙</span>
+            <span class="hidden md:inline ml-2">Mode</span>
+        </button>
+    </div>
+
+    <div class="max-w-2xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-2xl border-t-8 border-emerald-600">
+      <div class="space-y-4 mb-6 border-b pb-4">
+        <div class="flex items-center gap-4 mb-2">
+          <img
+            src="LOGO IGD.png"
+            alt="Logo IGD"
+            onerror="this.style.display='none'"
+            class="app-logo w-14 h-14 md:w-20 md:h-20 object-contain border-none"/>
+          <div>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-emerald-900 leading-tight">Laporan Jaga IGD</h1>
+            <p class="text-emerald-600 text-sm font-bold tracking-widest">RS DIAN HUSADA</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 p-5 rounded-2xl mb-6 text-center text-white shadow-xl relative overflow-hidden">
+         <div class="absolute -top-4 -right-4 opacity-10 text-6xl">🕌</div>
+         <h2 class="text-xl font-bold mb-1" style="color: white !important;">🌙 Selamat Hari Raya 🌙</h2>
+         <p id="quote-display" class="text-sm italic my-2 font-medium">"Mohon Maaf Lahir dan Batin"</p>
+         <p class="text-xs font-bold text-emerald-200">IDUL FITRI 1447H / 2026</p>
+      </div>
+
+      <div class="space-y-6 mb-8 border-b pb-6">
+          <h2 class="text-xl font-bold text-emerald-700 flex items-center gap-2">
+              <span>📋</span> Data Umum
+          </h2>
+          <div class="input-group">
+            <label for="inputDate">Hari & Tanggal</label>
+            <input type="text" id="inputDate" value="" placeholder="Contoh: Senin, 30 Maret 2026" />
+            <div class="input-group mt-4">
+              <label for="inputCity">Kota</label>
+              <input type="text" id="inputCity" value="Mojokerto" readonly class="bg-emerald-50 border-emerald-100 cursor-default" />
+            </div>
+          </div>
+      </div>
+
+      <div id="shifts-container" class="space-y-6">
+        <!-- Loop shift blocks -->
+        <script>
+            const shifts = [
+                { id: 'Pagi1', name: 'Shift Dini Hari (00.00 - 07.00)', icon: '🌑', color: 'from-emerald-900 to-emerald-700' },
+                { id: 'Pagi2', name: 'Shift Pagi (07.00 - 14.00)', icon: '☀️', color: 'from-emerald-700 to-emerald-500' },
+                { id: 'Siang', name: 'Shift Siang (14.00 - 21.00)', icon: '🌤️', color: 'from-emerald-600 to-emerald-400' },
+                { id: 'Malam', name: 'Shift Malam (21.00 - 00.00)', icon: '🌙', color: 'from-emerald-800 to-teal-900' }
+            ];
+
+            const container = document.getElementById('shifts-container');
+            shifts.forEach(s => {
+                container.innerHTML += `
+                <div class="shift-block" data-shift="${s.id}">
+                  <div class="shift-header cursor-pointer bg-gradient-to-r ${s.color}" id="header${s.id}">
+                    <span role="img" aria-label="emoji" class="mr-3 text-xl">${s.icon}</span>${s.name}
+                  </div>
+                  <div class="p-4 bg-emerald-50 rounded-b-xl space-y-4 hidden" id="content${s.id}">
+                    <div class="space-y-4">
+                      <div class="input-group">
+                        <label for="dr${s.id}">Nama Dokter</label>
+                        <div class="doctor-inputs">
+                          <select id="dr${s.id}">
+                            <option value="">-- Pilih Dokter --</option>
+                            <option value="dr. Sukresno Tjahjo W., M.Kes">dr. Sukresno Tjahjo W., M.Kes</option>
+                            <option value="dr. Felicia Putri Hartono">dr. Felicia Putri Hartono</option>
+                            <option value="dr. Syntia Desy Arisandi">dr. Syntia Desy Arisandi</option>
+                            <option value="dr. Imam Fadli">dr. Imam Fadli</option>
+                            <option value="dr. Deo Sanjaya">dr. Deo Sanjaya</option>
+                            <option value="dr. Evva Mardiyana">dr. Evva Mardiyana</option>
+                            <option value="dr. Farah Shania">dr. Farah Shania</option>
+                            <option value="dr. Ratna Dewi">dr. Ratna Dewi</option>
+                          </select>
+                          <input type="text" id="drExtra${s.id}" placeholder="Nama Dokter Pengganti" />
+                        </div>
+                      </div>
+                      <div class="grid grid-cols-2 gap-3">
+                        <div class="input-group"><label>Jumlah Pasien</label><input type="text" disabled id="displayJml${s.id}" value="0" class="bg-white/50" /></div>
+                        <div class="input-group"><label>Rawat Inap (MRS)</label><input type="text" disabled id="displayMrs${s.id}" value="0" class="bg-white/50" /></div>
+                      </div>
+                    </div>
+                    
+                    <h3 class="text-base font-bold pt-2 text-emerald-800 border-t border-emerald-200 mt-3">Rincian Kedatangan</h3>
+                    <div class="grid grid-cols-2 gap-3 p-3 bg-white rounded-lg border border-emerald-200">
+                        <div class="col-span-2 text-sm font-bold text-emerald-600">Rujukan Puskesmas:</div>
+                        <div class="input-group"><label>MRS</label><input type="number" id="pkmRI${s.id}" value="0" min="0" placeholder="0" /></div>
+                        <div class="input-group"><label>RJ</label><input type="number" id="pkmRJ${s.id}" value="0" min="0" placeholder="0" /></div>
+                        <div class="col-span-2 text-sm font-bold text-emerald-600">Bawa Surat Rujukan:</div>
+                        <div class="input-group"><label>MRS</label><input type="number" id="rujukRI${s.id}" value="0" min="0" placeholder="0" /></div>
+                        <div class="input-group"><label>RJ</label><input type="number" id="rujukRJ${s.id}" value="0" min="0" placeholder="0" /></div>
+                        <div class="col-span-2 text-sm font-bold text-emerald-600">Bawa Hasil Lab:</div>
+                        <div class="input-group"><label>MRS</label><input type="number" id="labRI${s.id}" value="0" min="0" placeholder="0" /></div>
+                        <div class="input-group"><label>RJ</label><input type="number" id="labRJ${s.id}" value="0" min="0" placeholder="0" /></div>
+                        <div class="col-span-2 text-sm font-bold text-emerald-600">Diantar Siaga Desa:</div>
+                        <div class="input-group"><label>MRS</label><input type="number" id="desaRI${s.id}" value="0" min="0" placeholder="0" /></div>
+                        <div class="input-group"><label>RJ</label><input type="number" id="desaRJ${s.id}" value="0" min="0" placeholder="0" /></div>
+                        <div class="col-span-2 text-sm font-bold text-emerald-600">Datang Sendiri:</div>
+                        <div class="input-group"><label>MRS</label><input type="number" id="sendiriRI${s.id}" value="0" min="0" placeholder="0" /></div>
+                        <div class="input-group"><label>RJ</label><input type="number" id="sendiriRJ${s.id}" value="0" min="0" placeholder="0" /></div>
+                    </div>
+                    
+                    <h3 class="text-base font-bold pt-2 text-emerald-800 border-t border-emerald-200 mt-3">Rincian Pembayaran</h3>
+                    <div class="input-row">
+                      <div class="input-group"><label>BPJS</label><input type="number" id="bpjs${s.id}" value="0" min="0" placeholder="0" /></div>
+                      <div class="input-group"><label>Umum</label><input type="number" id="umum${s.id}" value="0" min="0" placeholder="0" /></div>
+                    </div>
+                    <div class="input-group"><label>Ket BPJS</label><textarea id="bpjsKet${s.id}" rows="3" placeholder="Contoh:&#10;1. Tn. A - Obs. Febris&#10;2. Ny. B - Dyspepsia"></textarea></div>
+                    <div class="input-group"><label>Ket UMUM</label><textarea id="umumKet${s.id}" rows="3" placeholder="Contoh:&#10;1. An. C - Vulnus Laceratum&#10;2. Tn. D - GEA"></textarea></div>
+                    
+                    <h3 class="text-base font-bold pt-2 text-emerald-800 border-t border-emerald-200 mt-3">Status Akhir</h3>
+                    <div class="input-group"><label>DOA</label><textarea id="doaKet${s.id}" rows="2" placeholder="Nama Pasien, Penyebab / -"></textarea></div>
+                    <div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKet${s.id}" rows="2" placeholder="Nama Pasien, Diagnosa / -"></textarea></div>
+                    <div class="input-group"><label>MCU</label><textarea id="mcuKet${s.id}" rows="2" placeholder="Jumlah atau Nama Pasien / -"></textarea></div>
+                    <div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKet${s.id}" rows="2" placeholder="Nama Pasien, Diagnosa / -"></textarea></div>
+                    <div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKet${s.id}" rows="2" placeholder="Nama Pasien, RS Tujuan / -"></textarea></div>
+                  </div>
+                </div>`;
+            });
+        </script>
+      </div>
+
+      <div class="mt-8">
+        <h2 class="text-xl font-bold text-emerald-900 mb-2">Hasil Laporan Siap Salin</h2>
+        <textarea
+          id="outputReport"
+          class="w-full h-64 bg-emerald-50 text-emerald-900 p-4 border-2 border-emerald-200 rounded-xl font-mono text-sm resize-none shadow-inner"
+          readonly
+          placeholder="Laporan otomatis akan muncul di sini setelah data diisi..."
+          style="white-space: pre;"
+        ></textarea>
+
+        <div id="doctorWarningMessage" class="mt-3 p-4 bg-red-100 border border-red-400 text-red-700 rounded-xl font-medium hidden">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-2xl">⚠️</span>
+            <span class="text-lg font-bold">Lengkapi Nama Dokter</span>
+          </div>
+          <p class="text-sm mb-1 opacity-90">Mohon isi nama dokter jaga atau nama pengganti untuk shift berikut:</p>
+          <ul id="missingDoctorsList" class="list-disc list-inside text-sm font-bold bg-white/40 p-2 rounded-lg"></ul>
+        </div>
+
+        <button
+          id="copyBtn"
+          class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl mt-3 transition duration-150 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed border-b-4 border-emerald-800 active:border-b-0"
+          disabled
+        >
+          <span role="img" aria-label="emoji" class="mr-1">📋</span> Salin Laporan
+        </button>
+
+        <button
+          id="resetBtn"
+          class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-4 rounded-xl mt-8 transition duration-150 shadow-md hover:shadow-lg border-b-4 border-amber-800"
+        >
+          <span role="img" aria-label="emoji" class="mr-1">🗑️</span> Hapus Semua Data
+        </button>
+        <div id="copyMessage" class="mt-2 text-sm text-center font-bold hidden"></div>
+      </div>
+
+      <div class="mt-8 border-t border-emerald-100 pt-6">
+        <div id="changelogHeader" class="flex justify-between items-center cursor-pointer mb-2">
+          <h2 class="text-xl font-bold text-emerald-900">Changelog Aplikasi</h2>
+          <svg id="changelogIcon" class="w-5 h-5 text-emerald-600 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </div>
+        <div id="changelogContent" class="hidden">
+            <ul class="list-disc list-inside text-emerald-800 space-y-4 pl-4 text-sm font-medium">
+                <li><span class="font-bold">Edisi Lebaran 2026</span>: Pembaruan tema visual Hijau Emerald & Emas.</li>
+                <li><span class="font-bold">Hint & Placeholder</span>: Menambahkan panduan pengisian pada setiap kotak input.</li>
+                <li><span class="font-bold">Fix Visual Mode Gelap</span>: Perbaikan kontras label dan input agar terbaca jelas.</li>
+                <li><span class="font-bold">Update [27 Jan 2026]</span>: Perbaikan sinkronisasi realtime daftar peringatan dokter.</li>
+            </ul>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const allShiftNames = ['Pagi1', 'Pagi2', 'Siang', 'Malam'];
+      const allContentIds = allShiftNames.map(name => `content${name}`);
+
+      function getNum(id) { const el = document.getElementById(id); return el ? Number(el.value) || 0 : 0; }
+      function getStr(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+      function getDoctorName(shift) {
+          const drName = document.getElementById(`dr${shift}`).value.trim();
+          const drExtra = document.getElementById(`drExtra${shift}`).value.trim();
+          if (drName) return drExtra ? `${drName} (${drExtra})` : drName;
+          return drExtra || '';
+      }
+
+      function formatRincianStatusAkhir(text) { return text ? `\n${text}` : ''; }
+
+      function showNotification(message, colorClass = 'text-emerald-700') {
+          const copyMessage = document.getElementById('copyMessage');
+          copyMessage.textContent = message;
+          copyMessage.className = `mt-2 text-sm text-center font-bold ${colorClass}`;
+          copyMessage.classList.remove('hidden');
+          setTimeout(() => copyMessage.classList.add('hidden'), 3000);
+      }
+
+      function saveData() {
+          const dataToSave = { inputCity: getStr('inputCity'), inputDate: getStr('inputDate') };
+          allShiftNames.forEach(s => {
+              const fields = ['dr', 'drExtra', 'bpjsKet', 'umumKet', 'doaKet', 'meninggalKet', 'mcuKet', 'pkmRujukKet', 'rsLainKet', 'pkmRI', 'pkmRJ', 'rujukRI', 'rujukRJ', 'labRI', 'labRJ', 'desaRI', 'desaRJ', 'sendiriRI', 'sendiriRJ', 'bpjs', 'umum'];
+              fields.forEach(f => {
+                  const id = `${f}${s}`;
+                  const el = document.getElementById(id);
+                  if (el) dataToSave[id] = el.value;
+              });
+          });
+          localStorage.setItem('igdReportData', JSON.stringify(dataToSave));
+      }
+
+      function loadData() {
+          const savedData = localStorage.getItem('igdReportData');
+          if (!savedData) return;
+          try {
+              const data = JSON.parse(savedData);
+              for (const id in data) {
+                  const el = document.getElementById(id);
+                  if (el && id !== 'inputCity') el.value = data[id];
+              }
+          } catch (e) { localStorage.removeItem('igdReportData'); }
+      }
+
+      function generateReport() {
+          const city = getStr('inputCity');
+          const dateStr = getStr('inputDate');
+          const shiftData = {};
+          const missingDoctors = [];
+          let totalK = 0;
+          let breakdown = { Pagi1: [0,0], Pagi2: [0,0], Siang: [0,0], Malam: [0,0] };
+
+          allShiftNames.forEach(shift => {
+              const valDr = document.getElementById(`dr${shift}`).value.trim();
+              const valExtra = document.getElementById(`drExtra${shift}`).value.trim();
+              const isFilled = valDr !== '' || valExtra !== '';
+
+              if (!isFilled) {
+                  const headerText = document.getElementById(`header${shift}`).innerText.replace(/🌑|☀️|🌤️|🌙/g, '').trim();
+                  missingDoctors.push(headerText);
+              }
+
+              const counts = ['pkmRI', 'pkmRJ', 'rujukRI', 'rujukRJ', 'labRI', 'labRJ', 'desaRI', 'desaRJ', 'sendiriRI', 'sendiriRJ'].map(k => getNum(`${k}${shift}`));
+              const shiftMRS = counts[0] + counts[2] + counts[4] + counts[6] + counts[8];
+              const shiftRJ = counts[1] + counts[3] + counts[5] + counts[7] + counts[9];
+              const shiftJml = shiftMRS + shiftRJ;
+
+              document.getElementById(`displayJml${shift}`).value = shiftJml;
+              document.getElementById(`displayMrs${shift}`).value = shiftMRS;
+
+              shiftData[shift] = {
+                  dr: getDoctorName(shift), jml: shiftJml, mrs: shiftMRS, rj: shiftRJ,
+                  bpjs: getNum(`bpjs${shift}`), umum: getNum(`umum${shift}`),
+                  bpjsKet: getStr(`bpjsKet${shift}`), umumKet: getStr(`umumKet${shift}`),
+                  doaKet: formatRincianStatusAkhir(getStr(`doaKet${shift}`)),
+                  meninggalKet: formatRincianStatusAkhir(getStr(`meninggalKet${shift}`)),
+                  mcuKet: formatRincianStatusAkhir(getStr(`mcuKet${shift}`)),
+                  pkmRujukKet: formatRincianStatusAkhir(getStr(`pkmRujukKet${shift}`)),
+                  rsLainKet: formatRincianStatusAkhir(getStr(`rsLainKet${shift}`)),
+                  pkmRI: counts[0], pkmRJ: counts[1], rujukRI: counts[2], rujukRJ: counts[3], labRI: counts[4], labRJ: counts[5], desaRI: counts[6], desaRJ: counts[7], sendiriRI: counts[8], sendiriRJ: counts[9]
+              };
+              totalK += shiftJml;
+              breakdown[shift] = [shiftJml, shiftMRS];
+          });
+
+          const warnBox = document.getElementById('doctorWarningMessage');
+          const warnList = document.getElementById('missingDoctorsList');
+          const copyBtn = document.getElementById('copyBtn');
+
+          if (missingDoctors.length > 0) {
+              warnList.innerHTML = missingDoctors.map(d => `<li>${d}</li>`).join('');
+              warnBox.classList.remove('hidden');
+              copyBtn.disabled = true;
+          } else {
+              warnList.innerHTML = "";
+              warnBox.classList.add('hidden');
+              copyBtn.disabled = false;
+          }
+
+          let report = `LAPORAN JAGA IGD\n\n${city}, ${dateStr} Jam 00.00\n\n`;
+          report += `TOTAL KUNJUNGAN IGD ${totalK} PASIEN\nDINI HARI : ${breakdown.Pagi1[0]} px, MRS: ${breakdown.Pagi1[1]}\nPAGI      : ${breakdown.Pagi2[0]} px, MRS: ${breakdown.Pagi2[1]}\nSIANG     : ${breakdown.Siang[0]} px, MRS: ${breakdown.Siang[1]}\nMALAM     : ${breakdown.Malam[0]} px, MRS: ${breakdown.Malam[1]}\n\n`;
+
+          const labels = { Pagi1: ['Shift Dini Hari', '00.00 - 07.00'], Pagi2: ['Shift Pagi', '07.00 - 14.00'], Siang: ['Shift Siang', '14.00 - 21.00'], Malam: ['Shift Malam', '21.00 - 00.00'] };
+          
+          allShiftNames.forEach(s => {
+              const d = shiftData[s];
+              report += `${labels[s][0]}\nJam ${labels[s][1]} Wib\nDokter jaga : ${d.dr || '-'}\nTotal kunjungan : ${d.jml || '0'}\nTotal rawat inap : ${d.mrs || '0'}\n\nKeterangan :\nPasien BPJS : ${d.bpjs || '0'}\nPasien Umum : ${d.umum || '0'}\nPasien Rawat jalan : ${d.rj || '0'}\n\nRincian jumlah pasien yang datang:\n-Rujukan Puskesmas:\n\u2022 Rawat inap : ${d.pkmRI || '0'}\n\u2022 Rawat jalan : ${d.pkmRJ || '0'}\n-Bawa surat rujukan :\n\u2022 Rawat inap : ${d.rujukRI || '0'}\n\u2022 Rawat jalan : ${d.rujukRJ || '0'}\n-Bawa hasil lab : \n\u2022 Rawat inap : ${d.labRI || '0'}\n\u2022 Rawat jalan : ${d.labRJ || '0'}\n-Diantar siaga desa : \n\u2022 Rawat inap : ${d.desaRI || '0'}\n\u2022 Rawat jalan : ${d.desaRJ || '0'}\n-Datang sendiri : \n\u2022 Rawat inap : ${d.sendiriRI || '0'}\n\u2022 Rawat jalan : ${d.sendiriRJ || '0'}\n\nRINCIAN KASUS RAWAT JALAN\nBPJS:\n${d.bpjsKet || '- Tidak ada'}\n\nUMUM:\n${d.umumKet || '- Tidak ada'}\n\nRINCIAN STATUS AKHIR\nDOA (Death On Arrival) :${d.doaKet || '-'}\nMeninggal di IGD :${d.meninggalKet || '-'}\nMCU (Medical Check Up) :${d.mcuKet || '-'}\nRujukan dari Puskesmas :${d.pkmRujukKet || '-'}\nRujuk ke Rumah Sakit Lain :${d.rsLainKet || '-'}\nCovid Rawat Jalan: -\n\n`;
+          });
+          document.getElementById('outputReport').value = report;
+      }
+
+      function copyReport() {
+          const output = document.getElementById('outputReport');
+          output.select();
+          document.execCommand('copy');
+          showNotification('Berhasil disalin ke Clipboard!');
+      }
+
+      function resetAllInputs() {
+          if (!confirm("Hapus semua data input?")) return;
+          document.querySelectorAll('input:not(#inputCity), textarea, select').forEach(i => {
+              if (i.type === 'number') i.value = '0';
+              else i.value = '';
+          });
+          localStorage.removeItem('igdReportData');
+          generateReport();
+      }
+
+      window.onload = function() {
+          if (localStorage.getItem("darkMode") === "enabled") document.documentElement.classList.add("dark");
+          
+          document.getElementById('darkToggle').onclick = () => {
+              const isDark = document.documentElement.classList.toggle("dark");
+              localStorage.setItem("darkMode", isDark ? "enabled" : "disabled");
+          };
+          
+          loadData();
+
+          document.querySelectorAll('input, textarea, select').forEach(i => {
+              i.addEventListener('input', () => { generateReport(); saveData(); });
+              i.addEventListener('change', () => { generateReport(); saveData(); });
+          });
+
+          allShiftNames.forEach(s => {
+              document.getElementById(`header${s}`).onclick = () => {
+                  const content = document.getElementById(`content${s}`);
+                  const isHidden = content.classList.contains('hidden');
+                  allContentIds.forEach(id => {
+                      const el = document.getElementById(id);
+                      if (el) el.classList.add('hidden');
+                  });
+                  if (isHidden) content.classList.remove('hidden');
+              };
+          });
+
+          document.getElementById('changelogHeader').onclick = () => {
+              document.getElementById('changelogContent').classList.toggle('hidden');
+              document.getElementById('changelogIcon').classList.toggle('rotate-180');
+          };
+
+          document.getElementById('refreshBtn').onclick = () => { if(confirm("Muat ulang aplikasi?")) window.location.reload(); };
+          document.getElementById('copyBtn').onclick = copyReport;
+          document.getElementById('resetBtn').onclick = resetAllInputs;
+          
+          generateReport();
+      };
+    </script>
+  </body>
+</html>
