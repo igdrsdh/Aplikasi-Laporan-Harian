@@ -105,7 +105,7 @@
           border-top-color: #10b981 !important;
       }
       .dark .input-group label {
-          color: #6ee7b7 !important; /* Hijau mint terang agar terbaca */
+          color: #6ee7b7 !important; 
       }
       .dark .input-group input,
       .dark .input-group textarea,
@@ -181,7 +181,6 @@
     </div>
 
     <div class="max-w-2xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-2xl border-t-8 border-emerald-600">
-      <!-- Header Section -->
       <div class="space-y-4 mb-6 border-b pb-4">
         <div class="flex items-center gap-4 mb-2">
           <img
@@ -203,7 +202,6 @@
          <p class="text-xs font-bold text-emerald-200">IDUL FITRI 1447H / 2026</p>
       </div>
 
-      <!-- General Data -->
       <div class="space-y-6 mb-8 border-b pb-6">
           <h2 class="text-xl font-bold text-emerald-700 flex items-center gap-2">
               <span>📋</span> Data Umum
@@ -219,7 +217,6 @@
       </div>
 
       <div id="shifts-container" class="space-y-6">
-        <!-- SHIFT BLOCKS START -->
         <!-- Pagi 1: Dini Hari -->
         <div class="shift-block" data-shift="Pagi1">
           <div class="shift-header cursor-pointer bg-gradient-to-r from-emerald-900 to-emerald-700" id="headerPagi1">
@@ -241,7 +238,7 @@
                     <option value="dr. Farah Shania">dr. Farah Shania</option>
                     <option value="dr. Ratna Dewi">dr. Ratna Dewi</option>
                   </select>
-                  <input type="text" id="drExtraPagi1" placeholder="(Pengganti)" />
+                  <input type="text" id="drExtraPagi1" placeholder="Nama Dokter Luar / Pengganti" />
                 </div>
               </div>
               <div class="grid grid-cols-2 gap-3">
@@ -274,30 +271,29 @@
               <div class="input-group"><label>BPJS</label><input type="number" id="bpjsPagi1" value="0" min="0" /></div>
               <div class="input-group"><label>Umum</label><input type="number" id="umumPagi1" value="0" min="0" /></div>
             </div>
-            <div class="input-group"><label>Ket BPJS</label><textarea id="bpjsKetPagi1" rows="3" placeholder="Contoh:&#10;1. Tn. A - Obs. Febris"></textarea></div>
-            <div class="input-group"><label>Ket UMUM</label><textarea id="umumKetPagi1" rows="3" placeholder="Contoh:&#10;1. An. C - Vulnus Laceratum"></textarea></div>
+            <div class="input-group"><label>Ket BPJS</label><textarea id="bpjsKetPagi1" rows="3" placeholder="Format: No. Nama - Diagnosa&#10;1. Tn. A - Obs. Febris&#10;2. Ny. B - Colic Abdomen"></textarea></div>
+            <div class="input-group"><label>Ket UMUM</label><textarea id="umumKetPagi1" rows="3" placeholder="Format: No. Nama - Diagnosa&#10;1. An. C - Vulnus Laceratum&#10;2. Tn. D - GEA Dehidrasi Ringan"></textarea></div>
             
             <h3 class="text-base font-bold pt-2 text-emerald-800 border-t border-emerald-200 mt-3">Status Akhir</h3>
-            <div class="input-group"><label>DOA</label><textarea id="doaKetPagi1" rows="2" placeholder="Nama Pasien, Penyebab"></textarea></div>
-            <div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKetPagi1" rows="2" placeholder="Nama Pasien, Diagnosa"></textarea></div>
-            <div class="input-group"><label>MCU</label><textarea id="mcuKetPagi1" rows="2" placeholder="Jumlah atau Nama Pasien"></textarea></div>
-            <div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKetPagi1" rows="2" placeholder="Nama Pasien, Diagnosa"></textarea></div>
-            <div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKetPagi1" rows="2" placeholder="Nama Pasien, RS Tujuan"></textarea></div>
+            <div class="input-group"><label>DOA</label><textarea id="doaKetPagi1" rows="2" placeholder="Contoh: Tn. X, Penyebab: Henti Jantung"></textarea></div>
+            <div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKetPagi1" rows="2" placeholder="Contoh: Ny. Y, Diagnosa: CKD Stage V"></textarea></div>
+            <div class="input-group"><label>MCU</label><textarea id="mcuKetPagi1" rows="2" placeholder="Contoh: 5 Orang Karyawan Baru / Nama Pasien"></textarea></div>
+            <div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKetPagi1" rows="2" placeholder="Contoh: An. Z, Diagnosa: DHF Grade II"></textarea></div>
+            <div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKetPagi1" rows="2" placeholder="Contoh: Tn. W, Tujuan: RSUD Dr. Soetomo"></textarea></div>
           </div>
         </div>
 
-        <!-- Shift Pagi 2 (Simpified for One File Logic) -->
+        <!-- Shift Pagi 2 -->
         <div class="shift-block" data-shift="Pagi2">
           <div class="shift-header cursor-pointer bg-gradient-to-r from-emerald-700 to-emerald-500" id="headerPagi2">
             <span role="img" aria-label="emoji" class="mr-3 text-xl">☀️</span>Shift Pagi (07.00 - 14.00)
           </div>
           <div class="p-4 bg-emerald-50 rounded-b-xl space-y-4 hidden" id="contentPagi2">
-            <!-- Pagi 2 content is same as Pagi 1 structurally -->
             <div class="space-y-4">
               <div class="input-group"><label for="drPagi2">Nama Dokter</label>
                 <div class="doctor-inputs">
                   <select id="drPagi2"><option value="">-- Pilih Dokter --</option><option value="dr. Sukresno Tjahjo W., M.Kes">dr. Sukresno Tjahjo W., M.Kes</option><option value="dr. Felicia Putri Hartono">dr. Felicia Putri Hartono</option><option value="dr. Syntia Desy Arisandi">dr. Syntia Desy Arisandi</option><option value="dr. Imam Fadli">dr. Imam Fadli</option><option value="dr. Deo Sanjaya">dr. Deo Sanjaya</option><option value="dr. Evva Mardiyana">dr. Evva Mardiyana</option><option value="dr. Farah Shania">dr. Farah Shania</option><option value="dr. Ratna Dewi">dr. Ratna Dewi</option></select>
-                  <input type="text" id="drExtraPagi2" placeholder="(Pengganti)" />
+                  <input type="text" id="drExtraPagi2" placeholder="Nama Dokter Luar / Pengganti" />
                 </div>
               </div>
               <div class="grid grid-cols-2 gap-3">
@@ -327,13 +323,13 @@
               <div class="input-group"><label>BPJS</label><input type="number" id="bpjsPagi2" value="0" min="0" /></div>
               <div class="input-group"><label>Umum</label><input type="number" id="umumPagi2" value="0" min="0" /></div>
             </div>
-            <div class="input-group"><label>Ket BPJS</label><textarea id="bpjsKetPagi2" rows="3"></textarea></div>
-            <div class="input-group"><label>Ket UMUM</label><textarea id="umumKetPagi2" rows="3"></textarea></div>
-            <div class="input-group"><label>DOA</label><textarea id="doaKetPagi2" rows="2"></textarea></div>
-            <div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKetPagi2" rows="2"></textarea></div>
-            <div class="input-group"><label>MCU</label><textarea id="mcuKetPagi2" rows="2"></textarea></div>
-            <div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKetPagi2" rows="2"></textarea></div>
-            <div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKetPagi2" rows="2"></textarea></div>
+            <div class="input-group"><label>Ket BPJS</label><textarea id="bpjsKetPagi2" rows="3" placeholder="Format: No. Nama - Diagnosa"></textarea></div>
+            <div class="input-group"><label>Ket UMUM</label><textarea id="umumKetPagi2" rows="3" placeholder="Format: No. Nama - Diagnosa"></textarea></div>
+            <div class="input-group"><label>DOA</label><textarea id="doaKetPagi2" rows="2" placeholder="Nama Pasien, Penyebab"></textarea></div>
+            <div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKetPagi2" rows="2" placeholder="Nama Pasien, Diagnosa"></textarea></div>
+            <div class="input-group"><label>MCU</label><textarea id="mcuKetPagi2" rows="2" placeholder="Jumlah atau Nama Pasien"></textarea></div>
+            <div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKetPagi2" rows="2" placeholder="Nama Pasien, Diagnosa"></textarea></div>
+            <div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKetPagi2" rows="2" placeholder="Nama Pasien, RS Tujuan"></textarea></div>
           </div>
         </div>
 
@@ -347,7 +343,7 @@
               <div class="input-group"><label for="drSiang">Nama Dokter</label>
                 <div class="doctor-inputs">
                   <select id="drSiang"><option value="">-- Pilih Dokter --</option><option value="dr. Sukresno Tjahjo W., M.Kes">dr. Sukresno Tjahjo W., M.Kes</option><option value="dr. Felicia Putri Hartono">dr. Felicia Putri Hartono</option><option value="dr. Syntia Desy Arisandi">dr. Syntia Desy Arisandi</option><option value="dr. Imam Fadli">dr. Imam Fadli</option><option value="dr. Deo Sanjaya">dr. Deo Sanjaya</option><option value="dr. Evva Mardiyana">dr. Evva Mardiyana</option><option value="dr. Farah Shania">dr. Farah Shania</option><option value="dr. Ratna Dewi">dr. Ratna Dewi</option></select>
-                  <input type="text" id="drExtraSiang" placeholder="(Pengganti)" />
+                  <input type="text" id="drExtraSiang" placeholder="Nama Dokter Luar / Pengganti" />
                 </div>
               </div>
               <div class="grid grid-cols-2 gap-3">
@@ -377,13 +373,13 @@
               <div class="input-group"><label>BPJS</label><input type="number" id="bpjsSiang" value="0" min="0" /></div>
               <div class="input-group"><label>Umum</label><input type="number" id="umumSiang" value="0" min="0" /></div>
             </div>
-            <div class="input-group"><label>Ket BPJS</label><textarea id="bpjsKetSiang" rows="3"></textarea></div>
-            <div class="input-group"><label>Ket UMUM</label><textarea id="umumKetSiang" rows="3"></textarea></div>
-            <div class="input-group"><label>DOA</label><textarea id="doaKetSiang" rows="2"></textarea></div>
-            <div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKetSiang" rows="2"></textarea></div>
-            <div class="input-group"><label>MCU</label><textarea id="mcuKetSiang" rows="2"></textarea></div>
-            <div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKetSiang" rows="2"></textarea></div>
-            <div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKetSiang" rows="2"></textarea></div>
+            <div class="input-group"><label>Ket BPJS</label><textarea id="bpjsKetSiang" rows="3" placeholder="Format: No. Nama - Diagnosa"></textarea></div>
+            <div class="input-group"><label>Ket UMUM</label><textarea id="umumKetSiang" rows="3" placeholder="Format: No. Nama - Diagnosa"></textarea></div>
+            <div class="input-group"><label>DOA</label><textarea id="doaKetSiang" rows="2" placeholder="Nama Pasien, Penyebab"></textarea></div>
+            <div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKetSiang" rows="2" placeholder="Nama Pasien, Diagnosa"></textarea></div>
+            <div class="input-group"><label>MCU</label><textarea id="mcuKetSiang" rows="2" placeholder="Jumlah atau Nama Pasien"></textarea></div>
+            <div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKetSiang" rows="2" placeholder="Nama Pasien, Diagnosa"></textarea></div>
+            <div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKetSiang" rows="2" placeholder="Nama Pasien, RS Tujuan"></textarea></div>
           </div>
         </div>
 
@@ -397,7 +393,7 @@
               <div class="input-group"><label for="drMalam">Nama Dokter</label>
                 <div class="doctor-inputs">
                   <select id="drMalam"><option value="">-- Pilih Dokter --</option><option value="dr. Sukresno Tjahjo W., M.Kes">dr. Sukresno Tjahjo W., M.Kes</option><option value="dr. Felicia Putri Hartono">dr. Felicia Putri Hartono</option><option value="dr. Syntia Desy Arisandi">dr. Syntia Desy Arisandi</option><option value="dr. Imam Fadli">dr. Imam Fadli</option><option value="dr. Deo Sanjaya">dr. Deo Sanjaya</option><option value="dr. Evva Mardiyana">dr. Evva Mardiyana</option><option value="dr. Farah Shania">dr. Farah Shania</option><option value="dr. Ratna Dewi">dr. Ratna Dewi</option></select>
-                  <input type="text" id="drExtraMalam" placeholder="(Pengganti)" />
+                  <input type="text" id="drExtraMalam" placeholder="Nama Dokter Luar / Pengganti" />
                 </div>
               </div>
               <div class="grid grid-cols-2 gap-3">
@@ -427,25 +423,24 @@
               <div class="input-group"><label>BPJS</label><input type="number" id="bpjsMalam" value="0" min="0" /></div>
               <div class="input-group"><label>Umum</label><input type="number" id="umumMalam" value="0" min="0" /></div>
             </div>
-            <div class="input-group"><label>Ket BPJS</label><textarea id="bpjsKetMalam" rows="3"></textarea></div>
-            <div class="input-group"><label>Ket UMUM</label><textarea id="umumKetMalam" rows="3"></textarea></div>
-            <div class="input-group"><label>DOA</label><textarea id="doaKetMalam" rows="2"></textarea></div>
-            <div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKetMalam" rows="2"></textarea></div>
-            <div class="input-group"><label>MCU</label><textarea id="mcuKetMalam" rows="2"></textarea></div>
-            <div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKetMalam" rows="2"></textarea></div>
-            <div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKetMalam" rows="2"></textarea></div>
+            <div class="input-group"><label>Ket BPJS</label><textarea id="bpjsKetMalam" rows="3" placeholder="Format: No. Nama - Diagnosa"></textarea></div>
+            <div class="input-group"><label>Ket UMUM</label><textarea id="umumKetMalam" rows="3" placeholder="Format: No. Nama - Diagnosa"></textarea></div>
+            <div class="input-group"><label>DOA</label><textarea id="doaKetMalam" rows="2" placeholder="Nama Pasien, Penyebab"></textarea></div>
+            <div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKetMalam" rows="2" placeholder="Nama Pasien, Diagnosa"></textarea></div>
+            <div class="input-group"><label>MCU</label><textarea id="mcuKetMalam" rows="2" placeholder="Jumlah atau Nama Pasien"></textarea></div>
+            <div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKetMalam" rows="2" placeholder="Nama Pasien, Diagnosa"></textarea></div>
+            <div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKetMalam" rows="2" placeholder="Nama Pasien, RS Tujuan"></textarea></div>
           </div>
         </div>
       </div>
 
-      <!-- Output Section -->
       <div class="mt-8">
         <h2 class="text-xl font-bold text-emerald-900 mb-2">Hasil Laporan Siap Salin</h2>
         <textarea
           id="outputReport"
           class="w-full h-64 bg-emerald-50 text-emerald-900 p-4 border-2 border-emerald-200 rounded-xl font-mono text-sm resize-none shadow-inner"
           readonly
-          placeholder="Laporan akan muncul di sini..."
+          placeholder="Laporan akan muncul di sini otomatis setelah data diisi..."
           style="white-space: pre;"
         ></textarea>
 
@@ -475,7 +470,6 @@
         <div id="copyMessage" class="mt-2 text-sm text-center font-bold hidden"></div>
       </div>
 
-      <!-- Changelog -->
       <div class="mt-8 border-t border-emerald-100 pt-6">
         <div id="changelogHeader" class="flex justify-between items-center cursor-pointer mb-2">
           <h2 class="text-xl font-bold text-emerald-900">Changelog Aplikasi</h2>
@@ -485,6 +479,7 @@
         </div>
         <div id="changelogContent" class="hidden">
             <ul class="list-disc list-inside text-emerald-800 space-y-4 pl-4 text-sm font-medium">
+                <li><span class="font-bold">Update [Placeholder]</span>: Penambahan teks bantuan (hint) pada semua kotak input untuk mempermudah pengisian.</li>
                 <li><span class="font-bold">Edisi Lebaran 2026</span>: Pembaruan tema visual Hijau Emerald & Emas.</li>
                 <li><span class="font-bold">Fix Visual Mode Gelap</span>: Perbaikan kontras label dan input agar terbaca jelas.</li>
                 <li><span class="font-bold">Update [27 Jan 2026]</span>: Perbaikan sinkronisasi realtime daftar peringatan dokter.</li>
