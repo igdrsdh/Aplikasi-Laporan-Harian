@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Laporan Jaga IGD</title>
+    <title>Laporan Jaga IGD - RS Dian Husada</title>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
@@ -125,9 +125,6 @@
       .dark .text-sky-600 { color: #60a5fa !important; }
       .dark .text-sky-700 { color: #93c5fd !important; }
       .dark .text-gray-700 { color: #cbd5e1 !important; }
-      .dark .text-sm, .dark .text-base, .dark .font-medium, .dark .font-semibold {
-          color: #f1f5f9 !important;
-      }
       .dark .input-group label {
           color: #e2e8f0 !important;
       }
@@ -163,9 +160,8 @@
       <div class="space-y-4 mb-6 border-b pb-4">
         <div class="flex items-center gap-4 mb-2">
           <img
-            src="LOGO IGD.png"
+            src="https://img.icons8.com/fluency/96/hospital.png"
             alt="Logo IGD"
-            onerror="this.style.display='none'"
             class="app-logo w-14 h-14 md:w-20 md:h-20 object-contain border-none"/>
           <div>
             <h1 class="text-2xl md:text-3xl font-extrabold text-gray-800 leading-tight">Laporan Jaga IGD</h1>
@@ -174,9 +170,10 @@
         </div>
       </div>
 
+      <!-- Hero Section with Static Text -->
       <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-4 rounded-xl mb-6 text-center text-white shadow-md">
          <h2 class="text-xl font-bold">🚑 Selamat Datang 🚑</h2>
-         <p id="quote-display" class="text-sm italic my-2">"..."</p>
+         <p class="text-sm italic my-2">"Melayani dengan Hati, Bertindak dengan Cepat."</p>
          <p class="text-xs opacity-80">Emergency Room Team</p>
       </div>
 
@@ -193,7 +190,6 @@
       </div>
 
       <div id="shifts-container" class="space-y-6">
-        <!-- Loop for Shifts -->
         <!-- Pagi 1 (00.00 - 07.00) -->
         <div class="shift-block" data-shift="Pagi1">
           <div class="shift-header cursor-pointer bg-gradient-to-r from-slate-600 to-slate-400" id="headerPagi1">
@@ -249,11 +245,11 @@
             <div class="input-group"><label>Ket BPJS</label><textarea id="bpjsKetPagi1" rows="3" placeholder="Nama Pasien - Diagnosa"></textarea></div>
             <div class="input-group"><label>Ket UMUM</label><textarea id="umumKetPagi1" rows="3" placeholder="Nama Pasien - Diagnosa"></textarea></div>
             <h3 class="text-base font-semibold pt-2 text-sky-600 border-t pt-3">Status Akhir</h3>
-            <div class="input-group"><label>DOA</label><textarea id="doaKetPagi1" rows="2"></textarea></div>
-            <div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKetPagi1" rows="2"></textarea></div>
-            <div class="input-group"><label>MCU</label><textarea id="mcuKetPagi1" rows="2"></textarea></div>
-            <div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKetPagi1" rows="2"></textarea></div>
-            <div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKetPagi1" rows="2"></textarea></div>
+            <div class="input-group"><label>DOA</label><textarea id="doaKetPagi1" rows="2" placeholder="Nama Pasien - Jam Kedatangan"></textarea></div>
+            <div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKetPagi1" rows="2" placeholder="Nama Pasien - Diagnosa - Jam Meninggal"></textarea></div>
+            <div class="input-group"><label>MCU</label><textarea id="mcuKetPagi1" rows="2" placeholder="Nama Pasien - Jenis Pemeriksaan"></textarea></div>
+            <div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKetPagi1" rows="2" placeholder="Nama Puskesmas - Diagnosa"></textarea></div>
+            <div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKetPagi1" rows="2" placeholder="Nama Pasien - RS Tujuan - Diagnosa"></textarea></div>
           </div>
         </div>
 
@@ -267,17 +263,7 @@
               <div class="input-group">
                 <label for="drPagi2" class="text-sky-600">Nama Dokter</label>
                 <div class="doctor-inputs">
-                  <select id="drPagi2">
-                    <option value="">-- Pilih Dokter --</option>
-                    <option value="dr. Sukresno Tjahjo W., M.Kes">dr. Sukresno Tjahjo W., M.Kes</option>
-                    <option value="dr. Felicia Putri Hartono">dr. Felicia Putri Hartono</option>
-                    <option value="dr. Syntia Desy Arisandi">dr. Syntia Desy Arisandi</option>
-                    <option value="dr. Imam Fadli">dr. Imam Fadli</option>
-                    <option value="dr. Deo Sanjaya">dr. Deo Sanjaya</option>
-                    <option value="dr. Evva Mardiyana">dr. Evva Mardiyana</option>
-                    <option value="dr. Farah Shania">dr. Farah Shania</option>
-                    <option value="dr. Ratna Dewi">dr. Ratna Dewi</option>
-                  </select>
+                  <select id="drPagi2"><option value="">-- Pilih Dokter --</option><option value="dr. Sukresno Tjahjo W., M.Kes">dr. Sukresno Tjahjo W., M.Kes</option><option value="dr. Felicia Putri Hartono">dr. Felicia Putri Hartono</option><option value="dr. Syntia Desy Arisandi">dr. Syntia Desy Arisandi</option><option value="dr. Imam Fadli">dr. Imam Fadli</option><option value="dr. Deo Sanjaya">dr. Deo Sanjaya</option><option value="dr. Evva Mardiyana">dr. Evva Mardiyana</option><option value="dr. Farah Shania">dr. Farah Shania</option><option value="dr. Ratna Dewi">dr. Ratna Dewi</option></select>
                   <input type="text" id="drExtraPagi2" placeholder="(Pengganti)" />
                 </div>
               </div>
@@ -305,18 +291,11 @@
                 <div class="input-group"><label>RJ</label><input type="number" id="sendiriRJPagi2" value="0" min="0" /></div>
             </div>
             <h3 class="text-base font-semibold pt-2 text-sky-600 border-t pt-3">Rincian Pembayaran</h3>
-            <div class="input-row">
-              <div class="input-group"><label>BPJS</label><input type="number" id="bpjsPagi2" value="0" min="0" /></div>
-              <div class="input-group"><label>Umum</label><input type="number" id="umumPagi2" value="0" min="0" /></div>
-            </div>
-            <div class="input-group"><label>Ket BPJS</label><textarea id="bpjsKetPagi2" rows="3"></textarea></div>
-            <div class="input-group"><label>Ket UMUM</label><textarea id="umumKetPagi2" rows="3"></textarea></div>
+            <div class="input-row"><div class="input-group"><label>BPJS</label><input type="number" id="bpjsPagi2" value="0" min="0" /></div><div class="input-group"><label>Umum</label><input type="number" id="umumPagi2" value="0" min="0" /></div></div>
+            <div class="input-group"><label>Ket BPJS</label><textarea id="bpjsKetPagi2" rows="3" placeholder="Nama Pasien - Diagnosa"></textarea></div>
+            <div class="input-group"><label>Ket UMUM</label><textarea id="umumKetPagi2" rows="3" placeholder="Nama Pasien - Diagnosa"></textarea></div>
             <h3 class="text-base font-semibold pt-2 text-sky-600 border-t pt-3">Status Akhir</h3>
-            <div class="input-group"><label>DOA</label><textarea id="doaKetPagi2" rows="2"></textarea></div>
-            <div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKetPagi2" rows="2"></textarea></div>
-            <div class="input-group"><label>MCU</label><textarea id="mcuKetPagi2" rows="2"></textarea></div>
-            <div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKetPagi2" rows="2"></textarea></div>
-            <div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKetPagi2" rows="2"></textarea></div>
+            <div class="input-group"><label>DOA</label><textarea id="doaKetPagi2" rows="2" placeholder="Nama Pasien - Jam Kedatangan"></textarea></div><div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKetPagi2" rows="2" placeholder="Nama Pasien - Diagnosa - Jam Meninggal"></textarea></div><div class="input-group"><label>MCU</label><textarea id="mcuKetPagi2" rows="2" placeholder="Nama Pasien - Jenis Pemeriksaan"></textarea></div><div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKetPagi2" rows="2" placeholder="Nama Puskesmas - Diagnosa"></textarea></div><div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKetPagi2" rows="2" placeholder="Nama Pasien - RS Tujuan - Diagnosa"></textarea></div>
           </div>
         </div>
 
@@ -330,17 +309,7 @@
               <div class="input-group">
                 <label for="drSiang" class="text-sky-600">Nama Dokter</label>
                 <div class="doctor-inputs">
-                  <select id="drSiang">
-                    <option value="">-- Pilih Dokter --</option>
-                    <option value="dr. Sukresno Tjahjo W., M.Kes">dr. Sukresno Tjahjo W., M.Kes</option>
-                    <option value="dr. Felicia Putri Hartono">dr. Felicia Putri Hartono</option>
-                    <option value="dr. Syntia Desy Arisandi">dr. Syntia Desy Arisandi</option>
-                    <option value="dr. Imam Fadli">dr. Imam Fadli</option>
-                    <option value="dr. Deo Sanjaya">dr. Deo Sanjaya</option>
-                    <option value="dr. Evva Mardiyana">dr. Evva Mardiyana</option>
-                    <option value="dr. Farah Shania">dr. Farah Shania</option>
-                    <option value="dr. Ratna Dewi">dr. Ratna Dewi</option>
-                  </select>
+                  <select id="drSiang"><option value="">-- Pilih Dokter --</option><option value="dr. Sukresno Tjahjo W., M.Kes">dr. Sukresno Tjahjo W., M.Kes</option><option value="dr. Felicia Putri Hartono">dr. Felicia Putri Hartono</option><option value="dr. Syntia Desy Arisandi">dr. Syntia Desy Arisandi</option><option value="dr. Imam Fadli">dr. Imam Fadli</option><option value="dr. Deo Sanjaya">dr. Deo Sanjaya</option><option value="dr. Evva Mardiyana">dr. Evva Mardiyana</option><option value="dr. Farah Shania">dr. Farah Shania</option><option value="dr. Ratna Dewi">dr. Ratna Dewi</option></select>
                   <input type="text" id="drExtraSiang" placeholder="(Pengganti)" />
                 </div>
               </div>
@@ -368,18 +337,11 @@
                 <div class="input-group"><label>RJ</label><input type="number" id="sendiriRJSiang" value="0" min="0" /></div>
             </div>
             <h3 class="text-base font-semibold pt-2 text-sky-600 border-t pt-3">Rincian Pembayaran</h3>
-            <div class="input-row">
-              <div class="input-group"><label>BPJS</label><input type="number" id="bpjsSiang" value="0" min="0" /></div>
-              <div class="input-group"><label>Umum</label><input type="number" id="umumSiang" value="0" min="0" /></div>
-            </div>
-            <div class="input-group"><label>Ket BPJS</label><textarea id="bpjsKetSiang" rows="3"></textarea></div>
-            <div class="input-group"><label>Ket UMUM</label><textarea id="umumKetSiang" rows="3"></textarea></div>
+            <div class="input-row"><div class="input-group"><label>BPJS</label><input type="number" id="bpjsSiang" value="0" min="0" /></div><div class="input-group"><label>Umum</label><input type="number" id="umumSiang" value="0" min="0" /></div></div>
+            <div class="input-group"><label>Ket BPJS</label><textarea id="bpjsKetSiang" rows="3" placeholder="Nama Pasien - Diagnosa"></textarea></div>
+            <div class="input-group"><label>Ket UMUM</label><textarea id="umumKetSiang" rows="3" placeholder="Nama Pasien - Diagnosa"></textarea></div>
             <h3 class="text-base font-semibold pt-2 text-sky-600 border-t pt-3">Status Akhir</h3>
-            <div class="input-group"><label>DOA</label><textarea id="doaKetSiang" rows="2"></textarea></div>
-            <div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKetSiang" rows="2"></textarea></div>
-            <div class="input-group"><label>MCU</label><textarea id="mcuKetSiang" rows="2"></textarea></div>
-            <div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKetSiang" rows="2"></textarea></div>
-            <div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKetSiang" rows="2"></textarea></div>
+            <div class="input-group"><label>DOA</label><textarea id="doaKetSiang" rows="2" placeholder="Nama Pasien - Jam Kedatangan"></textarea></div><div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKetSiang" rows="2" placeholder="Nama Pasien - Diagnosa - Jam Meninggal"></textarea></div><div class="input-group"><label>MCU</label><textarea id="mcuKetSiang" rows="2" placeholder="Nama Pasien - Jenis Pemeriksaan"></textarea></div><div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKetSiang" rows="2" placeholder="Nama Puskesmas - Diagnosa"></textarea></div><div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKetSiang" rows="2" placeholder="Nama Pasien - RS Tujuan - Diagnosa"></textarea></div>
           </div>
         </div>
 
@@ -393,17 +355,7 @@
               <div class="input-group">
                 <label for="drMalam" class="text-sky-600">Nama Dokter</label>
                 <div class="doctor-inputs">
-                  <select id="drMalam">
-                    <option value="">-- Pilih Dokter --</option>
-                    <option value="dr. Sukresno Tjahjo W., M.Kes">dr. Sukresno Tjahjo W., M.Kes</option>
-                    <option value="dr. Felicia Putri Hartono">dr. Felicia Putri Hartono</option>
-                    <option value="dr. Syntia Desy Arisandi">dr. Syntia Desy Arisandi</option>
-                    <option value="dr. Imam Fadli">dr. Imam Fadli</option>
-                    <option value="dr. Deo Sanjaya">dr. Deo Sanjaya</option>
-                    <option value="dr. Evva Mardiyana">dr. Evva Mardiyana</option>
-                    <option value="dr. Farah Shania">dr. Farah Shania</option>
-                    <option value="dr. Ratna Dewi">dr. Ratna Dewi</option>
-                  </select>
+                  <select id="drMalam"><option value="">-- Pilih Dokter --</option><option value="dr. Sukresno Tjahjo W., M.Kes">dr. Sukresno Tjahjo W., M.Kes</option><option value="dr. Felicia Putri Hartono">dr. Felicia Putri Hartono</option><option value="dr. Syntia Desy Arisandi">dr. Syntia Desy Arisandi</option><option value="dr. Imam Fadli">dr. Imam Fadli</option><option value="dr. Deo Sanjaya">dr. Deo Sanjaya</option><option value="dr. Evva Mardiyana">dr. Evva Mardiyana</option><option value="dr. Farah Shania">dr. Farah Shania</option><option value="dr. Ratna Dewi">dr. Ratna Dewi</option></select>
                   <input type="text" id="drExtraMalam" placeholder="(Pengganti)" />
                 </div>
               </div>
@@ -431,18 +383,11 @@
                 <div class="input-group"><label>RJ</label><input type="number" id="sendiriRJMalam" value="0" min="0" /></div>
             </div>
             <h3 class="text-base font-semibold pt-2 text-sky-600 border-t pt-3">Rincian Pembayaran</h3>
-            <div class="input-row">
-              <div class="input-group"><label>BPJS</label><input type="number" id="bpjsMalam" value="0" min="0" /></div>
-              <div class="input-group"><label>Umum</label><input type="number" id="umumMalam" value="0" min="0" /></div>
-            </div>
-            <div class="input-group"><label>Ket BPJS</label><textarea id="bpjsKetMalam" rows="3"></textarea></div>
-            <div class="input-group"><label>Ket UMUM</label><textarea id="umumKetMalam" rows="3"></textarea></div>
+            <div class="input-row"><div class="input-group"><label>BPJS</label><input type="number" id="bpjsMalam" value="0" min="0" /></div><div class="input-group"><label>Umum</label><input type="number" id="umumMalam" value="0" min="0" /></div></div>
+            <div class="input-group"><label>Ket BPJS</label><textarea id="bpjsKetMalam" rows="3" placeholder="Nama Pasien - Diagnosa"></textarea></div>
+            <div class="input-group"><label>Ket UMUM</label><textarea id="umumKetMalam" rows="3" placeholder="Nama Pasien - Diagnosa"></textarea></div>
             <h3 class="text-base font-semibold pt-2 text-sky-600 border-t pt-3">Status Akhir</h3>
-            <div class="input-group"><label>DOA</label><textarea id="doaKetMalam" rows="2"></textarea></div>
-            <div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKetMalam" rows="2"></textarea></div>
-            <div class="input-group"><label>MCU</label><textarea id="mcuKetMalam" rows="2"></textarea></div>
-            <div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKetMalam" rows="2"></textarea></div>
-            <div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKetMalam" rows="2"></textarea></div>
+            <div class="input-group"><label>DOA</label><textarea id="doaKetMalam" rows="2" placeholder="Nama Pasien - Jam Kedatangan"></textarea></div><div class="input-group"><label>Meninggal di IGD</label><textarea id="meninggalKetMalam" rows="2" placeholder="Nama Pasien - Diagnosa - Jam Meninggal"></textarea></div><div class="input-group"><label>MCU</label><textarea id="mcuKetMalam" rows="2" placeholder="Nama Pasien - Jenis Pemeriksaan"></textarea></div><div class="input-group"><label>Rujukan PKM</label><textarea id="pkmRujukKetMalam" rows="2" placeholder="Nama Puskesmas - Diagnosa"></textarea></div><div class="input-group"><label>Rujuk RS Lain</label><textarea id="rsLainKetMalam" rows="2" placeholder="Nama Pasien - RS Tujuan - Diagnosa"></textarea></div>
           </div>
         </div>
       </div>
@@ -493,6 +438,8 @@
         </div>
         <div id="changelogContent" class="hidden">
             <ul class="list-disc list-inside text-gray-600 space-y-4 pl-4 text-sm">
+                <li><span class="font-semibold">Update [24 Mar 2024]</span>: Penambahan hint (placeholder) pada seluruh input status akhir.</li>
+                <li><span class="font-semibold">Update [02 Feb 2026]</span>: Perbaikan logika real-time kalkulasi MRS/Total Pasien di tiap baris rincian.</li>
                 <li><span class="font-semibold">Update [27 Jan 2026]</span>: Perbaikan bug rincian siaga desa pada shift malam.</li>
                 <li><span class="font-semibold">Update [02 Jan 2026]</span>: Penyempurnaan sinkronisasi data dan peringatan pengisian dokter.</li>
             </ul>
@@ -528,7 +475,11 @@
       }
 
       function saveData() {
-          const dataToSave = { inputCity: getStr('inputCity'), inputDate: getStr('inputDate') };
+          const dataToSave = { 
+              inputCity: getStr('inputCity'), 
+              inputDate: getStr('inputDate'),
+              darkMode: document.documentElement.classList.contains("dark") ? "enabled" : "disabled"
+          };
           const fields = ['dr', 'drExtra', 'bpjsKet', 'umumKet', 'doaKet', 'meninggalKet', 'mcuKet', 'pkmRujukKet', 'rsLainKet', 'pkmRI', 'pkmRJ', 'rujukRI', 'rujukRJ', 'labRI', 'labRJ', 'desaRI', 'desaRJ', 'sendiriRI', 'sendiriRJ', 'bpjs', 'umum'];
           allShiftNames.forEach(s => fields.forEach(f => {
               const id = `${f}${s}`;
@@ -540,14 +491,49 @@
 
       function loadData() {
           const savedData = localStorage.getItem('igdReportData');
-          if (!savedData) return;
+          if (!savedData) {
+              setDefaultDate();
+              return;
+          }
           try {
               const data = JSON.parse(savedData);
               for (const id in data) {
                   const el = document.getElementById(id);
                   if (el && id !== 'inputCity') el.value = data[id];
               }
-          } catch (e) { localStorage.removeItem('igdReportData'); }
+              if (data.darkMode === "enabled") document.documentElement.classList.add("dark");
+              if (!getStr('inputDate')) setDefaultDate();
+          } catch (e) { 
+              localStorage.removeItem('igdReportData'); 
+              setDefaultDate();
+          }
+      }
+
+      function setDefaultDate() {
+          const now = new Date();
+          const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+          document.getElementById('inputDate').value = now.toLocaleDateString('id-ID', options);
+      }
+
+      function updateShiftTotals(shift) {
+          const counts = {
+              pkmRI: getNum(`pkmRI${shift}`), pkmRJ: getNum(`pkmRJ${shift}`),
+              rujukRI: getNum(`rujukRI${shift}`), rujukRJ: getNum(`rujukRJ${shift}`),
+              labRI: getNum(`labRI${shift}`), labRJ: getNum(`labRJ${shift}`),
+              desaRI: getNum(`desaRI${shift}`), desaRJ: getNum(`desaRJ${shift}`),
+              sendiriRI: getNum(`sendiriRI${shift}`), sendiriRJ: getNum(`sendiriRJ${shift}`)
+          };
+
+          const shiftMRS = counts.pkmRI + counts.rujukRI + counts.labRI + counts.desaRI + counts.sendiriRI;
+          const shiftRJ = counts.pkmRJ + counts.rujukRJ + counts.labRJ + counts.desaRJ + counts.sendiriRJ;
+          const shiftTotal = shiftMRS + shiftRJ;
+
+          const displayJml = document.getElementById(`displayJml${shift}`);
+          const displayMrs = document.getElementById(`displayMrs${shift}`);
+          if (displayJml) displayJml.value = shiftTotal;
+          if (displayMrs) displayMrs.value = shiftMRS;
+
+          return { total: shiftTotal, mrs: shiftMRS, rj: shiftRJ, counts };
       }
 
       function generateReport() {
@@ -565,30 +551,15 @@
                   missingDoctors.push(headerText);
               }
 
-              // Kalkulasi rincian per shift
-              const counts = {
-                  pkmRI: getNum(`pkmRI${shift}`), pkmRJ: getNum(`pkmRJ${shift}`),
-                  rujukRI: getNum(`rujukRI${shift}`), rujukRJ: getNum(`rujukRJ${shift}`),
-                  labRI: getNum(`labRI${shift}`), labRJ: getNum(`labRJ${shift}`),
-                  desaRI: getNum(`desaRI${shift}`), desaRJ: getNum(`desaRJ${shift}`),
-                  sendiriRI: getNum(`sendiriRI${shift}`), sendiriRJ: getNum(`sendiriRJ${shift}`)
-              };
+              const result = updateShiftTotals(shift);
+              const { total, mrs, rj, counts } = result;
 
-              const shiftMRS = counts.pkmRI + counts.rujukRI + counts.labRI + counts.desaRI + counts.sendiriRI;
-              const shiftRJ = counts.pkmRJ + counts.rujukRJ + counts.labRJ + counts.desaRJ + counts.sendiriRJ;
-              const shiftTotal = shiftMRS + shiftRJ;
+              totalK += total;
+              breakdown[shift] = { total, mrs };
 
-              document.getElementById(`displayJml${shift}`).value = shiftTotal;
-              document.getElementById(`displayMrs${shift}`).value = shiftMRS;
-
-              totalK += shiftTotal;
-              breakdown[shift] = { total: shiftTotal, mrs: shiftMRS };
-
-              // Build string rincian per shift
-              fullShiftData += `${labels[shift][0]}\nJam ${labels[shift][1]} Wib\nDokter jaga : ${drName || '-'}\nTotal kunjungan : ${shiftTotal}\nTotal rawat inap : ${shiftMRS}\n\nKeterangan :\nPasien BPJS : ${getNum(`bpjs${shift}`)}\nPasien Umum : ${getNum(`umum${shift}`)}\nPasien Rawat jalan : ${shiftRJ}\n\nRincian jumlah pasien yang datang:\n-Rujukan Puskesmas:\n\u2022 Rawat inap : ${counts.pkmRI}\n\u2022 Rawat jalan : ${counts.pkmRJ}\n-Bawa surat rujukan :\n\u2022 Rawat inap : ${counts.rujukRI}\n\u2022 Rawat jalan : ${counts.rujukRJ}\n-Bawa hasil lab : \n\u2022 Rawat inap : ${counts.labRI}\n\u2022 Rawat jalan : ${counts.labRJ}\n-Diantar siaga desa : \n\u2022 Rawat inap : ${counts.desaRI}\n\u2022 Rawat jalan : ${counts.desaRJ}\n-Datang sendiri : \n\u2022 Rawat inap : ${counts.sendiriRI}\n\u2022 Rawat jalan : ${counts.sendiriRJ}\n\nRINCIAN KASUS RAWAT JALAN\nBPJS:\n${getStr(`bpjsKet${shift}`) || '- Tidak ada'}\n\nUMUM:\n${getStr(`umumKet${shift}`) || '- Tidak ada'}\n\nRINCIAN STATUS AKHIR\nDOA (Death On Arrival) : ${getStr(`doaKet${shift}`) || '-'}\nMeninggal di IGD : ${getStr(`meninggalKet${shift}`) || '-'}\nMCU (Medical Check Up) : ${getStr(`mcuKet${shift}`) || '-'}\nRujukan dari Puskesmas : ${getStr(`pkmRujukKet${shift}`) || '-'}\nRujuk ke Rumah Sakit Lain : ${getStr(`rsLainKet${shift}`) || '-'}\nCovid Rawat Jalan: -\n\n`;
+              fullShiftData += `${labels[shift][0]}\nJam ${labels[shift][1]} Wib\nDokter jaga : ${drName || '-'}\nTotal kunjungan : ${total}\nTotal rawat inap : ${mrs}\n\nKeterangan :\nPasien BPJS : ${getNum(`bpjs${shift}`)}\nPasien Umum : ${getNum(`umum${shift}`)}\nPasien Rawat jalan : ${rj}\n\nRincian jumlah pasien yang datang:\n-Rujukan Puskesmas:\n\u2022 Rawat inap : ${counts.pkmRI}\n\u2022 Rawat jalan : ${counts.pkmRJ}\n-Bawa surat rujukan :\n\u2022 Rawat inap : ${counts.rujukRI}\n\u2022 Rawat jalan : ${counts.rujukRJ}\n-Bawa hasil lab : \n\u2022 Rawat inap : ${counts.labRI}\n\u2022 Rawat jalan : ${counts.labRJ}\n-Diantar siaga desa : \n\u2022 Rawat inap : ${counts.desaRI}\n\u2022 Rawat jalan : ${counts.desaRJ}\n-Datang sendiri : \n\u2022 Rawat inap : ${counts.sendiriRI}\n\u2022 Rawat jalan : ${counts.sendiriRJ}\n\nRINCIAN KASUS RAWAT JALAN\nBPJS:\n${getStr(`bpjsKet${shift}`) || '- Tidak ada'}\n\nUMUM:\n${getStr(`umumKet${shift}`) || '- Tidak ada'}\n\nRINCIAN STATUS AKHIR\nDOA (Death On Arrival) : ${getStr(`doaKet${shift}`) || '-'}\nMeninggal di IGD : ${getStr(`meninggalKet${shift}`) || '-'}\nMCU (Medical Check Up) : ${getStr(`mcuKet${shift}`) || '-'}\nRujukan dari Puskesmas : ${getStr(`pkmRujukKet${shift}`) || '-'}\nRujuk ke Rumah Sakit Lain : ${getStr(`rsLainKet${shift}`) || '-'}\nCovid Rawat Jalan: -\n\n`;
           });
 
-          // Warning & Copy Button State
           const warnBox = document.getElementById('doctorWarningMessage');
           const warnList = document.getElementById('missingDoctorsList');
           const copyBtn = document.getElementById('copyBtn');
@@ -602,7 +573,6 @@
               copyBtn.disabled = false;
           }
 
-          // Final Report Formatting
           let finalReport = `LAPORAN JAGA IGD\n\n${city}, ${dateStr} Jam 00.00\n\n`;
           finalReport += `TOTAL KUNJUNGAN IGD ${totalK} PASIEN\n`;
           finalReport += `DINI HARI : ${breakdown.Pagi1.total} px, MRS: ${breakdown.Pagi1.mrs}\n`;
@@ -615,52 +585,54 @@
       }
 
       function resetAllInputs() {
-          if (!confirm("Hapus semua data? Tindakan ini tidak dapat dibatalkan.")) return;
+          const confirmBox = confirm("Hapus semua data? Tindakan ini tidak dapat dibatalkan.");
+          if (!confirmBox) return;
           document.querySelectorAll('input:not(#inputCity), textarea, select').forEach(i => {
               if (i.type === 'number') i.value = '0';
-              else i.value = '';
+              else if (i.id !== 'inputDate') i.value = '';
           });
           localStorage.removeItem('igdReportData');
+          setDefaultDate();
           generateReport();
       }
 
       window.onload = function() {
-          // Dark Mode Init
-          if (localStorage.getItem("darkMode") === "enabled") document.documentElement.classList.add("dark");
-          document.getElementById('darkToggle').onclick = () => {
-              const isDark = document.documentElement.classList.toggle("dark");
-              localStorage.setItem("darkMode", isDark ? "enabled" : "disabled");
-          };
-
-          // Data Init
           loadData();
-          document.getElementById('quote-display').innerText = '"Marhaban Ya Ramadhan"';
           
-          // Event Listeners for all inputs
           document.querySelectorAll('input, textarea, select').forEach(i => {
-              i.addEventListener('input', () => { generateReport(); saveData(); });
-              i.addEventListener('change', () => { generateReport(); saveData(); });
+              i.addEventListener('input', () => { 
+                  generateReport(); 
+                  saveData(); 
+              });
+              i.addEventListener('change', () => { 
+                  generateReport(); 
+                  saveData(); 
+              });
           });
 
-          // Accordion for shifts
+          document.getElementById('darkToggle').onclick = () => {
+              const isDark = document.documentElement.classList.toggle("dark");
+              saveData();
+          };
+
           allShiftNames.forEach(s => {
               document.getElementById(`header${s}`).onclick = () => {
                   const content = document.getElementById(`content${s}`);
                   const isHidden = content.classList.contains('hidden');
-                  // Close others
                   allShiftNames.forEach(name => document.getElementById(`content${name}`).classList.add('hidden'));
-                  // Toggle current
                   if (isHidden) content.classList.remove('hidden');
               };
           });
 
-          // Changelog toggle
           document.getElementById('changelogHeader').onclick = () => {
               document.getElementById('changelogContent').classList.toggle('hidden');
               document.getElementById('changelogIcon').classList.toggle('rotate-180');
           };
 
-          document.getElementById('refreshBtn').onclick = () => { if(confirm("Segarkan halaman?")) window.location.reload(); };
+          document.getElementById('refreshBtn').onclick = () => { 
+              if(confirm("Segarkan halaman? Pastikan data Anda sudah tersimpan otomatis.")) window.location.reload(); 
+          };
+
           document.getElementById('copyBtn').onclick = () => {
               const output = document.getElementById('outputReport');
               output.select();
@@ -671,8 +643,8 @@
                   showNotification('Gagal menyalin. Silakan salin manual.', 'text-red-700');
               }
           };
+
           document.getElementById('resetBtn').onclick = resetAllInputs;
-          
           generateReport();
       };
     </script>
