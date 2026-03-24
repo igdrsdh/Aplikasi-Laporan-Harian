@@ -72,10 +72,10 @@
            text-align: center;
       }
 
-      /* Enhanced Warning Message UI - Fixed contrast for light mode */
+      /* FIX CONTRAST: Doctor Warning Message UI */
       #doctorWarningMessage {
-          border: 1px solid #fca5a5;
-          background: #fef2f2; /* Solid background for better readability */
+          border: 2px solid #ef4444; /* High contrast border */
+          background-color: #fff1f2; /* Light red background */
           box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.1);
           animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
       }
@@ -130,12 +130,17 @@
       .dark .input-group label {
           color: #e2e8f0 !important;
       }
-      .dark .bg-red-100 { background-color: #450a0a !important; }
-      .dark .border-red-400 { border-color: #991b1b !important; }
-      .dark .text-red-700 { color: #fecaca !important; }
+      
+      /* DARK MODE FIX: Warning Message Contrast */
       .dark #doctorWarningMessage {
-          background: #2d0606 !important;
-          border-color: #991b1b !important;
+          background-color: #450a0a !important; /* Deep dark red for dark mode */
+          border-color: #dc2626 !important; /* Bright red border */
+      }
+      .dark #doctorWarningMessage h3 {
+          color: #fecaca !important;
+      }
+      .dark #doctorWarningMessage p {
+          color: #fca5a5 !important;
       }
 
       .dark .app-logo {
@@ -408,7 +413,7 @@
           style="white-space: pre;"
         ></textarea>
 
-        <!-- BEAUTIFIED DOCTOR WARNING UI -->
+        <!-- BEAUTIFIED DOCTOR WARNING UI (FIXED CONTRAST) -->
         <div id="doctorWarningMessage" class="mt-4 p-5 rounded-2xl hidden">
           <div class="flex items-start gap-4">
             <div class="bg-red-600 p-2 rounded-xl shadow-lg">
@@ -417,8 +422,8 @@
                </svg>
             </div>
             <div class="flex-1">
-              <h3 class="text-red-900 dark:text-red-200 font-bold text-lg mb-1 leading-tight">Data Dokter Belum Lengkap</h3>
-              <p class="text-red-800 dark:text-red-300 text-sm mb-3 font-medium">Satu atau lebih shift belum memiliki nama dokter atau nama pengganti:</p>
+              <h3 class="text-red-900 font-bold text-lg mb-1 leading-tight">Data Dokter Belum Lengkap</h3>
+              <p class="text-red-700 text-sm mb-3 font-medium">Satu atau lebih shift belum memiliki nama dokter atau nama pengganti:</p>
               <div id="missingDoctorsList" class="flex flex-wrap gap-2">
                  <!-- Badges will be injected here -->
               </div>
@@ -453,7 +458,7 @@
         </div>
         <div id="changelogContent" class="hidden">
             <ul class="list-disc list-inside text-gray-600 space-y-4 pl-4 text-sm">
-                <li><span class="font-semibold">Update [25 Mar 2024]</span>: Perbaikan kontras box peringatan agar teks lebih terbaca di mode terang.</li>
+                <li><span class="font-semibold">Update [25 Mar 2024]</span>: Optimalisasi kontras box peringatan (Warning Box) untuk mode Terang dan Gelap agar teks lebih tajam dan mudah dibaca.</li>
                 <li><span class="font-semibold">Update [25 Mar 2024]</span>: Pembaruan visual Box Peringatan Dokter yang lebih modern.</li>
                 <li><span class="font-semibold">Update [25 Mar 2024]</span>: Perbaikan Bug validasi nama dokter shift Malam.</li>
                 <li><span class="font-semibold">Update [24 Mar 2024]</span>: Penambahan hint (placeholder) pada seluruh input status akhir.</li>
@@ -591,7 +596,7 @@
 
           if (missingDoctors.length > 0) {
               warnList.innerHTML = missingDoctors.map(d => 
-                `<span class="bg-red-200 text-red-900 px-3 py-1 rounded-full text-xs font-bold border border-red-300 dark:bg-red-900/40 dark:text-red-300 dark:border-red-800">${d}</span>`
+                `<span class="bg-red-200 text-red-900 px-3 py-1 rounded-full text-xs font-bold border border-red-300 dark:bg-red-800 dark:text-red-100 dark:border-red-600">${d}</span>`
               ).join('');
               
               if (warnBox.classList.contains('hidden')) {
