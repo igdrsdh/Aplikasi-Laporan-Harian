@@ -159,7 +159,6 @@
     <div class="max-w-2xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-2xl">
       <div class="space-y-4 mb-6 border-b pb-4">
         <div class="flex items-center gap-4 mb-2">
-          <!-- Logo updated to "LOGO IGD.png" -->
           <img
             src="LOGO%20IGD.png"
             alt="Logo IGD"
@@ -172,7 +171,6 @@
         </div>
       </div>
 
-      <!-- Hero Section with Static Text -->
       <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-4 rounded-xl mb-6 text-center text-white shadow-md">
          <h2 class="text-xl font-bold">🚑 Selamat Datang 🚑</h2>
          <p class="text-sm italic my-2">"Melayani dengan Hati, Bertindak dengan Cepat."</p>
@@ -440,6 +438,7 @@
         </div>
         <div id="changelogContent" class="hidden">
             <ul class="list-disc list-inside text-gray-600 space-y-4 pl-4 text-sm">
+                <li><span class="font-semibold">Update [25 Mar 2024]</span>: Perbaikan Bug validasi nama dokter shift Malam.</li>
                 <li><span class="font-semibold">Update [24 Mar 2024]</span>: Penambahan hint (placeholder) pada seluruh input status akhir.</li>
                 <li><span class="font-semibold">Update [02 Feb 2026]</span>: Perbaikan logika real-time kalkulasi MRS/Total Pasien di tiap baris rincian.</li>
                 <li><span class="font-semibold">Update [27 Jan 2026]</span>: Perbaikan bug rincian siaga desa pada shift malam.</li>
@@ -461,9 +460,15 @@
       function getNum(id) { const el = document.getElementById(id); return el ? (parseInt(el.value) || 0) : 0; }
       function getStr(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
 
+      // Logika penamaan dokter diperbaiki agar konsisten
       function getDoctorName(shift) {
-          const drSelect = document.getElementById(`dr${shift}`).value;
-          const drExtra = document.getElementById(`drExtra${shift}`).value.trim();
+          const drSelectEl = document.getElementById(`dr${shift}`);
+          const drExtraEl = document.getElementById(`drExtra${shift}`);
+          if (!drSelectEl || !drExtraEl) return '';
+          
+          const drSelect = drSelectEl.value;
+          const drExtra = drExtraEl.value.trim();
+          
           if (drSelect && drExtra) return `${drSelect} (${drExtra})`;
           return drSelect || drExtra || '';
       }
@@ -549,7 +554,8 @@
           allShiftNames.forEach(shift => {
               const drName = getDoctorName(shift);
               if (!drName) {
-                  const headerText = document.getElementById(`header${shift}`).innerText.replace(/[🌑☀️🌤️🌙]/g, '').trim();
+                  const headerEl = document.getElementById(`header${shift}`);
+                  const headerText = headerEl ? headerEl.innerText.replace(/[🌑☀️🌤️🌙]/g, '').trim() : shift;
                   missingDoctors.push(headerText);
               }
 
