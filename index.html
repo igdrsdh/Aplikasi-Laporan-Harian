@@ -72,10 +72,10 @@
            text-align: center;
       }
 
-      /* Enhanced Warning Message UI */
+      /* Enhanced Warning Message UI - Fixed contrast for light mode */
       #doctorWarningMessage {
-          border: 1px solid #fee2e2;
-          background: linear-gradient(to bottom right, #fef2f2, #fff);
+          border: 1px solid #fca5a5;
+          background: #fef2f2; /* Solid background for better readability */
           box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.1);
           animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
       }
@@ -134,8 +134,8 @@
       .dark .border-red-400 { border-color: #991b1b !important; }
       .dark .text-red-700 { color: #fecaca !important; }
       .dark #doctorWarningMessage {
-          background: linear-gradient(to bottom right, #450a0a, #2d0606);
-          border-color: #991b1b;
+          background: #2d0606 !important;
+          border-color: #991b1b !important;
       }
 
       .dark .app-logo {
@@ -411,14 +411,14 @@
         <!-- BEAUTIFIED DOCTOR WARNING UI -->
         <div id="doctorWarningMessage" class="mt-4 p-5 rounded-2xl hidden">
           <div class="flex items-start gap-4">
-            <div class="bg-red-500 p-2 rounded-xl shadow-lg shadow-red-200">
+            <div class="bg-red-600 p-2 rounded-xl shadow-lg">
                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                </svg>
             </div>
             <div class="flex-1">
-              <h3 class="text-red-800 dark:text-red-200 font-bold text-lg mb-1 leading-tight">Data Dokter Belum Lengkap</h3>
-              <p class="text-red-600 dark:text-red-300 text-sm mb-3 opacity-90">Satu atau lebih shift belum memiliki nama dokter atau nama pengganti:</p>
+              <h3 class="text-red-900 dark:text-red-200 font-bold text-lg mb-1 leading-tight">Data Dokter Belum Lengkap</h3>
+              <p class="text-red-800 dark:text-red-300 text-sm mb-3 font-medium">Satu atau lebih shift belum memiliki nama dokter atau nama pengganti:</p>
               <div id="missingDoctorsList" class="flex flex-wrap gap-2">
                  <!-- Badges will be injected here -->
               </div>
@@ -453,6 +453,7 @@
         </div>
         <div id="changelogContent" class="hidden">
             <ul class="list-disc list-inside text-gray-600 space-y-4 pl-4 text-sm">
+                <li><span class="font-semibold">Update [25 Mar 2024]</span>: Perbaikan kontras box peringatan agar teks lebih terbaca di mode terang.</li>
                 <li><span class="font-semibold">Update [25 Mar 2024]</span>: Pembaruan visual Box Peringatan Dokter yang lebih modern.</li>
                 <li><span class="font-semibold">Update [25 Mar 2024]</span>: Perbaikan Bug validasi nama dokter shift Malam.</li>
                 <li><span class="font-semibold">Update [24 Mar 2024]</span>: Penambahan hint (placeholder) pada seluruh input status akhir.</li>
@@ -590,7 +591,7 @@
 
           if (missingDoctors.length > 0) {
               warnList.innerHTML = missingDoctors.map(d => 
-                `<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold border border-red-200 dark:bg-red-900/40 dark:text-red-300 dark:border-red-800">${d}</span>`
+                `<span class="bg-red-200 text-red-900 px-3 py-1 rounded-full text-xs font-bold border border-red-300 dark:bg-red-900/40 dark:text-red-300 dark:border-red-800">${d}</span>`
               ).join('');
               
               if (warnBox.classList.contains('hidden')) {
