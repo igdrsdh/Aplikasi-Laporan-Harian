@@ -72,17 +72,19 @@
            text-align: center;
       }
 
+      /* Enhanced Warning Message UI */
       #doctorWarningMessage {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          border-left-width: 6px;
-          animation: pulse-red 2s infinite;
+          border: 1px solid #fee2e2;
+          background: linear-gradient(to bottom right, #fef2f2, #fff);
+          box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.1);
+          animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
       }
-      @keyframes pulse-red {
-          0% { border-left-color: #ef4444; }
-          50% { border-left-color: #fca5a5; }
-          100% { border-left-color: #ef4444; }
+
+      @keyframes shake {
+          10%, 90% { transform: translate3d(-1px, 0, 0); }
+          20%, 80% { transform: translate3d(2px, 0, 0); }
+          30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+          40%, 60% { transform: translate3d(4px, 0, 0); }
       }
 
       .dark {
@@ -131,6 +133,10 @@
       .dark .bg-red-100 { background-color: #450a0a !important; }
       .dark .border-red-400 { border-color: #991b1b !important; }
       .dark .text-red-700 { color: #fecaca !important; }
+      .dark #doctorWarningMessage {
+          background: linear-gradient(to bottom right, #450a0a, #2d0606);
+          border-color: #991b1b;
+      }
 
       .dark .app-logo {
           filter: drop-shadow(0 0 2px rgba(255,255,255,0.2));
@@ -402,18 +408,27 @@
           style="white-space: pre;"
         ></textarea>
 
-        <div id="doctorWarningMessage" class="mt-3 p-4 bg-red-100 border border-red-400 text-red-700 rounded-xl font-medium hidden">
-          <div class="flex items-center gap-2 mb-2">
-            <span class="text-2xl">⚠️</span>
-            <span class="text-lg font-bold">Lengkapi Nama Dokter</span>
+        <!-- BEAUTIFIED DOCTOR WARNING UI -->
+        <div id="doctorWarningMessage" class="mt-4 p-5 rounded-2xl hidden">
+          <div class="flex items-start gap-4">
+            <div class="bg-red-500 p-2 rounded-xl shadow-lg shadow-red-200">
+               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+               </svg>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-red-800 dark:text-red-200 font-bold text-lg mb-1 leading-tight">Data Dokter Belum Lengkap</h3>
+              <p class="text-red-600 dark:text-red-300 text-sm mb-3 opacity-90">Satu atau lebih shift belum memiliki nama dokter atau nama pengganti:</p>
+              <div id="missingDoctorsList" class="flex flex-wrap gap-2">
+                 <!-- Badges will be injected here -->
+              </div>
+            </div>
           </div>
-          <p class="text-sm mb-1 opacity-90">Mohon isi nama dokter jaga atau nama pengganti untuk shift berikut:</p>
-          <ul id="missingDoctorsList" class="list-disc list-inside text-sm font-bold bg-white/40 p-2 rounded-lg"></ul>
         </div>
 
         <button
           id="copyBtn"
-          class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl mt-3 transition duration-150 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+          class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl mt-4 transition duration-150 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
           disabled
         >
           <span role="img" aria-label="emoji" class="mr-1">📋</span> Salin Laporan
@@ -438,6 +453,7 @@
         </div>
         <div id="changelogContent" class="hidden">
             <ul class="list-disc list-inside text-gray-600 space-y-4 pl-4 text-sm">
+                <li><span class="font-semibold">Update [25 Mar 2024]</span>: Pembaruan visual Box Peringatan Dokter yang lebih modern.</li>
                 <li><span class="font-semibold">Update [25 Mar 2024]</span>: Perbaikan Bug validasi nama dokter shift Malam.</li>
                 <li><span class="font-semibold">Update [24 Mar 2024]</span>: Penambahan hint (placeholder) pada seluruh input status akhir.</li>
                 <li><span class="font-semibold">Update [02 Feb 2026]</span>: Perbaikan logika real-time kalkulasi MRS/Total Pasien di tiap baris rincian.</li>
@@ -460,7 +476,6 @@
       function getNum(id) { const el = document.getElementById(id); return el ? (parseInt(el.value) || 0) : 0; }
       function getStr(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
 
-      // Logika penamaan dokter diperbaiki agar konsisten
       function getDoctorName(shift) {
           const drSelectEl = document.getElementById(`dr${shift}`);
           const drExtraEl = document.getElementById(`drExtra${shift}`);
@@ -568,13 +583,19 @@
               fullShiftData += `${labels[shift][0]}\nJam ${labels[shift][1]} Wib\nDokter jaga : ${drName || '-'}\nTotal kunjungan : ${total}\nTotal rawat inap : ${mrs}\n\nKeterangan :\nPasien BPJS : ${getNum(`bpjs${shift}`)}\nPasien Umum : ${getNum(`umum${shift}`)}\nPasien Rawat jalan : ${rj}\n\nRincian jumlah pasien yang datang:\n-Rujukan Puskesmas:\n\u2022 Rawat inap : ${counts.pkmRI}\n\u2022 Rawat jalan : ${counts.pkmRJ}\n-Bawa surat rujukan :\n\u2022 Rawat inap : ${counts.rujukRI}\n\u2022 Rawat jalan : ${counts.rujukRJ}\n-Bawa hasil lab : \n\u2022 Rawat inap : ${counts.labRI}\n\u2022 Rawat jalan : ${counts.labRJ}\n-Diantar siaga desa : \n\u2022 Rawat inap : ${counts.desaRI}\n\u2022 Rawat jalan : ${counts.desaRJ}\n-Datang sendiri : \n\u2022 Rawat inap : ${counts.sendiriRI}\n\u2022 Rawat jalan : ${counts.sendiriRJ}\n\nRINCIAN KASUS RAWAT JALAN\nBPJS:\n${getStr(`bpjsKet${shift}`) || '- Tidak ada'}\n\nUMUM:\n${getStr(`umumKet${shift}`) || '- Tidak ada'}\n\nRINCIAN STATUS AKHIR\nDOA (Death On Arrival) : ${getStr(`doaKet${shift}`) || '-'}\nMeninggal di IGD : ${getStr(`meninggalKet${shift}`) || '-'}\nMCU (Medical Check Up) : ${getStr(`mcuKet${shift}`) || '-'}\nRujukan dari Puskesmas : ${getStr(`pkmRujukKet${shift}`) || '-'}\nRujuk ke Rumah Sakit Lain : ${getStr(`rsLainKet${shift}`) || '-'}\nCovid Rawat Jalan: -\n\n`;
           });
 
+          // Logic for displaying the beautified warning
           const warnBox = document.getElementById('doctorWarningMessage');
           const warnList = document.getElementById('missingDoctorsList');
           const copyBtn = document.getElementById('copyBtn');
 
           if (missingDoctors.length > 0) {
-              warnList.innerHTML = missingDoctors.map(d => `<li>${d}</li>`).join('');
-              warnBox.classList.remove('hidden');
+              warnList.innerHTML = missingDoctors.map(d => 
+                `<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold border border-red-200 dark:bg-red-900/40 dark:text-red-300 dark:border-red-800">${d}</span>`
+              ).join('');
+              
+              if (warnBox.classList.contains('hidden')) {
+                  warnBox.classList.remove('hidden');
+              }
               copyBtn.disabled = true;
           } else {
               warnBox.classList.add('hidden');
