@@ -72,10 +72,9 @@
            text-align: center;
       }
 
-      /* FIX CONTRAST: Doctor Warning Message UI */
       #doctorWarningMessage {
-          border: 2px solid #ef4444; /* High contrast border */
-          background-color: #fff1f2; /* Light red background */
+          border: 2px solid #ef4444;
+          background-color: #fff1f2;
           box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.1);
           animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
       }
@@ -131,10 +130,9 @@
           color: #e2e8f0 !important;
       }
       
-      /* DARK MODE FIX: Warning Message Contrast */
       .dark #doctorWarningMessage {
-          background-color: #450a0a !important; /* Deep dark red for dark mode */
-          border-color: #dc2626 !important; /* Bright red border */
+          background-color: #450a0a !important;
+          border-color: #dc2626 !important;
       }
       .dark #doctorWarningMessage h3 {
           color: #fecaca !important;
@@ -201,7 +199,6 @@
       </div>
 
       <div id="shifts-container" class="space-y-6">
-        <!-- Pagi 1 (00.00 - 07.00) -->
         <div class="shift-block" data-shift="Pagi1">
           <div class="shift-header cursor-pointer bg-gradient-to-r from-slate-600 to-slate-400" id="headerPagi1">
             <span role="img" aria-label="emoji" class="mr-3 text-xl">🌑</span>Shift Dini Hari (00.00 - 07.00)
@@ -264,7 +261,6 @@
           </div>
         </div>
 
-        <!-- Shift Pagi 2 (07.00 - 14.00) -->
         <div class="shift-block" data-shift="Pagi2">
           <div class="shift-header cursor-pointer bg-gradient-to-r from-indigo-600 to-indigo-400" id="headerPagi2">
             <span role="img" aria-label="emoji" class="mr-3 text-xl">☀️</span>Shift Pagi (07.00 - 14.00)
@@ -310,7 +306,6 @@
           </div>
         </div>
 
-        <!-- Shift Siang (14.00 - 21.00) -->
         <div class="shift-block" data-shift="Siang">
           <div class="shift-header cursor-pointer bg-gradient-to-r from-amber-600 to-amber-400" id="headerSiang">
             <span role="img" aria-label="emoji" class="mr-3 text-xl">🌤️</span>Shift Siang (14.00 - 21.00)
@@ -356,7 +351,6 @@
           </div>
         </div>
 
-        <!-- Shift Malam (21.00 - 00.00) -->
         <div class="shift-block" data-shift="Malam">
           <div class="shift-header cursor-pointer bg-gradient-to-r from-fuchsia-600 to-fuchsia-400" id="headerMalam">
             <span role="img" aria-label="emoji" class="mr-3 text-xl">🌙</span>Shift Malam (21.00 - 00.00)
@@ -403,6 +397,18 @@
         </div>
       </div>
 
+      <div class="mt-8 border-t pt-6">
+          <h2 class="text-xl font-semibold text-red-600 mb-4 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Kendala / Masalah Hari Ini
+          </h2>
+          <div class="input-group">
+            <textarea id="inputKendala" rows="4" placeholder="Tuliskan kendala operasional, sarana prasarana, atau masalah lainnya jika ada..."></textarea>
+          </div>
+      </div>
+
       <div class="mt-8">
         <h2 class="text-xl font-semibold text-gray-800 mb-2">Hasil Laporan Siap Salin</h2>
         <textarea
@@ -413,7 +419,6 @@
           style="white-space: pre;"
         ></textarea>
 
-        <!-- BEAUTIFIED DOCTOR WARNING UI (FIXED CONTRAST) -->
         <div id="doctorWarningMessage" class="mt-4 p-5 rounded-2xl hidden">
           <div class="flex items-start gap-4">
             <div class="bg-red-600 p-2 rounded-xl shadow-lg">
@@ -424,9 +429,7 @@
             <div class="flex-1">
               <h3 class="text-red-900 font-bold text-lg mb-1 leading-tight">Data Dokter Belum Lengkap</h3>
               <p class="text-red-700 text-sm mb-3 font-medium">Satu atau lebih shift belum memiliki nama dokter atau nama pengganti:</p>
-              <div id="missingDoctorsList" class="flex flex-wrap gap-2">
-                 <!-- Badges will be injected here -->
-              </div>
+              <div id="missingDoctorsList" class="flex flex-wrap gap-2"></div>
             </div>
           </div>
         </div>
@@ -448,7 +451,6 @@
         <div id="copyMessage" class="mt-2 text-sm text-center font-medium hidden"></div>
       </div>
 
-      <!-- Changelog -->
       <div class="mt-8 border-t pt-6">
         <div id="changelogHeader" class="flex justify-between items-center cursor-pointer mb-2">
           <h2 class="text-xl font-semibold text-gray-800">Changelog Aplikasi</h2>
@@ -458,13 +460,9 @@
         </div>
         <div id="changelogContent" class="hidden">
             <ul class="list-disc list-inside text-gray-600 space-y-4 pl-4 text-sm">
-                <li><span class="font-semibold">Update [25 Mar 2024]</span>: Optimalisasi kontras box peringatan (Warning Box) untuk mode Terang dan Gelap agar teks lebih tajam dan mudah dibaca.</li>
-                <li><span class="font-semibold">Update [25 Mar 2024]</span>: Pembaruan visual Box Peringatan Dokter yang lebih modern.</li>
-                <li><span class="font-semibold">Update [25 Mar 2024]</span>: Perbaikan Bug validasi nama dokter shift Malam.</li>
-                <li><span class="font-semibold">Update [24 Mar 2024]</span>: Penambahan hint (placeholder) pada seluruh input status akhir.</li>
-                <li><span class="font-semibold">Update [02 Feb 2026]</span>: Perbaikan logika real-time kalkulasi MRS/Total Pasien di tiap baris rincian.</li>
-                <li><span class="font-semibold">Update [27 Jan 2026]</span>: Perbaikan bug rincian siaga desa pada shift malam.</li>
-                <li><span class="font-semibold">Update [02 Jan 2026]</span>: Penyempurnaan sinkronisasi data dan peringatan pengisian dokter.</li>
+                <li><span class="font-semibold">Update [25 Mar 2026]</span>: Penambahan fitur input Kendala/Masalah harian di akhir laporan.</li>
+                <li><span class="font-semibold">Update [25 Mar 2024]</span>: Optimalisasi kontras box peringatan untuk mode Terang dan Gelap.</li>
+                <li><span class="font-semibold">Update [02 Feb 2026]</span>: Perbaikan logika real-time kalkulasi MRS/Total Pasien.</li>
             </ul>
         </div>
       </div>
@@ -486,10 +484,8 @@
           const drSelectEl = document.getElementById(`dr${shift}`);
           const drExtraEl = document.getElementById(`drExtra${shift}`);
           if (!drSelectEl || !drExtraEl) return '';
-          
           const drSelect = drSelectEl.value;
           const drExtra = drExtraEl.value.trim();
-          
           if (drSelect && drExtra) return `${drSelect} (${drExtra})`;
           return drSelect || drExtra || '';
       }
@@ -506,6 +502,7 @@
           const dataToSave = { 
               inputCity: getStr('inputCity'), 
               inputDate: getStr('inputDate'),
+              inputKendala: getStr('inputKendala'), // Save kendala
               darkMode: document.documentElement.classList.contains("dark") ? "enabled" : "disabled"
           };
           const fields = ['dr', 'drExtra', 'bpjsKet', 'umumKet', 'doaKet', 'meninggalKet', 'mcuKet', 'pkmRujukKet', 'rsLainKet', 'pkmRI', 'pkmRJ', 'rujukRI', 'rujukRJ', 'labRI', 'labRJ', 'desaRI', 'desaRJ', 'sendiriRI', 'sendiriRJ', 'bpjs', 'umum'];
@@ -519,10 +516,7 @@
 
       function loadData() {
           const savedData = localStorage.getItem('igdReportData');
-          if (!savedData) {
-              setDefaultDate();
-              return;
-          }
+          if (!savedData) { setDefaultDate(); return; }
           try {
               const data = JSON.parse(savedData);
               for (const id in data) {
@@ -531,10 +525,7 @@
               }
               if (data.darkMode === "enabled") document.documentElement.classList.add("dark");
               if (!getStr('inputDate')) setDefaultDate();
-          } catch (e) { 
-              localStorage.removeItem('igdReportData'); 
-              setDefaultDate();
-          }
+          } catch (e) { localStorage.removeItem('igdReportData'); setDefaultDate(); }
       }
 
       function setDefaultDate() {
@@ -551,22 +542,20 @@
               desaRI: getNum(`desaRI${shift}`), desaRJ: getNum(`desaRJ${shift}`),
               sendiriRI: getNum(`sendiriRI${shift}`), sendiriRJ: getNum(`sendiriRJ${shift}`)
           };
-
           const shiftMRS = counts.pkmRI + counts.rujukRI + counts.labRI + counts.desaRI + counts.sendiriRI;
           const shiftRJ = counts.pkmRJ + counts.rujukRJ + counts.labRJ + counts.desaRJ + counts.sendiriRJ;
           const shiftTotal = shiftMRS + shiftRJ;
-
           const displayJml = document.getElementById(`displayJml${shift}`);
           const displayMrs = document.getElementById(`displayMrs${shift}`);
           if (displayJml) displayJml.value = shiftTotal;
           if (displayMrs) displayMrs.value = shiftMRS;
-
           return { total: shiftTotal, mrs: shiftMRS, rj: shiftRJ, counts };
       }
 
       function generateReport() {
           const city = getStr('inputCity');
           const dateStr = getStr('inputDate');
+          const kendalaStr = getStr('inputKendala');
           const missingDoctors = [];
           let totalK = 0;
           let breakdown = {};
@@ -579,29 +568,19 @@
                   const headerText = headerEl ? headerEl.innerText.replace(/[🌑☀️🌤️🌙]/g, '').trim() : shift;
                   missingDoctors.push(headerText);
               }
-
               const result = updateShiftTotals(shift);
-              const { total, mrs, rj, counts } = result;
-
-              totalK += total;
-              breakdown[shift] = { total, mrs };
-
-              fullShiftData += `${labels[shift][0]}\nJam ${labels[shift][1]} Wib\nDokter jaga : ${drName || '-'}\nTotal kunjungan : ${total}\nTotal rawat inap : ${mrs}\n\nKeterangan :\nPasien BPJS : ${getNum(`bpjs${shift}`)}\nPasien Umum : ${getNum(`umum${shift}`)}\nPasien Rawat jalan : ${rj}\n\nRincian jumlah pasien yang datang:\n-Rujukan Puskesmas:\n\u2022 Rawat inap : ${counts.pkmRI}\n\u2022 Rawat jalan : ${counts.pkmRJ}\n-Bawa surat rujukan :\n\u2022 Rawat inap : ${counts.rujukRI}\n\u2022 Rawat jalan : ${counts.rujukRJ}\n-Bawa hasil lab : \n\u2022 Rawat inap : ${counts.labRI}\n\u2022 Rawat jalan : ${counts.labRJ}\n-Diantar siaga desa : \n\u2022 Rawat inap : ${counts.desaRI}\n\u2022 Rawat jalan : ${counts.desaRJ}\n-Datang sendiri : \n\u2022 Rawat inap : ${counts.sendiriRI}\n\u2022 Rawat jalan : ${counts.sendiriRJ}\n\nRINCIAN KASUS RAWAT JALAN\nBPJS:\n${getStr(`bpjsKet${shift}`) || '- Tidak ada'}\n\nUMUM:\n${getStr(`umumKet${shift}`) || '- Tidak ada'}\n\nRINCIAN STATUS AKHIR\nDOA (Death On Arrival) : ${getStr(`doaKet${shift}`) || '-'}\nMeninggal di IGD : ${getStr(`meninggalKet${shift}`) || '-'}\nMCU (Medical Check Up) : ${getStr(`mcuKet${shift}`) || '-'}\nRujukan dari Puskesmas : ${getStr(`pkmRujukKet${shift}`) || '-'}\nRujuk ke Rumah Sakit Lain : ${getStr(`rsLainKet${shift}`) || '-'}\nCovid Rawat Jalan: -\n\n`;
+              totalK += result.total;
+              breakdown[shift] = { total: result.total, mrs: result.mrs };
+              fullShiftData += `${labels[shift][0]}\nJam ${labels[shift][1]} Wib\nDokter jaga : ${drName || '-'}\nTotal kunjungan : ${result.total}\nTotal rawat inap : ${result.mrs}\n\nKeterangan :\nPasien BPJS : ${getNum(`bpjs${shift}`)}\nPasien Umum : ${getNum(`umum${shift}`)}\nPasien Rawat jalan : ${result.rj}\n\nRincian jumlah pasien yang datang:\n-Rujukan Puskesmas:\n\u2022 Rawat inap : ${result.counts.pkmRI}\n\u2022 Rawat jalan : ${result.counts.pkmRJ}\n-Bawa surat rujukan :\n\u2022 Rawat inap : ${result.counts.rujukRI}\n\u2022 Rawat jalan : ${result.counts.rujukRJ}\n-Bawa hasil lab : \n\u2022 Rawat inap : ${result.counts.labRI}\n\u2022 Rawat jalan : ${result.counts.labRJ}\n-Diantar siaga desa : \n\u2022 Rawat inap : ${result.counts.desaRI}\n\u2022 Rawat jalan : ${result.counts.desaRJ}\n-Datang sendiri : \n\u2022 Rawat inap : ${result.counts.sendiriRI}\n\u2022 Rawat jalan : ${result.counts.sendiriRJ}\n\nRINCIAN KASUS RAWAT JALAN\nBPJS:\n${getStr(`bpjsKet${shift}`) || '- Tidak ada'}\n\nUMUM:\n${getStr(`umumKet${shift}`) || '- Tidak ada'}\n\nRINCIAN STATUS AKHIR\nDOA (Death On Arrival) : ${getStr(`doaKet${shift}`) || '-'}\nMeninggal di IGD : ${getStr(`meninggalKet${shift}`) || '-'}\nMCU (Medical Check Up) : ${getStr(`mcuKet${shift}`) || '-'}\nRujukan dari Puskesmas : ${getStr(`pkmRujukKet${shift}`) || '-'}\nRujuk ke Rumah Sakit Lain : ${getStr(`rsLainKet${shift}`) || '-'}\nCovid Rawat Jalan: -\n\n`;
           });
 
-          // Logic for displaying the beautified warning
           const warnBox = document.getElementById('doctorWarningMessage');
           const warnList = document.getElementById('missingDoctorsList');
           const copyBtn = document.getElementById('copyBtn');
 
           if (missingDoctors.length > 0) {
-              warnList.innerHTML = missingDoctors.map(d => 
-                `<span class="bg-red-200 text-red-900 px-3 py-1 rounded-full text-xs font-bold border border-red-300 dark:bg-red-800 dark:text-red-100 dark:border-red-600">${d}</span>`
-              ).join('');
-              
-              if (warnBox.classList.contains('hidden')) {
-                  warnBox.classList.remove('hidden');
-              }
+              warnList.innerHTML = missingDoctors.map(d => `<span class="bg-red-200 text-red-900 px-3 py-1 rounded-full text-xs font-bold border border-red-300 dark:bg-red-800 dark:text-red-100 dark:border-red-600">${d}</span>`).join('');
+              if (warnBox.classList.contains('hidden')) warnBox.classList.remove('hidden');
               copyBtn.disabled = true;
           } else {
               warnBox.classList.add('hidden');
@@ -615,6 +594,11 @@
           finalReport += `SIANG     : ${breakdown.Siang.total} px, MRS: ${breakdown.Siang.mrs}\n`;
           finalReport += `MALAM     : ${breakdown.Malam.total} px, MRS: ${breakdown.Malam.mrs}\n\n`;
           finalReport += fullShiftData;
+          
+          // APPEND KENDALA TO END OF REPORT
+          finalReport += `KENDALA / MASALAH HARI INI:\n`;
+          finalReport += `${kendalaStr || '-'}\n\n`;
+          finalReport += `Terima Kasih.`;
 
           document.getElementById('outputReport').value = finalReport;
       }
@@ -633,23 +617,11 @@
 
       window.onload = function() {
           loadData();
-          
           document.querySelectorAll('input, textarea, select').forEach(i => {
-              i.addEventListener('input', () => { 
-                  generateReport(); 
-                  saveData(); 
-              });
-              i.addEventListener('change', () => { 
-                  generateReport(); 
-                  saveData(); 
-              });
+              i.addEventListener('input', () => { generateReport(); saveData(); });
+              i.addEventListener('change', () => { generateReport(); saveData(); });
           });
-
-          document.getElementById('darkToggle').onclick = () => {
-              const isDark = document.documentElement.classList.toggle("dark");
-              saveData();
-          };
-
+          document.getElementById('darkToggle').onclick = () => { document.documentElement.classList.toggle("dark"); saveData(); };
           allShiftNames.forEach(s => {
               document.getElementById(`header${s}`).onclick = () => {
                   const content = document.getElementById(`content${s}`);
@@ -658,31 +630,22 @@
                   if (isHidden) content.classList.remove('hidden');
               };
           });
-
           document.getElementById('changelogHeader').onclick = () => {
               document.getElementById('changelogContent').classList.toggle('hidden');
               document.getElementById('changelogIcon').classList.toggle('rotate-180');
           };
-
-          document.getElementById('refreshBtn').onclick = () => { 
-              if(confirm("Segarkan halaman? Pastikan data Anda sudah tersimpan otomatis.")) window.location.reload(); 
-          };
-
+          document.getElementById('refreshBtn').onclick = () => { if(confirm("Segarkan halaman?")) window.location.reload(); };
           document.getElementById('copyBtn').onclick = () => {
               const output = document.getElementById('outputReport');
               output.select();
-              try {
-                  document.execCommand('copy');
-                  showNotification('Laporan disalin ke clipboard!');
-              } catch(e) {
-                  showNotification('Gagal menyalin. Silakan salin manual.', 'text-red-700');
-              }
+              try { document.execCommand('copy'); showNotification('Laporan disalin ke clipboard!'); } 
+              catch(e) { showNotification('Gagal menyalin.', 'text-red-700'); }
           };
-
           document.getElementById('resetBtn').onclick = resetAllInputs;
           generateReport();
       };
     </script>
   </body>
 </html>
+
 
