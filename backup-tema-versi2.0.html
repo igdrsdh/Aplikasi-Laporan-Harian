@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Laporan Jaga IGD - RS Dian Husada</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
+        
+        @keyframes slideIn {
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slide-in { animation: slideIn 0.3s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-300">
+
+    <!-- Header & Controls -->
+    <div class="fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-3">
+        <div class="max-w-3xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <!-- Logo Container -->
+                <div class="w-12 h-12 flex items-center justify-center overflow-hidden rounded-xl bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700">
+                    <img 
+                        src="LOGO%20IGD.png" 
+                        alt="Logo IGD" 
+                        class="w-full h-full object-contain p-1"
+                        onerror="this.src='https://img.icons8.com/fluency/96/hospital.png'"
+                    />
+                </div>
+                <div>
+                    <h1 class="font-bold text-sm md:text-base leading-none">IGD Report</h1>
+                    <span class="text-[10px] uppercase tracking-wider font-bold text-slate-400">RS Dian Husada</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="darkToggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all border border-transparent dark:border-slate-700">
+                    <span id="themeIcon" class="text-lg">🌙</span>
+                </button>
+                <button id="refreshBtn" class="flex items-center gap-2 px-3 py-2 rounded-lg bg-sky-500 hover:bg-sky-600 text-white text-sm font-semibold transition-all shadow-lg shadow-sky-500/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    <span class="hidden sm:inline">Segarkan</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <main class="max-w-3xl mx-auto pt-24 pb-20 px-4">
+        <div class="space-y-6">
+            <!-- Data Umum -->
+            <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 transition-colors">
+                <div class="flex items-center gap-2 mb-4 text-sky-500 font-bold uppercase text-xs tracking-widest">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Informasi Umum
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400 ml-1">Hari & Tanggal</label>
+                        <input type="text" id="inputDate" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all dark:text-white" />
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400 ml-1">Kota Pelaporan</label>
+                        <input type="text" id="inputCity" value="Mojokerto" readonly class="w-full p-3 rounded-xl bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 text-slate-400 cursor-not-allowed" />
+                    </div>
+                </div>
+            </section>
+
+            <!-- Shifts Container -->
+            <div id="shiftsContainer" class="space-y-4"></div>
+
+            <!-- Kendala -->
+            <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 transition-colors">
+                <div class="flex items-center gap-2 mb-4 text-amber-500 font-bold uppercase text-xs tracking-widest">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    Kendala / Masalah Operasional
+                </div>
+                <textarea id="inputKendala" rows="3" class="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all placeholder:text-slate-400 dark:text-white" placeholder="Tuliskan kendala hari ini..."></textarea>
+            </section>
+
+            <!-- Report Output -->
+            <section class="bg-slate-800 dark:bg-black rounded-2xl shadow-xl overflow-hidden">
+                <div class="px-6 py-4 bg-slate-700 dark:bg-slate-900 border-b border-slate-600 dark:border-slate-800 flex justify-between items-center">
+                    <div class="flex items-center gap-2 text-white font-bold text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        PREVIEW LAPORAN
+                    </div>
+                    <div id="validationBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30">
+                        DOKTER BELUM LENGKAP
+                    </div>
+                </div>
+                <textarea id="outputReport" readonly class="w-full h-80 p-6 bg-transparent text-emerald-400 font-mono text-xs md:text-sm resize-none outline-none custom-scrollbar" spellcheck="false"></textarea>
+                <div class="p-4 bg-slate-700/50 dark:bg-slate-900/50 flex flex-col gap-3">
+                    <button id="copyBtn" disabled class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-600 disabled:opacity-50 text-white font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-1 4h.01M9 16h.01" />
+                        </svg>
+                        Salin Laporan
+                    </button>
+                    <button id="resetTrigger" class="w-full py-2 text-slate-400 hover:text-red-400 text-xs font-bold transition-all">
+                        HAPUS SEMUA DATA
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Custom Modals -->
+    <div id="modalOverlay" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-sm p-6 shadow-2xl scale-95 opacity-0 transition-all duration-300" id="modalContent">
+            <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-2 text-slate-800 dark:text-white">Hapus Data?</h3>
+            <p class="text-slate-500 dark:text-slate-400 text-center text-sm mb-6">Seluruh inputan laporan akan dikosongkan secara permanen.</p>
+            <div class="flex gap-3">
+                <button id="cancelReset" class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 font-bold text-sm dark:text-white">Batal</button>
+                <button id="confirmReset" class="flex-1 py-3 rounded-xl bg-red-500 text-white font-bold text-sm shadow-lg shadow-red-500/20">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-slate-800 text-white rounded-2xl shadow-2xl font-bold text-sm flex items-center gap-3 translate-y-20 transition-all duration-300 pointer-events-none">
+        <div class="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+        </div>
+        <span id="toastMsg">Laporan Disalin!</span>
+    </div>
+
+    <script>
+        const SHIFTS_CONFIG = [
+            { id: 'Pagi1', label: 'Dini Hari', time: '00.00 - 07.00', icon: '🌑', color: 'from-slate-600 to-slate-400' },
+            { id: 'Pagi2', label: 'Shift Pagi', time: '07.00 - 14.00', icon: '☀️', color: 'from-sky-600 to-sky-400' },
+            { id: 'Siang', label: 'Shift Siang', time: '14.00 - 21.00', icon: '🌤️', color: 'from-amber-600 to-amber-400' },
+            { id: 'Malam', label: 'Shift Malam', time: '21.00 - 00.00', icon: '🌙', color: 'from-indigo-600 to-indigo-400' }
+        ];
+
+        const DOCTORS_LIST = [
+            "dr. Sukresno Tjahjo W., M.Kes", "dr. Felicia Putri Hartono", 
+            "dr. Syntia Desy Arisandi", "dr. Imam Fadli", 
+            "dr. Deo Sanjaya", "dr. Evva Mardiyana", 
+            "dr. Farah Shania", "dr. Ratna Dewi"
+        ];
+
+        const SOURCES = [
+            { id: 'pkm', label: 'Rujukan PKM' },
+            { id: 'rujuk', label: 'Surat Rujukan' },
+            { id: 'lab', label: 'Hasil Lab' },
+            { id: 'desa', label: 'Siaga Desa' },
+            { id: 'sendiri', label: 'Datang Sendiri' }
+        ];
+
+        const $ = (id) => document.getElementById(id);
+        const getVal = (id) => $(id) ? $(id).value : '';
+        const getNum = (id) => parseInt(getVal(id)) || 0;
+
+        function renderShifts() {
+            const container = $('shiftsContainer');
+            if (!container) return;
+            let html = '';
+
+            SHIFTS_CONFIG.forEach(shift => {
+                html += `
+                <div class="shift-block bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors">
+                    <button type="button" onclick="toggleShift('${shift.id}')" class="w-full flex items-center justify-between p-4 bg-gradient-to-r ${shift.color} text-white transition-all active:scale-[0.98]">
+                        <div class="flex items-center gap-3">
+                            <span class="text-xl">${shift.icon}</span>
+                            <div class="text-left">
+                                <h3 class="font-bold text-sm leading-none">${shift.label}</h3>
+                                <span class="text-[10px] opacity-80 uppercase font-bold tracking-wider">${shift.time}</span>
+                            </div>
+                        </div>
+                        <svg id="icon-${shift.id}" class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </button>
+                    
+                    <div id="content-${shift.id}" class="hidden p-6 space-y-6 animate-slide-in">
+                        <div class="space-y-1">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-widest">Dokter Jaga</label>
+                            <div class="flex gap-2">
+                                <select id="dr-${shift.id}" class="flex-1 p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 outline-none text-sm dark:text-white transition-colors">
+                                    <option value="">-- Pilih Dokter --</option>
+                                    ${DOCTORS_LIST.map(d => `<option value="${d}">${d}</option>`).join('')}
+                                </select>
+                                <input type="text" id="drExtra-${shift.id}" placeholder="Lainnya" class="w-1/3 p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 outline-none text-sm dark:text-white transition-colors" />
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="p-3 bg-sky-50 dark:bg-sky-900/20 rounded-xl border border-sky-100 dark:border-sky-800">
+                                <div class="text-[10px] font-bold text-sky-500 uppercase tracking-tighter">Total Pasien</div>
+                                <input type="text" id="summaryTotal-${shift.id}" value="0" readonly class="bg-transparent font-bold text-xl outline-none dark:text-sky-400" />
+                            </div>
+                            <div class="p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-100 dark:border-emerald-800">
+                                <div class="text-[10px] font-bold text-emerald-500 uppercase tracking-tighter">Rawat Inap (MRS)</div>
+                                <input type="text" id="summaryMrs-${shift.id}" value="0" readonly class="bg-transparent font-bold text-xl outline-none dark:text-emerald-400" />
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Rincian Kedatangan</div>
+                            <div class="grid grid-cols-1 gap-4 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 transition-colors">
+                                ${SOURCES.map(src => `
+                                    <div class="flex items-center gap-4">
+                                        <div class="flex-1 text-xs font-bold text-slate-500 dark:text-slate-400">${src.label}</div>
+                                        <div class="flex gap-2">
+                                            <div class="relative w-24">
+                                                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] text-slate-400 font-extrabold uppercase pointer-events-none">MRS</span>
+                                                <input type="number" id="${src.id}RI-${shift.id}" value="0" min="0" class="w-full pl-11 pr-2 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold dark:text-white transition-colors" />
+                                            </div>
+                                            <div class="relative w-20">
+                                                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] text-slate-400 font-extrabold uppercase pointer-events-none">RJ</span>
+                                                <input type="number" id="${src.id}RJ-${shift.id}" value="0" min="0" class="w-full pl-8 pr-2 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold dark:text-white transition-colors" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-bold text-slate-400 uppercase">Pasien BPJS</label>
+                                <input type="number" id="bpjs-${shift.id}" value="0" min="0" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 outline-none text-sm font-bold dark:text-white transition-colors" />
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-bold text-slate-400 uppercase">Pasien UMUM</label>
+                                <input type="number" id="umum-${shift.id}" value="0" min="0" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 outline-none text-sm font-bold dark:text-white transition-colors" />
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <textarea id="bpjsKet-${shift.id}" rows="2" placeholder="Ket BPJS: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs outline-none focus:ring-1 focus:ring-sky-500/20 dark:text-white transition-colors"></textarea>
+                            <textarea id="umumKet-${shift.id}" rows="2" placeholder="Ket UMUM: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs outline-none focus:ring-1 focus:ring-sky-500/20 dark:text-white transition-colors"></textarea>
+                        </div>
+
+                        <div class="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-700">
+                             <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Status Akhir & Kasus Khusus</div>
+                             <input type="text" id="doa-${shift.id}" placeholder="DOA: Nama - Jam" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs outline-none dark:text-white transition-colors" />
+                             <input type="text" id="meninggal-${shift.id}" placeholder="Meninggal di IGD: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs outline-none dark:text-white transition-colors" />
+                             <input type="text" id="mcu-${shift.id}" placeholder="MCU: Jenis Pemeriksaan" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs outline-none dark:text-white transition-colors" />
+                             <input type="text" id="pkmRujukKet-${shift.id}" placeholder="Rujukan PKM: Nama PKM - Diagnosa" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs outline-none dark:text-white transition-colors" />
+                             <input type="text" id="rsLain-${shift.id}" placeholder="Rujuk RS Lain: Nama Pasien - RS Tujuan" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs outline-none dark:text-white transition-colors" />
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function toggleShift(id) {
+            const content = $(`content-${id}`);
+            const icon = $(`icon-${id}`);
+            if (!content || !icon) return;
+            const isHidden = content.classList.contains('hidden');
+            SHIFTS_CONFIG.forEach(s => {
+                const c = $(`content-${s.id}`);
+                const i = $(`icon-${s.id}`);
+                if (c) c.classList.add('hidden');
+                if (i) i.classList.remove('rotate-180');
+            });
+            if (isHidden) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+                content.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function processData() {
+            let totalAll = 0;
+            let reportText = `LAPORAN JAGA IGD\n\n${getVal('inputCity')}, ${getVal('inputDate')} Jam 00.00\n\n`;
+            let summaryBlock = '';
+            let detailsBlock = '';
+            let missingDoctors = [];
+
+            SHIFTS_CONFIG.forEach(shift => {
+                const sId = shift.id;
+                const drSel = getVal(`dr-${sId}`);
+                const drExt = getVal(`drExtra-${sId}`);
+                const drFinal = (drSel && drExt) ? `${drSel} (${drExt})` : (drSel || drExt || '');
+                if (!drFinal) missingDoctors.push(shift.label);
+
+                let shiftMRS = 0;
+                let shiftRJ = 0;
+                let sourcesText = '';
+                SOURCES.forEach(src => {
+                    const ri = getNum(`${src.id}RI-${sId}`);
+                    const rj = getNum(`${src.id}RJ-${sId}`);
+                    shiftMRS += ri;
+                    shiftRJ += rj;
+                    sourcesText += `-${src.label}:\n\u2022 Rawat inap : ${ri}\n\u2022 Rawat jalan : ${rj}\n`;
+                });
+
+                const shiftTotal = shiftMRS + shiftRJ;
+                totalAll += shiftTotal;
+
+                if ($(`summaryTotal-${sId}`)) $(`summaryTotal-${sId}`).value = shiftTotal;
+                if ($(`summaryMrs-${sId}`)) $(`summaryMrs-${sId}`).value = shiftMRS;
+
+                summaryBlock += `${shift.label.padEnd(12)}: ${shiftTotal} px, MRS: ${shiftMRS}\n`;
+
+                detailsBlock += `${shift.label}\nJam ${shift.time} Wib\n`;
+                detailsBlock += `Dokter jaga : ${drFinal || '-'}\n`;
+                detailsBlock += `Total kunjungan : ${shiftTotal}\n`;
+                detailsBlock += `Total rawat inap : ${shiftMRS}\n\n`;
+                detailsBlock += `Keterangan :\n`;
+                detailsBlock += `Pasien BPJS : ${getNum(`bpjs-${sId}`)}\n`;
+                detailsBlock += `Pasien Umum : ${getNum(`umum-${sId}`)}\n`;
+                detailsBlock += `Pasien Rawat jalan : ${shiftRJ}\n\n`;
+                detailsBlock += `Rincian jumlah pasien yang datang:\n${sourcesText}\n`;
+                detailsBlock += `RINCIAN KASUS RAWAT JALAN\n`;
+                detailsBlock += `BPJS:\n${getVal(`bpjsKet-${sId}`) || '- Tidak ada'}\n\n`;
+                detailsBlock += `UMUM:\n${getVal(`umumKet-${sId}`) || '- Tidak ada'}\n\n`;
+                detailsBlock += `RINCIAN STATUS AKHIR\n`;
+                detailsBlock += `DOA (Death On Arrival) :\n${getVal(`doa-${sId}`) || '-'}\n`;
+                detailsBlock += `Meninggal di IGD :\n${getVal(`meninggal-${sId}`) || '-'}\n`;
+                detailsBlock += `MCU (Medical Check Up) :\n${getVal(`mcu-${sId}`) || '-'}\n`;
+                detailsBlock += `Rujukan dari Puskesmas :\n${getVal(`pkmRujukKet-${sId}`) || '-'}\n`;
+                detailsBlock += `Rujuk ke Rumah Sakit Lain :\n${getVal(`rsLain-${sId}`) || '-'}\n`;
+                detailsBlock += `Covid Rawat Jalan: -\n\n`;
+                detailsBlock += `-------------------------------\n\n`;
+            });
+
+            const vBadge = $('validationBadge');
+            const copyBtn = $('copyBtn');
+            if (missingDoctors.length > 0) {
+                if (vBadge) {
+                    vBadge.textContent = "DOKTER BELUM LENGKAP";
+                    vBadge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30";
+                }
+                if (copyBtn) copyBtn.disabled = true;
+            } else {
+                if (vBadge) {
+                    vBadge.textContent = "DATA LENGKAP";
+                    vBadge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+                }
+                if (copyBtn) copyBtn.disabled = false;
+            }
+
+            reportText += `TOTAL KUNJUNGAN IGD ${totalAll} PASIEN\n`;
+            reportText += summaryBlock;
+            reportText += `\n` + detailsBlock;
+            reportText += `KENDALA / MASALAH HARI INI:\n`;
+            reportText += `${getVal('inputKendala') || '-'}\n\n`;
+            reportText += `Terima Kasih.`;
+
+            if ($('outputReport')) $('outputReport').value = reportText;
+            saveToLocal();
+        }
+
+        function applyTheme(mode) {
+            const icon = $('themeIcon');
+            const html = document.documentElement;
+            if (mode === 'dark') {
+                html.classList.add('dark');
+                if (icon) icon.textContent = '☀️';
+            } else {
+                html.classList.remove('dark');
+                if (icon) icon.textContent = '🌙';
+            }
+        }
+
+        function saveToLocal() {
+            const inputs = document.querySelectorAll('input, select, textarea');
+            const data = { theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light' };
+            inputs.forEach(el => { if(el.id) data[el.id] = el.value; });
+            localStorage.setItem('rsdh_report_data_v2', JSON.stringify(data));
+        }
+
+        function loadFromLocal() {
+            const raw = localStorage.getItem('rsdh_report_data_v2');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (!raw) { 
+                applyTheme(systemPrefersDark ? 'dark' : 'light');
+                setDefaultDate(); 
+                processData(); 
+                return; 
+            }
+            try {
+                const data = JSON.parse(raw);
+                applyTheme(data.theme || (systemPrefersDark ? 'dark' : 'light'));
+                Object.keys(data).forEach(id => {
+                    const el = $(id);
+                    if (el && id !== 'inputCity' && id !== 'theme') el.value = data[id];
+                });
+                if (!getVal('inputDate')) setDefaultDate();
+                processData();
+            } catch (e) {
+                applyTheme(systemPrefersDark ? 'dark' : 'light');
+                setDefaultDate();
+                processData();
+            }
+        }
+
+        function setDefaultDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            if ($('inputDate')) $('inputDate').value = now.toLocaleDateString('id-ID', options);
+        }
+
+        function showToast(msg) {
+            const toast = $('toast');
+            const msgEl = $('toastMsg');
+            if (toast && msgEl) {
+                msgEl.textContent = msg;
+                toast.classList.remove('translate-y-20');
+                setTimeout(() => toast.classList.add('translate-y-20'), 3000);
+            }
+        }
+
+        function toggleModal(show) {
+            const overlay = $('modalOverlay');
+            const content = $('modalContent');
+            if (!overlay || !content) return;
+            if (show) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => content.classList.remove('scale-95', 'opacity-0'), 10);
+            } else {
+                content.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        }
+
+        window.onload = () => {
+            renderShifts();
+            loadFromLocal();
+            document.body.addEventListener('input', (e) => {
+                const tag = e.target.tagName;
+                if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') processData();
+            });
+            document.body.addEventListener('change', (e) => {
+                if (e.target.tagName === 'SELECT') processData();
+            });
+            if ($('darkToggle')) $('darkToggle').onclick = () => {
+                const isNowDark = !document.documentElement.classList.contains('dark');
+                applyTheme(isNowDark ? 'dark' : 'light');
+                saveToLocal();
+            };
+            if ($('copyBtn')) $('copyBtn').onclick = () => {
+                const area = $('outputReport');
+                if (area) {
+                    area.select();
+                    try { document.execCommand('copy'); showToast('Laporan Disalin!'); } 
+                    catch(err) { showToast('Gagal menyalin'); }
+                }
+            };
+            if ($('refreshBtn')) $('refreshBtn').onclick = () => window.location.reload();
+            if ($('resetTrigger')) $('resetTrigger').onclick = () => toggleModal(true);
+            if ($('cancelReset')) $('cancelReset').onclick = () => toggleModal(false);
+            if ($('confirmReset')) $('confirmReset').onclick = () => {
+                localStorage.removeItem('rsdh_report_data_v2');
+                window.location.reload();
+            };
+            if ($('modalOverlay')) $('modalOverlay').onclick = (e) => {
+                if(e.target === $('modalOverlay')) toggleModal(false);
+            };
+        };
+    </script>
+</body>
+</html>
