@@ -64,10 +64,12 @@
         <div class="max-w-3xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="w-12 h-12 flex items-center justify-center overflow-hidden rounded-xl bg-white dark:bg-slate-800 shadow-md border border-slate-300 dark:border-slate-700">
+                    <!-- Menggunakan LOGO IGD.png dengan fallback ke icon jika gagal load -->
                     <img 
-                        src="https://img.icons8.com/fluency/96/hospital.png" 
+                        src="LOGO%20IGD.png" 
                         alt="Logo IGD" 
                         class="w-full h-full object-contain p-1"
+                        onerror="this.src='https://img.icons8.com/fluency/96/hospital.png'"
                     />
                 </div>
                 <div>
@@ -162,7 +164,7 @@
 
     <!-- Custom Modals -->
     <div id="modalOverlay" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-sm p-6 shadow-2xl scale-95 opacity-0 transition-all duration-300" id="modalContent">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-sm p-6 shadow-2xl scale-95 opacity-0 transition-all duration-300" id="modalContent">
             <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -231,7 +233,7 @@
             const formattedDate = now.toLocaleDateString('id-ID', options);
             if ($('inputDate')) {
                 $('inputDate').value = formattedDate;
-                processData(); // Refresh preview when date updated
+                processData(); 
             }
         }
 
@@ -487,14 +489,11 @@
                     }
                 });
 
-                // ALWAYS DEFAULT TO TODAY'S DATE REGARDLESS OF STORAGE ON FRESH OPEN
-                // If user wants to see old data, they can, but we prefer today's label
                 const now = new Date();
                 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                 const today = now.toLocaleDateString('id-ID', options);
                 
                 if (getVal('inputDate') !== today) {
-                    // Hanya override jika input kosong atau tanggal lama
                     if(!getVal('inputDate')) setDefaultDate();
                 }
                 
@@ -546,10 +545,8 @@
             renderShifts();
             loadFromLocal();
             
-            // Start real-time clock
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
-            // Refresh report timestamp every minute even if no input
             setInterval(processData, 60000);
 
             document.body.addEventListener('input', (e) => {
