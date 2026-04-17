@@ -38,22 +38,15 @@
             box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
         }
         
+        /* Membuat Textarea lebih lega secara default */
         textarea {
             field-sizing: content; 
-            min-height: 80px;
+            min-height: 80px; /* Tinggi minimum lebih besar agar tidak sempit */
         }
         
+        /* Khusus untuk keterangan BPJS/UMUM yang mungkin lebih panjang */
         .large-area {
             min-height: 100px;
-        }
-
-        /* Indicator Sinkronisasi */
-        .sync-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 4px;
         }
     </style>
 </head>
@@ -72,10 +65,7 @@
                     />
                 </div>
                 <div>
-                    <h1 class="font-extrabold text-sm md:text-base leading-none text-slate-900 dark:text-white flex items-center">
-                        <span id="syncDot" class="sync-dot bg-slate-400"></span>
-                        Laporan Jaga IGD
-                    </h1>
+                    <h1 class="font-extrabold text-sm md:text-base leading-none text-slate-900 dark:text-white">Laporan Jaga IGD</h1>
                     <span class="text-[10px] uppercase tracking-wider font-bold text-slate-500">RS Dian Husada</span>
                 </div>
             </div>
@@ -94,13 +84,7 @@
     </div>
 
     <main class="max-w-3xl mx-auto pt-24 pb-20 px-4">
-        <!-- Loader Awal -->
-        <div id="initialLoader" class="text-center py-20">
-            <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-sky-500 border-t-transparent"></div>
-            <p class="mt-4 text-slate-500 font-bold">Menghubungkan Database...</p>
-        </div>
-
-        <div id="appUI" class="space-y-6 hidden">
+        <div class="space-y-6">
             <!-- Data Umum -->
             <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
                 <div class="flex items-center gap-2 mb-4 text-sky-600 dark:text-sky-400 font-bold uppercase text-xs tracking-widest">
@@ -157,18 +141,23 @@
                         Salin Laporan
                     </button>
                     <button id="resetTrigger" class="w-full py-2 text-slate-400 hover:text-red-500 text-xs font-bold transition-all uppercase tracking-widest">
-                        Reset Semua Data di Cloud
+                        Reset Semua Data
                     </button>
                 </div>
             </section>
         </div>
     </main>
 
-    <!-- Modal Reset -->
+    <!-- Custom Modals -->
     <div id="modalOverlay" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-sm p-6 shadow-2xl scale-95 opacity-0 transition-all duration-300" id="modalContent">
-            <h3 class="text-xl font-bold text-center mb-2 text-slate-800 dark:text-white">Hapus Data Cloud?</h3>
-            <p class="text-slate-500 dark:text-slate-400 text-center text-sm mb-6">Seluruh data laporan ini akan dihapus dari semua perangkat secara permanen.</p>
+            <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-2 text-slate-800 dark:text-white">Hapus Data?</h3>
+            <p class="text-slate-500 dark:text-slate-400 text-center text-sm mb-6">Seluruh inputan laporan akan dikosongkan secara permanen.</p>
             <div class="flex gap-3">
                 <button id="cancelReset" class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 font-bold text-sm dark:text-white">Batal</button>
                 <button id="confirmReset" class="flex-1 py-3 rounded-xl bg-red-500 text-white font-bold text-sm shadow-lg shadow-red-500/20">Ya, Hapus</button>
@@ -178,26 +167,16 @@
 
     <!-- Notification Toast -->
     <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-slate-800 text-white rounded-2xl shadow-2xl font-bold text-sm flex items-center gap-3 translate-y-20 transition-all duration-300 pointer-events-none">
+        <div class="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+        </div>
         <span id="toastMsg">Laporan Disalin!</span>
     </div>
 
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-
+    <script>
         // CONFIGURATION
-        const firebaseConfig = {
-            apiKey: "AIzaSyBX4BETROyo2VacszXnZSpTIyfhh4lwjKg",
-            authDomain: "laporan-harian-igd.firebaseapp.com",
-            databaseURL: "https://laporan-harian-igd-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "laporan-harian-igd",
-            storageBucket: "laporan-harian-igd.firebasestorage.app",
-            messagingSenderId: "105675683087",
-            appId: "1:105675683087:web:fc853158e7489713f3fa7a"
-        };
-
         const SHIFTS_CONFIG = [
             { id: 'Pagi1', label: 'Dini Hari', time: '00.00 - 07.00', icon: '🌑', color: 'from-slate-600 to-slate-400' },
             { id: 'Pagi2', label: 'Shift Pagi', time: '07.00 - 14.00', icon: '☀️', color: 'from-sky-600 to-sky-400' },
@@ -225,21 +204,16 @@
         const getVal = (id) => $(id) ? $(id).value : '';
         const getNum = (id) => parseInt(getVal(id)) || 0;
 
-        // INIT FIREBASE
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        const auth = getAuth(app);
-        const dbPath = ref(db, 'reports/current_report');
-        let syncTimer;
-
         // RENDER SHIFT BLOCKS
         function renderShifts() {
             const container = $('shiftsContainer');
+            if (!container) return;
             let html = '';
+
             SHIFTS_CONFIG.forEach(shift => {
                 html += `
                 <div class="shift-block bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 overflow-hidden transition-colors">
-                    <button type="button" onclick="window.toggleShift('${shift.id}')" class="w-full flex items-center justify-between p-4 bg-gradient-to-r ${shift.color} text-white transition-all active:scale-[0.98] shadow-inner">
+                    <button type="button" onclick="toggleShift('${shift.id}')" class="w-full flex items-center justify-between p-4 bg-gradient-to-r ${shift.color} text-white transition-all active:scale-[0.98] shadow-inner">
                         <div class="flex items-center gap-3">
                             <span class="text-xl">${shift.icon}</span>
                             <div class="text-left">
@@ -251,6 +225,7 @@
                     </button>
                     
                     <div id="content-${shift.id}" class="hidden p-6 space-y-6 animate-slide-in">
+                        <!-- Dokter -->
                         <div class="space-y-1">
                             <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Dokter Jaga</label>
                             <div class="flex gap-2">
@@ -262,6 +237,7 @@
                             </div>
                         </div>
 
+                        <!-- Ringkasan MRS/Total -->
                         <div class="grid grid-cols-2 gap-3">
                             <div class="p-3 bg-sky-100/50 dark:bg-sky-900/20 rounded-xl border border-sky-200 dark:border-sky-800">
                                 <div class="text-[10px] font-bold text-sky-600 dark:text-sky-400 uppercase tracking-tighter">Total Pasien</div>
@@ -273,6 +249,7 @@
                             </div>
                         </div>
 
+                        <!-- Rincian Kedatangan -->
                         <div class="space-y-3">
                             <div class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Rincian Kedatangan</div>
                             <div class="grid grid-cols-1 gap-4 bg-slate-100 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-300 dark:border-slate-700 transition-colors shadow-inner">
@@ -294,6 +271,7 @@
                             </div>
                         </div>
 
+                        <!-- Pembayaran -->
                         <div class="grid grid-cols-2 gap-3">
                             <div class="space-y-1">
                                 <label class="text-[10px] font-bold text-slate-500 uppercase">Pasien BPJS</label>
@@ -310,13 +288,34 @@
                             <textarea id="umumKet-${shift.id}" rows="3" placeholder="Ket UMUM: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
                         </div>
 
+                        <!-- Status Akhir -->
                         <div class="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-700">
                              <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Status Akhir & Kasus Khusus</div>
-                             <textarea id="doa-${shift.id}" placeholder="DOA: Nama - Jam" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
-                             <textarea id="meninggal-${shift.id}" placeholder="Meninggal: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
-                             <textarea id="mcu-${shift.id}" placeholder="MCU: Jenis Pemeriksaan" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
-                             <textarea id="pkmRujukKet-${shift.id}" placeholder="Rujukan PKM: Nama PKM - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
-                             <textarea id="rsLain-${shift.id}" placeholder="Rujuk RS Lain: Nama Pasien - RS Tujuan" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                             
+                             <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase ml-1">DOA (Death On Arrival)</label>
+                                <textarea id="doa-${shift.id}" rows="2" placeholder="Nama - Jam" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                             </div>
+
+                             <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase ml-1">Meninggal di IGD</label>
+                                <textarea id="meninggal-${shift.id}" rows="2" placeholder="Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                             </div>
+
+                             <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase ml-1">MCU (Medical Check Up)</label>
+                                <textarea id="mcu-${shift.id}" rows="2" placeholder="Jenis Pemeriksaan" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                             </div>
+
+                             <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase ml-1">Rujukan PKM</label>
+                                <textarea id="pkmRujukKet-${shift.id}" rows="2" placeholder="Nama PKM - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                             </div>
+
+                             <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase ml-1">Rujuk RS Lain</label>
+                                <textarea id="rsLain-${shift.id}" rows="2" placeholder="Nama Pasien - RS Tujuan" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                             </div>
                         </div>
                     </div>
                 </div>
@@ -325,14 +324,19 @@
             container.innerHTML = html;
         }
 
-        window.toggleShift = function(id) {
+        // TOGGLE SHIFT ACCORDION
+        function toggleShift(id) {
             const content = $(`content-${id}`);
             const icon = $(`icon-${id}`);
+            if (!content || !icon) return;
+
             const isHidden = content.classList.contains('hidden');
             
             SHIFTS_CONFIG.forEach(s => {
-                $(`content-${s.id}`).classList.add('hidden');
-                $(`icon-${s.id}`).classList.remove('rotate-180');
+                const c = $(`content-${s.id}`);
+                const i = $(`icon-${s.id}`);
+                if (c) c.classList.add('hidden');
+                if (i) i.classList.remove('rotate-180');
             });
 
             if (isHidden) {
@@ -340,9 +344,9 @@
                 icon.classList.add('rotate-180');
                 content.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-        };
+        }
 
-        // MAIN LOGIC
+        // MAIN LOGIC & REPORT GENERATION
         function processData() {
             let totalAll = 0;
             let reportText = `LAPORAN JAGA IGD\n\n${getVal('inputCity')}, ${getVal('inputDate')} Jam 00.00\n\n`;
@@ -352,126 +356,233 @@
 
             SHIFTS_CONFIG.forEach(shift => {
                 const sId = shift.id;
+                
+                // Info Dokter
                 const drSel = getVal(`dr-${sId}`);
                 const drExt = getVal(`drExtra-${sId}`);
                 const drFinal = (drSel && drExt) ? `${drSel} (${drExt})` : (drSel || drExt || '');
                 if (!drFinal) missingDoctors.push(shift.label);
 
-                let shiftMRS = 0, shiftRJ = 0, sourcesText = '';
+                // Perhitungan MRS / RJ
+                let shiftMRS = 0;
+                let shiftRJ = 0;
+                let sourcesText = '';
+
                 SOURCES.forEach(src => {
                     const ri = getNum(`${src.id}RI-${sId}`);
                     const rj = getNum(`${src.id}RJ-${sId}`);
-                    shiftMRS += ri; shiftRJ += rj;
+                    shiftMRS += ri;
+                    shiftRJ += rj;
                     sourcesText += `-${src.label}:\n\u2022 Rawat inap : ${ri}\n\u2022 Rawat jalan : ${rj}\n`;
                 });
 
                 const shiftTotal = shiftMRS + shiftRJ;
                 totalAll += shiftTotal;
 
+                // Update Summary di UI
                 if ($(`summaryTotal-${sId}`)) $(`summaryTotal-${sId}`).value = shiftTotal;
                 if ($(`summaryMrs-${sId}`)) $(`summaryMrs-${sId}`).value = shiftMRS;
 
                 summaryBlock += `${shift.label.padEnd(12)}: ${shiftTotal} px, MRS: ${shiftMRS}\n`;
-                detailsBlock += `${shift.label}\nJam ${shift.time} Wib\nDokter jaga : ${drFinal || '-'}\nTotal kunjungan : ${shiftTotal}\nTotal rawat inap : ${shiftMRS}\n\nKeterangan :\nPasien BPJS : ${getNum(`bpjs-${sId}`)}\nPasien Umum : ${getNum(`umum-${sId}`)}\nPasien Rawat jalan : ${shiftRJ}\n\nRincian jumlah pasien datang:\n${sourcesText}\nRINCIAN STATUS AKHIR\nDOA : ${getVal(`doa-${sId}`) || '-'}\nMeninggal : ${getVal(`meninggal-${sId}`) || '-'}\nMCU : ${getVal(`mcu-${sId}`) || '-'}\nRujukan PKM : ${getVal(`pkmRujukKet-${sId}`) || '-'}\nRujuk RS Lain : ${getVal(`rsLain-${sId}`) || '-'}\n-------------------------------\n\n`;
+
+                detailsBlock += `${shift.label}\nJam ${shift.time} Wib\n`;
+                detailsBlock += `Dokter jaga : ${drFinal || '-'}\n`;
+                detailsBlock += `Total kunjungan : ${shiftTotal}\n`;
+                detailsBlock += `Total rawat inap : ${shiftMRS}\n\n`;
+                detailsBlock += `Keterangan :\n`;
+                detailsBlock += `Pasien BPJS : ${getNum(`bpjs-${sId}`)}\n`;
+                detailsBlock += `Pasien Umum : ${getNum(`umum-${sId}`)}\n`;
+                detailsBlock += `Pasien Rawat jalan : ${shiftRJ}\n\n`;
+                detailsBlock += `Rincian jumlah pasien yang datang:\n${sourcesText}\n`;
+                detailsBlock += `RINCIAN KASUS RAWAT JALAN\n`;
+                detailsBlock += `BPJS:\n${getVal(`bpjsKet-${sId}`) || '- Tidak ada'}\n\n`;
+                detailsBlock += `UMUM:\n${getVal(`umumKet-${sId}`) || '- Tidak ada'}\n\n`;
+                
+                // Rincian Status Akhir
+                detailsBlock += `RINCIAN STATUS AKHIR\n`;
+                detailsBlock += `DOA (Death On Arrival) :\n${getVal(`doa-${sId}`) || '-'}\n`;
+                detailsBlock += `Meninggal di IGD :\n${getVal(`meninggal-${sId}`) || '-'}\n`;
+                detailsBlock += `MCU (Medical Check Up) :\n${getVal(`mcu-${sId}`) || '-'}\n`;
+                detailsBlock += `Rujukan dari Puskesmas :\n${getVal(`pkmRujukKet-${sId}`) || '-'}\n`;
+                detailsBlock += `Rujuk ke Rumah Sakit Lain :\n${getVal(`rsLain-${sId}`) || '-'}\n`;
+                detailsBlock += `Covid Rawat Jalan: -\n\n`;
+                detailsBlock += `-------------------------------\n\n`;
             });
 
-            // Validation
+            // Validasi Dokter
+            const vBadge = $('validationBadge');
+            const copyBtn = $('copyBtn');
             if (missingDoctors.length > 0) {
-                $('validationBadge').textContent = "DOKTER BELUM LENGKAP";
-                $('validationBadge').className = "px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30";
-                $('copyBtn').disabled = true;
-            } else {
-                $('validationBadge').textContent = "DATA LENGKAP";
-                $('validationBadge').className = "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
-                $('copyBtn').disabled = false;
-            }
-
-            reportText += `TOTAL KUNJUNGAN IGD ${totalAll} PASIEN\n${summaryBlock}\n${detailsBlock}KENDALA: ${getVal('inputKendala') || '-'}\n\nTerima Kasih.`;
-            $('outputReport').value = reportText;
-            
-            // Sync to Database
-            pushToCloud();
-        }
-
-        function pushToCloud() {
-            clearTimeout(syncTimer);
-            syncTimer = setTimeout(async () => {
-                const data = { theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light' };
-                document.querySelectorAll('input, select, textarea').forEach(el => {
-                    if (el.id && el.id !== 'outputReport') data[el.id] = el.value;
-                });
-                try {
-                    await set(dbPath, data);
-                    $('syncDot').className = "sync-dot bg-emerald-500";
-                } catch (e) {
-                    $('syncDot').className = "sync-dot bg-red-500 animate-pulse";
+                if (vBadge) {
+                    vBadge.textContent = "DOKTER BELUM LENGKAP";
+                    vBadge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30";
                 }
-            }, 1000);
+                if (copyBtn) copyBtn.disabled = true;
+            } else {
+                if (vBadge) {
+                    vBadge.textContent = "DATA LENGKAP";
+                    vBadge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+                }
+                if (copyBtn) copyBtn.disabled = false;
+            }
+
+            // Gabungkan semua
+            reportText += `TOTAL KUNJUNGAN IGD ${totalAll} PASIEN\n`;
+            reportText += summaryBlock;
+            reportText += `\n` + detailsBlock;
+            reportText += `KENDALA / MASALAH HARI INI:\n`;
+            reportText += `${getVal('inputKendala') || '-'}\n\n`;
+            reportText += `Terima Kasih.`;
+
+            if ($('outputReport')) $('outputReport').value = reportText;
+            saveToLocal();
         }
 
-        async function startApp() {
-            renderShifts();
+        // PERSISTENCE
+        function saveToLocal() {
+            const inputs = document.querySelectorAll('input, select, textarea');
+            const data = { 
+                theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light' 
+            };
+            inputs.forEach(el => { if(el.id) data[el.id] = el.value; });
+            localStorage.setItem('rsdh_report_data_v2', JSON.stringify(data));
+        }
+
+        function loadFromLocal() {
+            const raw = localStorage.getItem('rsdh_report_data_v2');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (!raw) { 
+                applyTheme(systemPrefersDark ? 'dark' : 'light');
+                setDefaultDate(); 
+                processData(); 
+                return; 
+            }
+
             try {
-                await signInAnonymously(auth);
-                $('syncDot').className = "sync-dot bg-emerald-500";
+                const data = JSON.parse(raw);
+                applyTheme(data.theme || (systemPrefersDark ? 'dark' : 'light'));
                 
-                onValue(dbPath, (snap) => {
-                    $('initialLoader').classList.add('hidden');
-                    $('appUI').classList.remove('hidden');
-                    
-                    if (snap.exists()) {
-                        const data = snap.val();
-                        Object.keys(data).forEach(id => {
-                            const el = $(id);
-                            if (el && document.activeElement !== el) el.value = data[id];
-                        });
-                        if (data.theme === 'dark') document.documentElement.classList.add('dark');
-                    } else {
-                        const now = new Date();
-                        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                        $('inputDate').value = now.toLocaleDateString('id-ID', options);
+                Object.keys(data).forEach(id => {
+                    const el = $(id);
+                    if (el && id !== 'inputCity' && id !== 'theme') {
+                        el.value = data[id];
                     }
-                    processData();
                 });
-            } catch (err) {
-                console.error("Auth error", err);
-                $('syncDot').className = "sync-dot bg-red-500";
-                $('initialLoader').classList.add('hidden');
-                $('appUI').classList.remove('hidden');
+
+                if (!getVal('inputDate')) setDefaultDate();
+                processData();
+            } catch (e) {
+                applyTheme(systemPrefersDark ? 'dark' : 'light');
+                setDefaultDate();
+                processData();
             }
         }
 
-        // Event Listeners
-        document.body.addEventListener('input', (e) => {
-            if (e.target.id && e.target.id !== 'outputReport') processData();
-        });
+        function setDefaultDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            if ($('inputDate')) $('inputDate').value = now.toLocaleDateString('id-ID', options);
+        }
 
-        $('darkToggle').onclick = () => {
-            const isDark = document.documentElement.classList.toggle('dark');
-            $('themeIcon').textContent = isDark ? '☀️' : '🌙';
-            pushToCloud();
+        function applyTheme(mode) {
+            const icon = $('themeIcon');
+            const html = document.documentElement;
+            if (mode === 'dark') {
+                html.classList.add('dark');
+                if (icon) icon.textContent = '☀️';
+            } else {
+                html.classList.remove('dark');
+                if (icon) icon.textContent = '🌙';
+            }
+        }
+
+        // TOAST & MODAL
+        function showToast(msg) {
+            const toast = $('toast');
+            const msgEl = $('toastMsg');
+            if (toast && msgEl) {
+                msgEl.textContent = msg;
+                toast.classList.remove('translate-y-20');
+                setTimeout(() => toast.classList.add('translate-y-20'), 3000);
+            }
+        }
+
+        function toggleModal(show) {
+            const overlay = $('modalOverlay');
+            const content = $('modalContent');
+            if (!overlay || !content) return;
+            
+            if (show) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => content.classList.remove('scale-95', 'opacity-0'), 10);
+            } else {
+                content.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        }
+
+        // INITIALIZATION
+        window.onload = () => {
+            renderShifts();
+            loadFromLocal();
+
+            // Event Listeners
+            document.body.addEventListener('input', (e) => {
+                const tag = e.target.tagName;
+                if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
+                    processData();
+                }
+            });
+
+            document.body.addEventListener('change', (e) => {
+                if (e.target.tagName === 'SELECT') {
+                    processData();
+                }
+            });
+
+            if ($('darkToggle')) {
+                $('darkToggle').onclick = () => {
+                    const isNowDark = !document.documentElement.classList.contains('dark');
+                    applyTheme(isNowDark ? 'dark' : 'light');
+                    saveToLocal();
+                };
+            }
+
+            if ($('copyBtn')) {
+                $('copyBtn').onclick = () => {
+                    const area = $('outputReport');
+                    if (area) {
+                        area.select();
+                        try {
+                            document.execCommand('copy');
+                            showToast('Laporan Disalin!');
+                        } catch(err) {
+                            showToast('Gagal menyalin');
+                        }
+                    }
+                };
+            }
+
+            if ($('refreshBtn')) {
+                $('refreshBtn').onclick = () => window.location.reload();
+            }
+            
+            if ($('resetTrigger')) $('resetTrigger').onclick = () => toggleModal(true);
+            if ($('cancelReset')) $('cancelReset').onclick = () => toggleModal(false);
+            if ($('confirmReset')) {
+                $('confirmReset').onclick = () => {
+                    localStorage.removeItem('rsdh_report_data_v2');
+                    window.location.reload();
+                };
+            }
+
+            if ($('modalOverlay')) {
+                $('modalOverlay').onclick = (e) => {
+                    if(e.target === $('modalOverlay')) toggleModal(false);
+                };
+            }
         };
-
-        $('copyBtn').onclick = () => {
-            $('outputReport').select();
-            document.execCommand('copy');
-            $('toast').classList.remove('translate-y-20');
-            setTimeout(() => $('toast').classList.add('translate-y-20'), 2000);
-        };
-
-        $('resetTrigger').onclick = () => {
-            $('modalOverlay').classList.remove('hidden');
-            setTimeout(() => $('modalContent').classList.remove('scale-95', 'opacity-0'), 10);
-        };
-        $('cancelReset').onclick = () => $('modalOverlay').classList.add('hidden');
-        $('confirmReset').onclick = async () => {
-            await remove(dbPath);
-            window.location.reload();
-        };
-
-        $('refreshBtn').onclick = () => window.location.reload();
-
-        startApp();
     </script>
 </body>
 </html>
