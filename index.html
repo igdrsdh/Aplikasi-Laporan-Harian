@@ -197,10 +197,10 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, onSnapshot, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // GLOBAL CONFIG FROM ENVIRONMENT
+        // CONFIG
         const firebaseConfig = JSON.parse(__firebase_config);
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'laporan-harian-igd';
 
@@ -208,7 +208,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // CONSTANTS
         const SHIFTS_CONFIG = [
             { id: 'Pagi1', label: 'Dini Hari', time: '00.00 - 07.00', icon: '🌑', color: 'from-slate-600 to-slate-400' },
             { id: 'Pagi2', label: 'Shift Pagi', time: '07.00 - 14.00', icon: '☀️', color: 'from-sky-600 to-sky-400' },
@@ -440,7 +439,6 @@
                 }
             });
             try {
-                // RULE 1: /artifacts/{appId}/public/data/{collectionName}
                 const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'reports', dateId);
                 await setDoc(docRef, data, { merge: true });
                 setSyncStatus('saved');
@@ -476,11 +474,8 @@
         function listenToCloud(dateId) {
             if (activeUnsubscribe) activeUnsubscribe();
             if (!currentUser || !dateId) return;
-            
             setSyncStatus('syncing');
-            // RULE 1: /artifacts/{appId}/public/data/{collectionName}
             const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'reports', dateId);
-            
             activeUnsubscribe = onSnapshot(docRef, (snapshot) => {
                 isSyncingFromCloud = true;
                 if (snapshot.exists()) {
@@ -498,7 +493,6 @@
                 isSyncingFromCloud = false;
                 setSyncStatus('saved');
             }, (error) => {
-                console.error("Cloud error:", error);
                 setSyncStatus('error');
             });
         }
@@ -522,28 +516,18 @@
             updateFriendlyDate(localDateStr);
             generateReport();
 
-            // RULE 3: Auth First
-            const initAuth = async () => {
-                try {
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
-                        await signInAnonymously(auth);
-                    }
-                } catch (err) {
-                    console.error("Auth error:", err);
-                    setSyncStatus('error');
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    const cred = await signInWithCustomToken(auth, __initial_auth_token);
+                    currentUser = cred.user;
+                } else {
+                    const cred = await signInAnonymously(auth);
+                    currentUser = cred.user;
                 }
-            };
-
-            await initAuth();
-            
-            onAuthStateChanged(auth, (user) => {
-                currentUser = user;
-                if (user) {
-                    listenToCloud($('inputDateDb').value);
-                }
-            });
+                listenToCloud(localDateStr);
+            } catch (err) {
+                setSyncStatus('error');
+            }
 
             document.body.addEventListener('input', (e) => {
                 const el = e.target;
