@@ -69,6 +69,10 @@
     </div>
 
     <main class="max-w-3xl mx-auto pt-24 pb-20 px-4">
+        <div id="errorBanner" class="hidden mb-4 p-3 bg-red-100 border border-red-200 text-red-700 text-xs rounded-xl font-bold">
+            Gagal terhubung ke Cloud. Pastikan 'Anonymous Auth' aktif di Firebase.
+        </div>
+
         <div class="space-y-6">
             <!-- Informasi Umum -->
             <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6">
@@ -129,7 +133,7 @@
 
         // CONFIGURASI
         const firebaseConfig = JSON.parse(__firebase_config);
-        const appId = "laporan-harian-igd"; // ID Tetap untuk sinkronisasi antar perangkat
+        const appId = "laporan-harian-igd"; 
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -205,14 +209,8 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-3">
-                            <div class="space-y-1">
-                                <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">BPJS</label>
-                                <input type="number" id="bpjs-${shift.id}" value="0" class="w-full p-3 rounded-xl border bg-white dark:bg-slate-900 text-sm font-bold" />
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">UMUM</label>
-                                <input type="number" id="umum-${shift.id}" value="0" class="w-full p-3 rounded-xl border bg-white dark:bg-slate-900 text-sm font-bold" />
-                            </div>
+                            <input type="number" id="bpjs-${shift.id}" value="0" class="p-3 rounded-xl border bg-white dark:bg-slate-900 text-sm font-bold" placeholder="BPJS" />
+                            <input type="number" id="umum-${shift.id}" value="0" class="p-3 rounded-xl border bg-white dark:bg-slate-900 text-sm font-bold" placeholder="UMUM" />
                         </div>
                         <div class="space-y-3">
                             <textarea id="bpjsKet-${shift.id}" placeholder="Ket BPJS: Nama - Diagnosa" class="w-full p-3 rounded-xl border bg-white dark:bg-slate-900 text-xs outline-none large-area"></textarea>
@@ -292,19 +290,19 @@
             const data = {};
             document.querySelectorAll('input, select, textarea').forEach(el => { if (el.id && el.id !== 'outputReport') data[el.id] = el.value; });
             try {
-                // RTDB PATH: artifacts/laporan-harian-igd/public/data/reports/{dateId}
                 await set(ref(db, `artifacts/${appId}/public/data/reports/${dateId}`), data);
                 setSyncStatus('saved');
             } catch (err) { setSyncStatus('error'); }
         }
 
-        function setSyncStatus(status) {
+        function setSyncStatus(status, extraMsg = '') {
             const dot = $('statusDot'), text = $('statusText');
             if (!dot || !text) return;
             dot.classList.remove('bg-emerald-500', 'bg-amber-500', 'bg-red-500', 'dot-syncing', 'bg-slate-400');
             if (status === 'syncing') { dot.classList.add('bg-amber-500', 'dot-syncing'); text.innerText = 'Syncing'; }
             else if (status === 'saved') { dot.classList.add('bg-emerald-500'); text.innerText = 'Synced'; }
             else if (status === 'error') { dot.classList.add('bg-red-500'); text.innerText = 'Error'; }
+            else if (status === 'offline') { dot.classList.add('bg-slate-400'); text.innerText = extraMsg || 'Offline'; }
         }
 
         function listenToCloud(dateId) {
@@ -325,7 +323,11 @@
                 generateReport();
                 isSyncingFromCloud = false;
                 setSyncStatus('saved');
-            }, (error) => setSyncStatus('error'));
+            }, (error) => {
+                setSyncStatus('error');
+                $('errorBanner').innerText = "Akses ditolak (Permission Denied). Cek Security Rules!";
+                $('errorBanner').classList.remove('hidden');
+            });
         }
 
         window.onload = async () => {
@@ -336,15 +338,30 @@
             updateFriendlyDate(localDateStr);
             generateReport();
 
-            // AUTENTIKASI (Rule 3)
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token);
-                else await signInAnonymously(auth);
-            } catch (err) { setSyncStatus('error'); }
+            // RULE 3: Auth First
+            const initAuth = async () => {
+                try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } catch (err) {
+                    console.error("Auth failed:", err);
+                    setSyncStatus('error');
+                    $('errorBanner').innerText = "Auth Gagal: Pastikan 'Anonymous Login' aktif di Firebase Console!";
+                    $('errorBanner').classList.remove('hidden');
+                }
+            };
+
+            await initAuth();
 
             onAuthStateChanged(auth, (user) => {
                 currentUser = user;
-                if (user) listenToCloud($('inputDateDb').value);
+                if (user) {
+                    $('errorBanner').classList.add('hidden');
+                    listenToCloud($('inputDateDb').value);
+                }
             });
 
             document.body.addEventListener('input', (e) => {
