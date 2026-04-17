@@ -37,6 +37,12 @@
             border-color: #0ea5e9 !important;
             box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
         }
+        
+        /* Auto-expand style for textareas if needed, though rows is set */
+        textarea {
+            field-sizing: content; /* Modern browser support for auto-expanding */
+            min-height: 44px;
+        }
     </style>
 </head>
 <body class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
@@ -277,14 +283,34 @@
                             <textarea id="umumKet-${shift.id}" rows="2" placeholder="Ket UMUM: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
                         </div>
 
-                        <!-- Status Akhir -->
-                        <div class="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-700">
-                             <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Status Akhir & Kasus Khusus</div>
-                             <input type="text" id="doa-${shift.id}" placeholder="DOA: Nama - Jam" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring" />
-                             <input type="text" id="meninggal-${shift.id}" placeholder="Meninggal di IGD: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring" />
-                             <input type="text" id="mcu-${shift.id}" placeholder="MCU: Jenis Pemeriksaan" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring" />
-                             <input type="text" id="pkmRujukKet-${shift.id}" placeholder="Rujukan PKM: Nama PKM - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring" />
-                             <input type="text" id="rsLain-${shift.id}" placeholder="Rujuk RS Lain: Nama Pasien - RS Tujuan" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring" />
+                        <!-- Status Akhir (UPDATED TO TEXTAREAS) -->
+                        <div class="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+                             <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Status Akhir & Kasus Khusus</div>
+                             
+                             <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase ml-1">DOA (Death On Arrival)</label>
+                                <textarea id="doa-${shift.id}" rows="1" placeholder="Nama - Jam" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                             </div>
+
+                             <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase ml-1">Meninggal di IGD</label>
+                                <textarea id="meninggal-${shift.id}" rows="1" placeholder="Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                             </div>
+
+                             <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase ml-1">MCU (Medical Check Up)</label>
+                                <textarea id="mcu-${shift.id}" rows="1" placeholder="Jenis Pemeriksaan" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                             </div>
+
+                             <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase ml-1">Rujukan PKM</label>
+                                <textarea id="pkmRujukKet-${shift.id}" rows="1" placeholder="Nama PKM - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                             </div>
+
+                             <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase ml-1">Rujuk RS Lain</label>
+                                <textarea id="rsLain-${shift.id}" rows="1" placeholder="Nama Pasien - RS Tujuan" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                             </div>
                         </div>
                     </div>
                 </div>
@@ -367,7 +393,7 @@
                 detailsBlock += `BPJS:\n${getVal(`bpjsKet-${sId}`) || '- Tidak ada'}\n\n`;
                 detailsBlock += `UMUM:\n${getVal(`umumKet-${sId}`) || '- Tidak ada'}\n\n`;
                 
-                // Rincian Status Akhir (Value on new line)
+                // Rincian Status Akhir
                 detailsBlock += `RINCIAN STATUS AKHIR\n`;
                 detailsBlock += `DOA (Death On Arrival) :\n${getVal(`doa-${sId}`) || '-'}\n`;
                 detailsBlock += `Meninggal di IGD :\n${getVal(`meninggal-${sId}`) || '-'}\n`;
