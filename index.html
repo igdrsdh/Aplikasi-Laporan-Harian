@@ -2,7 +2,7 @@
 <html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Jaga IGD - RS Dian Husada</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -38,15 +38,22 @@
             box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
         }
         
-        /* Membuat Textarea lebih lega secara default */
         textarea {
             field-sizing: content; 
-            min-height: 80px; /* Tinggi minimum lebih besar agar tidak sempit */
+            min-height: 80px;
         }
         
-        /* Khusus untuk keterangan BPJS/UMUM yang mungkin lebih panjang */
         .large-area {
             min-height: 100px;
+        }
+
+        .live-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
         }
     </style>
 </head>
@@ -58,15 +65,17 @@
             <div class="flex items-center gap-3">
                 <div class="w-12 h-12 flex items-center justify-center overflow-hidden rounded-xl bg-white dark:bg-slate-800 shadow-md border border-slate-300 dark:border-slate-700">
                     <img 
-                        src="LOGO%20IGD.png" 
+                        src="https://img.icons8.com/fluency/96/hospital.png" 
                         alt="Logo IGD" 
                         class="w-full h-full object-contain p-1"
-                        onerror="this.src='https://img.icons8.com/fluency/96/hospital.png'"
                     />
                 </div>
                 <div>
                     <h1 class="font-extrabold text-sm md:text-base leading-none text-slate-900 dark:text-white">Laporan Jaga IGD</h1>
-                    <span class="text-[10px] uppercase tracking-wider font-bold text-slate-500">RS Dian Husada</span>
+                    <div class="flex items-center gap-1.5 mt-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 live-pulse"></span>
+                        <span id="liveClock" class="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400">Loading...</span>
+                    </div>
                 </div>
             </div>
             <div class="flex items-center gap-2">
@@ -87,11 +96,14 @@
         <div class="space-y-6">
             <!-- Data Umum -->
             <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
-                <div class="flex items-center gap-2 mb-4 text-sky-600 dark:text-sky-400 font-bold uppercase text-xs tracking-widest">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    Informasi Umum
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2 text-sky-600 dark:text-sky-400 font-bold uppercase text-xs tracking-widest">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Informasi Umum
+                    </div>
+                    <button onclick="setDefaultDate()" class="text-[10px] font-bold text-sky-500 hover:text-sky-600 uppercase">Set Hari Ini</button>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="space-y-1">
@@ -199,10 +211,29 @@
             { id: 'sendiri', label: 'Datang Sendiri' }
         ];
 
-        // UI HELPERS
         const $ = (id) => document.getElementById(id);
         const getVal = (id) => $(id) ? $(id).value : '';
         const getNum = (id) => parseInt(getVal(id)) || 0;
+
+        // REAL-TIME CLOCK LOGIC
+        function updateLiveClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+            if ($('liveClock')) {
+                $('liveClock').textContent = `${dateStr} - ${timeStr} WIB`;
+            }
+        }
+
+        function setDefaultDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = now.toLocaleDateString('id-ID', options);
+            if ($('inputDate')) {
+                $('inputDate').value = formattedDate;
+                processData(); // Refresh preview when date updated
+            }
+        }
 
         // RENDER SHIFT BLOCKS
         function renderShifts() {
@@ -225,7 +256,6 @@
                     </button>
                     
                     <div id="content-${shift.id}" class="hidden p-6 space-y-6 animate-slide-in">
-                        <!-- Dokter -->
                         <div class="space-y-1">
                             <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Dokter Jaga</label>
                             <div class="flex gap-2">
@@ -237,7 +267,6 @@
                             </div>
                         </div>
 
-                        <!-- Ringkasan MRS/Total -->
                         <div class="grid grid-cols-2 gap-3">
                             <div class="p-3 bg-sky-100/50 dark:bg-sky-900/20 rounded-xl border border-sky-200 dark:border-sky-800">
                                 <div class="text-[10px] font-bold text-sky-600 dark:text-sky-400 uppercase tracking-tighter">Total Pasien</div>
@@ -249,7 +278,6 @@
                             </div>
                         </div>
 
-                        <!-- Rincian Kedatangan -->
                         <div class="space-y-3">
                             <div class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Rincian Kedatangan</div>
                             <div class="grid grid-cols-1 gap-4 bg-slate-100 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-300 dark:border-slate-700 transition-colors shadow-inner">
@@ -271,7 +299,6 @@
                             </div>
                         </div>
 
-                        <!-- Pembayaran -->
                         <div class="grid grid-cols-2 gap-3">
                             <div class="space-y-1">
                                 <label class="text-[10px] font-bold text-slate-500 uppercase">Pasien BPJS</label>
@@ -288,7 +315,6 @@
                             <textarea id="umumKet-${shift.id}" rows="3" placeholder="Ket UMUM: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
                         </div>
 
-                        <!-- Status Akhir -->
                         <div class="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-700">
                              <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Status Akhir & Kasus Khusus</div>
                              
@@ -324,7 +350,6 @@
             container.innerHTML = html;
         }
 
-        // TOGGLE SHIFT ACCORDION
         function toggleShift(id) {
             const content = $(`content-${id}`);
             const icon = $(`icon-${id}`);
@@ -346,24 +371,21 @@
             }
         }
 
-        // MAIN LOGIC & REPORT GENERATION
         function processData() {
             let totalAll = 0;
-            let reportText = `LAPORAN JAGA IGD\n\n${getVal('inputCity')}, ${getVal('inputDate')} Jam 00.00\n\n`;
+            const nowTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            let reportText = `LAPORAN JAGA IGD\n\n${getVal('inputCity')}, ${getVal('inputDate')} Jam ${nowTime} WIB\n\n`;
             let summaryBlock = '';
             let detailsBlock = '';
             let missingDoctors = [];
 
             SHIFTS_CONFIG.forEach(shift => {
                 const sId = shift.id;
-                
-                // Info Dokter
                 const drSel = getVal(`dr-${sId}`);
                 const drExt = getVal(`drExtra-${sId}`);
                 const drFinal = (drSel && drExt) ? `${drSel} (${drExt})` : (drSel || drExt || '');
                 if (!drFinal) missingDoctors.push(shift.label);
 
-                // Perhitungan MRS / RJ
                 let shiftMRS = 0;
                 let shiftRJ = 0;
                 let sourcesText = '';
@@ -379,7 +401,6 @@
                 const shiftTotal = shiftMRS + shiftRJ;
                 totalAll += shiftTotal;
 
-                // Update Summary di UI
                 if ($(`summaryTotal-${sId}`)) $(`summaryTotal-${sId}`).value = shiftTotal;
                 if ($(`summaryMrs-${sId}`)) $(`summaryMrs-${sId}`).value = shiftMRS;
 
@@ -398,7 +419,6 @@
                 detailsBlock += `BPJS:\n${getVal(`bpjsKet-${sId}`) || '- Tidak ada'}\n\n`;
                 detailsBlock += `UMUM:\n${getVal(`umumKet-${sId}`) || '- Tidak ada'}\n\n`;
                 
-                // Rincian Status Akhir
                 detailsBlock += `RINCIAN STATUS AKHIR\n`;
                 detailsBlock += `DOA (Death On Arrival) :\n${getVal(`doa-${sId}`) || '-'}\n`;
                 detailsBlock += `Meninggal di IGD :\n${getVal(`meninggal-${sId}`) || '-'}\n`;
@@ -409,7 +429,6 @@
                 detailsBlock += `-------------------------------\n\n`;
             });
 
-            // Validasi Dokter
             const vBadge = $('validationBadge');
             const copyBtn = $('copyBtn');
             if (missingDoctors.length > 0) {
@@ -426,7 +445,6 @@
                 if (copyBtn) copyBtn.disabled = false;
             }
 
-            // Gabungkan semua
             reportText += `TOTAL KUNJUNGAN IGD ${totalAll} PASIEN\n`;
             reportText += summaryBlock;
             reportText += `\n` + detailsBlock;
@@ -438,7 +456,6 @@
             saveToLocal();
         }
 
-        // PERSISTENCE
         function saveToLocal() {
             const inputs = document.querySelectorAll('input, select, textarea');
             const data = { 
@@ -470,19 +487,23 @@
                     }
                 });
 
-                if (!getVal('inputDate')) setDefaultDate();
+                // ALWAYS DEFAULT TO TODAY'S DATE REGARDLESS OF STORAGE ON FRESH OPEN
+                // If user wants to see old data, they can, but we prefer today's label
+                const now = new Date();
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const today = now.toLocaleDateString('id-ID', options);
+                
+                if (getVal('inputDate') !== today) {
+                    // Hanya override jika input kosong atau tanggal lama
+                    if(!getVal('inputDate')) setDefaultDate();
+                }
+                
                 processData();
             } catch (e) {
                 applyTheme(systemPrefersDark ? 'dark' : 'light');
                 setDefaultDate();
                 processData();
             }
-        }
-
-        function setDefaultDate() {
-            const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            if ($('inputDate')) $('inputDate').value = now.toLocaleDateString('id-ID', options);
         }
 
         function applyTheme(mode) {
@@ -497,7 +518,6 @@
             }
         }
 
-        // TOAST & MODAL
         function showToast(msg) {
             const toast = $('toast');
             const msgEl = $('toastMsg');
@@ -522,12 +542,16 @@
             }
         }
 
-        // INITIALIZATION
         window.onload = () => {
             renderShifts();
             loadFromLocal();
+            
+            // Start real-time clock
+            updateLiveClock();
+            setInterval(updateLiveClock, 1000);
+            // Refresh report timestamp every minute even if no input
+            setInterval(processData, 60000);
 
-            // Event Listeners
             document.body.addEventListener('input', (e) => {
                 const tag = e.target.tagName;
                 if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
