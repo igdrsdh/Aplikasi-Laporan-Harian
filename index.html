@@ -59,6 +59,7 @@
 </head>
 <body class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
 
+    <!-- Header & Controls -->
     <div class="fixed top-0 left-0 right-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-300 dark:border-slate-800 px-4 py-3">
         <div class="max-w-3xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -94,6 +95,7 @@
 
     <main class="max-w-3xl mx-auto pt-24 pb-20 px-4">
         <div class="space-y-6">
+            <!-- Data Umum -->
             <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2 text-sky-600 dark:text-sky-400 font-bold uppercase text-xs tracking-widest">
@@ -116,8 +118,10 @@
                 </div>
             </section>
 
+            <!-- Shifts Container (JS Generated) -->
             <div id="shiftsContainer" class="space-y-4"></div>
 
+            <!-- Kendala -->
             <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
                 <div class="flex items-center gap-2 mb-4 text-amber-600 dark:text-amber-500 font-bold uppercase text-xs tracking-widest">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -128,6 +132,7 @@
                 <textarea id="inputKendala" rows="3" class="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all placeholder:text-slate-400 dark:text-white input-focus-ring" placeholder="Tuliskan kendala hari ini..."></textarea>
             </section>
 
+            <!-- Report Output -->
             <section class="bg-slate-900 dark:bg-black rounded-2xl shadow-2xl overflow-hidden border border-slate-800">
                 <div class="px-6 py-4 bg-slate-800 dark:bg-slate-950 border-b border-slate-700 flex justify-between items-center">
                     <div class="flex items-center gap-2 text-white font-bold text-sm">
@@ -164,6 +169,7 @@
         </div>
     </main>
 
+    <!-- Custom Modals -->
     <div id="modalOverlay" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-sm p-6 shadow-2xl scale-95 opacity-0 transition-all duration-300" id="modalContent">
             <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
@@ -180,6 +186,7 @@
         </div>
     </div>
 
+    <!-- Notification Toast -->
     <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-slate-800 text-white rounded-2xl shadow-2xl font-bold text-sm flex items-center gap-3 translate-y-20 transition-all duration-300 pointer-events-none">
         <div class="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -190,7 +197,7 @@
     </div>
 
     <script>
-        // CONFIGURATION (Sama seperti sebelumnya)
+        // CONFIGURATION
         const SHIFTS_CONFIG = [
             { id: 'Pagi1', label: 'Dini Hari', time: '00.00 - 07.00', icon: '🌑', color: 'from-slate-600 to-slate-400' },
             { id: 'Pagi2', label: 'Shift Pagi', time: '07.00 - 14.00', icon: '☀️', color: 'from-sky-600 to-sky-400' },
@@ -217,26 +224,32 @@
         const getVal = (id) => $(id) ? $(id).value : '';
         const getNum = (id) => parseInt(getVal(id)) || 0;
 
+        // REAL-TIME CLOCK LOGIC
         function updateLiveClock() {
             const now = new Date();
             const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
-            if ($('liveClock')) $('liveClock').textContent = `${dateStr} - ${timeStr} WIB`;
+            if ($('liveClock')) {
+                $('liveClock').textContent = `${dateStr} - ${timeStr} WIB`;
+            }
         }
 
         function setDefaultDate() {
             const now = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = now.toLocaleDateString('id-ID', options);
             if ($('inputDate')) {
-                $('inputDate').value = now.toLocaleDateString('id-ID', options);
+                $('inputDate').value = formattedDate;
                 processData(); 
             }
         }
 
+        // RENDER SHIFT BLOCKS
         function renderShifts() {
             const container = $('shiftsContainer');
             if (!container) return;
             let html = '';
+
             SHIFTS_CONFIG.forEach(shift => {
                 html += `
                 <div class="shift-block bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 overflow-hidden transition-colors">
@@ -250,6 +263,7 @@
                         </div>
                         <svg id="icon-${shift.id}" class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                     </button>
+                    
                     <div id="content-${shift.id}" class="hidden p-6 space-y-6 animate-slide-in">
                         <div class="space-y-1">
                             <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Dokter Jaga</label>
@@ -261,6 +275,7 @@
                                 <input type="text" id="drExtra-${shift.id}" placeholder="Pengganti" class="w-1/3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 outline-none text-sm dark:text-white input-focus-ring" />
                             </div>
                         </div>
+
                         <div class="grid grid-cols-2 gap-3">
                             <div class="p-3 bg-sky-100/50 dark:bg-sky-900/20 rounded-xl border border-sky-200 dark:border-sky-800">
                                 <div class="text-[10px] font-bold text-sky-600 dark:text-sky-400 uppercase tracking-tighter">Total Pasien</div>
@@ -271,6 +286,7 @@
                                 <input type="text" id="summaryMrs-${shift.id}" value="0" readonly class="bg-transparent font-extrabold text-xl outline-none dark:text-emerald-400 text-emerald-700" />
                             </div>
                         </div>
+
                         <div class="space-y-3">
                             <div class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Rincian Kedatangan</div>
                             <div class="grid grid-cols-1 gap-4 bg-slate-100 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-300 dark:border-slate-700 transition-colors shadow-inner">
@@ -291,6 +307,7 @@
                                 `).join('')}
                             </div>
                         </div>
+
                         <div class="grid grid-cols-2 gap-3">
                             <div class="space-y-1">
                                 <label class="text-[10px] font-bold text-slate-500 uppercase">Pasien BPJS</label>
@@ -301,20 +318,43 @@
                                 <input type="number" id="umum-${shift.id}" value="0" min="0" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 outline-none text-sm font-bold dark:text-white input-focus-ring" />
                             </div>
                         </div>
+
                         <div class="space-y-3">
                             <textarea id="bpjsKet-${shift.id}" rows="3" placeholder="Ket BPJS: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
                             <textarea id="umumKet-${shift.id}" rows="3" placeholder="Ket UMUM: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
                         </div>
+
                         <div class="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-700">
-                             <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Status Akhir</div>
-                             <div class="space-y-1"><label class="text-[9px] font-bold text-slate-400 uppercase">DOA</label><textarea id="doa-${shift.id}" rows="2" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 text-xs dark:text-white input-focus-ring"></textarea></div>
-                             <div class="space-y-1"><label class="text-[9px] font-bold text-slate-400 uppercase">Meninggal di IGD</label><textarea id="meninggal-${shift.id}" rows="2" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 text-xs dark:text-white input-focus-ring"></textarea></div>
-                             <div class="space-y-1"><label class="text-[9px] font-bold text-slate-400 uppercase">MCU</label><textarea id="mcu-${shift.id}" rows="2" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 text-xs dark:text-white input-focus-ring"></textarea></div>
-                             <div class="space-y-1"><label class="text-[9px] font-bold text-slate-400 uppercase">Rujukan PKM</label><textarea id="pkmRujukKet-${shift.id}" rows="2" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 text-xs dark:text-white input-focus-ring"></textarea></div>
-                             <div class="space-y-1"><label class="text-[9px] font-bold text-slate-400 uppercase">Rujuk RS Lain</label><textarea id="rsLain-${shift.id}" rows="2" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 text-xs dark:text-white input-focus-ring"></textarea></div>
+                             <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Status Akhir & Kasus Khusus</div>
+                             
+                             <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase ml-1">DOA (Death On Arrival)</label>
+                                <textarea id="doa-${shift.id}" rows="2" placeholder="Nama - Jam" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                             </div>
+
+                             <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase ml-1">Meninggal di IGD</label>
+                                <textarea id="meninggal-${shift.id}" rows="2" placeholder="Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                             </div>
+
+                             <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase ml-1">MCU (Medical Check Up)</label>
+                                <textarea id="mcu-${shift.id}" rows="2" placeholder="Jenis Pemeriksaan" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                             </div>
+
+                             <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase ml-1">Rujukan PKM</label>
+                                <textarea id="pkmRujukKet-${shift.id}" rows="2" placeholder="Nama PKM - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                             </div>
+
+                             <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase ml-1">Rujuk RS Lain</label>
+                                <textarea id="rsLain-${shift.id}" rows="2" placeholder="Nama Pasien - RS Tujuan" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                             </div>
                         </div>
                     </div>
-                </div>`;
+                </div>
+                `;
             });
             container.innerHTML = html;
         }
@@ -323,9 +363,21 @@
             const content = $(`content-${id}`);
             const icon = $(`icon-${id}`);
             if (!content || !icon) return;
+
             const isHidden = content.classList.contains('hidden');
-            SHIFTS_CONFIG.forEach(s => { $(`content-${s.id}`).classList.add('hidden'); $(`icon-${s.id}`).classList.remove('rotate-180'); });
-            if (isHidden) { content.classList.remove('hidden'); icon.classList.add('rotate-180'); content.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            
+            SHIFTS_CONFIG.forEach(s => {
+                const c = $(`content-${s.id}`);
+                const i = $(`icon-${s.id}`);
+                if (c) c.classList.add('hidden');
+                if (i) i.classList.remove('rotate-180');
+            });
+
+            if (isHidden) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+                content.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
         function processData() {
@@ -355,7 +407,9 @@
                 if ($(`summaryTotal-${sId}`)) $(`summaryTotal-${sId}`).value = shiftTotal;
                 if ($(`summaryMrs-${sId}`)) $(`summaryMrs-${sId}`).value = shiftMRS;
 
-                summaryBlock += `*${shift.label.padEnd(12)}*: ${shiftTotal} px, MRS: ${shiftMRS}\n`;
+                // FORMAT BOLD WHATSAPP: Bintang harus menempel pada teks (tanpa spasi padding)
+                summaryBlock += `*${shift.label}*: ${shiftTotal} px, MRS: ${shiftMRS}\n`;
+                
                 detailsBlock += `*${shift.label}*\nJam ${shift.time} Wib\n`;
                 detailsBlock += `Dokter jaga : ${drFinal || '-'}\n`;
                 detailsBlock += `Total kunjungan : ${shiftTotal}\n`;
@@ -394,7 +448,6 @@
             saveToLocal();
         }
 
-        // SHARE TO WHATSAPP FUNCTION
         function shareToWA() {
             const text = $('outputReport').value;
             const encodedText = encodeURIComponent(text);
@@ -403,55 +456,163 @@
         }
 
         function saveToLocal() {
-            const data = { theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light' };
-            document.querySelectorAll('input, select, textarea').forEach(el => { if(el.id) data[el.id] = el.value; });
+            const inputs = document.querySelectorAll('input, select, textarea');
+            const data = { 
+                theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light' 
+            };
+            inputs.forEach(el => { if(el.id) data[el.id] = el.value; });
             localStorage.setItem('rsdh_report_data_v2', JSON.stringify(data));
         }
 
         function loadFromLocal() {
             const raw = localStorage.getItem('rsdh_report_data_v2');
-            if (!raw) { setDefaultDate(); processData(); return; }
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (!raw) { 
+                applyTheme(systemPrefersDark ? 'dark' : 'light');
+                setDefaultDate(); 
+                processData(); 
+                return; 
+            }
+
             try {
                 const data = JSON.parse(raw);
-                if (data.theme === 'dark') applyTheme('dark');
-                Object.keys(data).forEach(id => { const el = $(id); if (el && id !== 'inputCity') el.value = data[id]; });
+                applyTheme(data.theme || (systemPrefersDark ? 'dark' : 'light'));
+                
+                Object.keys(data).forEach(id => {
+                    const el = $(id);
+                    if (el && id !== 'inputCity' && id !== 'theme') {
+                        el.value = data[id];
+                    }
+                });
+
+                const now = new Date();
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const today = now.toLocaleDateString('id-ID', options);
+                
+                if (getVal('inputDate') !== today) {
+                    if(!getVal('inputDate')) setDefaultDate();
+                }
+                
+                processData();
+            } catch (e) {
+                applyTheme(systemPrefersDark ? 'dark' : 'light');
                 setDefaultDate();
                 processData();
-            } catch (e) { setDefaultDate(); processData(); }
+            }
         }
 
         function applyTheme(mode) {
+            const icon = $('themeIcon');
             const html = document.documentElement;
-            if (mode === 'dark') { html.classList.add('dark'); $('themeIcon').textContent = '☀️'; }
-            else { html.classList.remove('dark'); $('themeIcon').textContent = '🌙'; }
+            if (mode === 'dark') {
+                html.classList.add('dark');
+                if (icon) icon.textContent = '☀️';
+            } else {
+                html.classList.remove('dark');
+                if (icon) icon.textContent = '🌙';
+            }
         }
 
         function showToast(msg) {
-            $('toastMsg').textContent = msg;
-            $('toast').classList.remove('translate-y-20');
-            setTimeout(() => $('toast').classList.add('translate-y-20'), 3000);
+            const toast = $('toast');
+            const msgEl = $('toastMsg');
+            if (toast && msgEl) {
+                msgEl.textContent = msg;
+                toast.classList.remove('translate-y-20');
+                setTimeout(() => toast.classList.add('translate-y-20'), 3000);
+            }
         }
 
         function toggleModal(show) {
-            if (show) { $('modalOverlay').classList.remove('hidden'); setTimeout(() => $('modalContent').classList.remove('scale-95', 'opacity-0'), 10); }
-            else { $('modalContent').classList.add('scale-95', 'opacity-0'); setTimeout(() => $('modalOverlay').classList.add('hidden'), 300); }
+            const overlay = $('modalOverlay');
+            const content = $('modalContent');
+            if (!overlay || !content) return;
+            
+            if (show) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => content.classList.remove('scale-95', 'opacity-0'), 10);
+            } else {
+                content.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
         }
 
         window.onload = () => {
             renderShifts();
             loadFromLocal();
+            
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
+            setInterval(processData, 60000);
 
-            document.body.addEventListener('input', (e) => { if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) processData(); });
-            document.body.addEventListener('change', (e) => { if (e.target.tagName === 'SELECT') processData(); });
-            $('darkToggle').onclick = () => { applyTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark'); saveToLocal(); };
-            $('copyBtn').onclick = () => { $('outputReport').select(); document.execCommand('copy'); showToast('Laporan Disalin!'); };
-            $('waBtn').onclick = shareToWA;
-            $('refreshBtn').onclick = () => window.location.reload();
-            $('resetTrigger').onclick = () => toggleModal(true);
-            $('cancelReset').onclick = () => toggleModal(false);
-            $('confirmReset').onclick = () => { localStorage.removeItem('rsdh_report_data_v2'); document.querySelectorAll('input, select, textarea').forEach(el => { if (el.id !== 'inputCity') { if(el.tagName === 'SELECT') el.selectedIndex = 0; else if(el.type === 'number') el.value = "0"; else el.value = ""; } }); window.location.reload(); };
+            document.body.addEventListener('input', (e) => {
+                const tag = e.target.tagName;
+                if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
+                    processData();
+                }
+            });
+
+            document.body.addEventListener('change', (e) => {
+                if (e.target.tagName === 'SELECT') {
+                    processData();
+                }
+            });
+
+            if ($('darkToggle')) {
+                $('darkToggle').onclick = () => {
+                    const isNowDark = !document.documentElement.classList.contains('dark');
+                    applyTheme(isNowDark ? 'dark' : 'light');
+                    saveToLocal();
+                };
+            }
+
+            if ($('copyBtn')) {
+                $('copyBtn').onclick = () => {
+                    const area = $('outputReport');
+                    if (area) {
+                        area.select();
+                        try {
+                            document.execCommand('copy');
+                            showToast('Laporan Disalin!');
+                        } catch(err) {
+                            showToast('Gagal menyalin');
+                        }
+                    }
+                };
+            }
+
+            if ($('waBtn')) $('waBtn').onclick = shareToWA;
+
+            if ($('refreshBtn')) {
+                $('refreshBtn').onclick = () => window.location.reload();
+            }
+            
+            if ($('resetTrigger')) $('resetTrigger').onclick = () => toggleModal(true);
+            if ($('cancelReset')) $('cancelReset').onclick = () => toggleModal(false);
+            if ($('confirmReset')) {
+                $('confirmReset').onclick = () => {
+                    // CLEAR LOCAL STORAGE
+                    localStorage.removeItem('rsdh_report_data_v2');
+                    
+                    // EXPLICITLY CLEAR ALL INPUTS (Termasuk Kendala)
+                    const allInputs = document.querySelectorAll('input, select, textarea');
+                    allInputs.forEach(el => {
+                        if (el.id === 'inputCity') return;
+                        if (el.tagName === 'SELECT') el.selectedIndex = 0;
+                        else if (el.type === 'number') el.value = "0";
+                        else el.value = "";
+                    });
+                    
+                    window.location.reload();
+                };
+            }
+
+            if ($('modalOverlay')) {
+                $('modalOverlay').onclick = (e) => {
+                    if(e.target === $('modalOverlay')) toggleModal(false);
+                };
+            }
         };
     </script>
 </body>
