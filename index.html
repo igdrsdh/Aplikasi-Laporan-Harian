@@ -64,8 +64,9 @@
         <div class="max-w-3xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="w-12 h-12 flex items-center justify-center overflow-hidden rounded-xl bg-white dark:bg-slate-800 shadow-md border border-slate-300 dark:border-slate-700">
+                    <!-- Ganti URL di bawah ini dengan link raw github Anda -->
                     <img 
-                        src="https://img.icons8.com/fluency/96/hospital.png" 
+                        src="https://raw.githubusercontent.com/USER_GITHUB/REPO_GITHUB/main/LOGO%20IGD.png" 
                         alt="Logo IGD" 
                         class="w-full h-full object-contain p-1"
                         onerror="this.src='https://img.icons8.com/fluency/96/hospital.png'"
@@ -382,7 +383,9 @@
 
         function processData() {
             let totalAll = 0;
-            const nowTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            // PERUBAHAN: Jam laporan dibuat tetap jam 00.00
+            const nowTime = "00.00"; 
+            
             let reportText = `*LAPORAN JAGA IGD*\n\n${getVal('inputCity')}, ${getVal('inputDate')} Jam ${nowTime} WIB\n\n`;
             let summaryBlock = '';
             let detailsBlock = '';
@@ -422,7 +425,6 @@
                 detailsBlock += `BPJS:\n${getVal(`bpjsKet-${sId}`) || '- Tidak ada'}\n\n`;
                 detailsBlock += `UMUM:\n${getVal(`umumKet-${sId}`) || '- Tidak ada'}\n\n`;
                 
-                // PEMBARUAN: Rincian status akhir dengan input di baris baru
                 detailsBlock += `*RINCIAN STATUS AKHIR*\n`;
                 detailsBlock += `DOA :\n${getVal(`doa-${sId}`) || '-'}\n\n`;
                 detailsBlock += `Meninggal di IGD :\n${getVal(`meninggal-${sId}`) || '-'}\n\n`;
