@@ -134,7 +134,7 @@
                 </div>
             </section>
 
-            <!-- Shifts Container -->
+            <!-- Shifts Container (JS Generated) -->
             <div id="shiftsContainer" class="space-y-4"></div>
 
             <!-- Kendala -->
@@ -441,17 +441,28 @@
             saveToLocal();
         }
 
-        // FUNGSI SHARE YANG DIPERBARUI
+        // FUNGSI SHARE DENGAN PROTOKOL DEEP LINK
         function shareToWA() {
             const text = $('outputReport').value;
             const encodedText = encodeURIComponent(text);
             
-            // Menggunakan format wa.me yang lebih modern dan mengganti window.open 
-            // menjadi window.location.href agar mencoba membuka aplikasi langsung
-            const waUrl = `https://wa.me/?text=${encodedText}`;
-            
-            // Langsung alihkan lokasi, di mobile browser ini akan memicu pop-up 'Buka di WhatsApp'
-            window.location.href = waUrl;
+            // Menggunakan Deep Link Protocol: whatsapp://
+            // Protokol ini memanggil aplikasi WhatsApp secara langsung tanpa navigasi browser
+            const deepLink = `whatsapp://send?text=${encodedText}`;
+            const universalLink = `https://wa.me/?text=${encodedText}`;
+
+            // Cek apakah browser mendukung navigasi tersembunyi
+            // Kita mencoba memicu Deep Link terlebih dahulu
+            window.location.assign(deepLink);
+
+            // Kita tambahkan timeout kecil: jika dalam 500ms browser tidak "keluar" (artinya aplikasi WA tidak terbuka/tidak ada)
+            // Maka kita arahkan ke link universal sebagai cadangan
+            setTimeout(() => {
+                // Jika halaman masih fokus, kemungkinan deep link gagal (misal di PC Desktop)
+                if (document.hasFocus()) {
+                    window.location.assign(universalLink);
+                }
+            }, 500);
         }
 
         function saveToLocal() {
