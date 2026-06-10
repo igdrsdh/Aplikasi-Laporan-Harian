@@ -49,28 +49,38 @@
             border-color: #0ea5e9 !important;
             box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
         }
-        
-        /* Mengatur tinggi minimum input teks biasa */
-        textarea:not(#outputReport) {
-            min-height: 80px;
+
+        /* --- TEKNIK CSS GRID AUTO-RESIZER (MENIADAKAN GEJALAH LAYAR LONCAT) --- */
+        .grid-textarea-container {
+            display: grid;
+        }
+        .grid-textarea-mirror {
+            grid-area: 1 / 1 / 2 / 2;
+            visibility: hidden;
+            white-space: pre-wrap;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            pointer-events: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .grid-textarea-input {
+            grid-area: 1 / 1 / 2 / 2;
             resize: none;
             overflow: hidden;
+            width: 100%;
+            height: 100%;
         }
 
-        /* Mengunci tinggi box preview secara mutlak agar tidak bisa dikecilkan oleh JS saat refresh */
+        /* Mengunci tinggi box preview secara mutlak agar tidak bisa dikecilkan saat sinkronisasi */
         #outputReport {
             overflow-y: auto !important;
-            height: 450px !important; /* Tinggi default perangkat mobile */
+            height: 450px !important; /* Tinggi perangkat mobile */
         }
         
         @media (min-width: 768px) {
             #outputReport {
                 height: 650px !important; /* Tinggi perangkat desktop */
             }
-        }
-        
-        .large-area {
-            min-height: 100px;
         }
 
         .ecg-path {
@@ -97,7 +107,7 @@
 </head>
 <body class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
 
-    <!-- Header & Controls -->
+    <!-- Header & Kontrol Utama -->
     <div class="fixed top-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-300 dark:border-slate-800 px-4 py-3" style="will-change: transform; transform: translateZ(0);">
         <div class="max-w-3xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -232,7 +242,10 @@
                                 </svg>
                                 Kendala / Masalah Operasional
                             </div>
-                            <textarea id="inputKendala" rows="3" class="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all placeholder:text-slate-400 dark:text-white input-focus-ring" placeholder="Tuliskan kendala hari ini..."></textarea>
+                            <div class="grid-textarea-container relative">
+                                <div id="mirror-inputKendala" class="grid-textarea-mirror text-sm p-4 min-h-[80px] border border-transparent"></div>
+                                <textarea id="inputKendala" oninput="$('mirror-inputKendala').textContent = this.value + '\n';" class="grid-textarea-input w-full h-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all placeholder:text-slate-400 dark:text-white input-focus-ring" placeholder="Tuliskan kendala hari ini..."></textarea>
+                            </div>
                         </section>
 
                         <!-- Report Output (Preview - COLLAPSIBLE) -->
@@ -255,9 +268,8 @@
                                 </div>
                             </button>
 
-                            <!-- Collapsible Content Wrapper (Default Collapsed) -->
+                            <!-- Collapsible Content Wrapper -->
                             <div id="previewContent" class="collapsible-content">
-                                <!-- Menggunakan tinggi statis yang dikunci via tag <style> agar kebal dari manipulasi JS saat refresh -->
                                 <textarea id="outputReport" readonly class="w-full p-6 bg-transparent text-emerald-400 font-mono text-xs md:text-sm resize-none outline-none custom-scrollbar" spellcheck="false"></textarea>
                                 <div class="p-4 bg-slate-800 dark:bg-slate-950 flex flex-col gap-3 border-t border-slate-800">
                                     <div class="grid grid-cols-2 gap-3">
@@ -270,6 +282,8 @@
                                         <button id="waBtn" disabled class="py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                                            </svg>
+                                            Kirim WhatsApp
                                         </button>
                                     </div>
                                 </div>
@@ -317,7 +331,7 @@
                             </div>
                             
                             <div id="handoverContainer" class="space-y-4">
-                                <!-- Baris operan akan dibuat secara dinamis menggunakan JS -->
+                                <!-- Baris operan dibuat secara dinamis -->
                             </div>
                             
                             <div id="handoverEmptyState" class="text-center py-6 text-slate-400 dark:text-slate-500 text-xs italic">
@@ -380,6 +394,7 @@
         </div>
     </div>
 
+    <!-- Notifikasi Toast -->
     <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-slate-800 text-white rounded-2xl shadow-2xl font-bold text-sm flex items-center gap-3 translate-y-20 transition-all duration-300 pointer-events-none">
         <div class="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -395,7 +410,7 @@
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Konfigurasi Firebase Anda
+        // Konfigurasi Database Firebase 
         const firebaseConfig = typeof __firebase_config !== 'undefined' 
             ? JSON.parse(__firebase_config) 
             : {
@@ -408,7 +423,7 @@
                 appId: "1:105675683087:web:fc853158e7489713f3fa7a"
             };
 
-        // Memulai Layanan Firebase
+        // Inisialisasi Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -436,7 +451,7 @@
             { id: 'sendiri', label: 'Datang Sendiri' }
         ];
 
-        // Global State
+        // State Global
         let handoverPatients = [];
         let currentUser = null;
         let unsubscribeCurrentReport = null;
@@ -449,7 +464,7 @@
         const getVal = (id) => $(id) ? $(id).value : '';
         const getNum = (id) => parseInt(getVal(id)) || 0;
 
-        // update clock
+        // Jam Real-time
         function updateLiveClock() {
             const now = new Date();
             const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -469,7 +484,7 @@
             }
         }
 
-        // render shifts
+        // Render struktur shift jaga
         function renderShifts() {
             const container = $('shiftsContainer');
             if (!container) return;
@@ -548,11 +563,17 @@
                             <div class="space-y-3">
                                 <div class="space-y-1">
                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Keterangan / Kasus Rawat Jalan BPJS</label>
-                                    <textarea id="bpjsKet-${shift.id}" rows="3" placeholder="Format: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
+                                    <div class="grid-textarea-container relative">
+                                        <div id="mirror-bpjsKet-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[100px] border border-transparent"></div>
+                                        <textarea id="bpjsKet-${shift.id}" oninput="$('mirror-bpjsKet-${shift.id}').textContent = this.value + '\\n';" placeholder="Format: Nama - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
+                                    </div>
                                 </div>
                                 <div class="space-y-1">
                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Keterangan / Kasus Rawat Jalan UMUM</label>
-                                    <textarea id="umumKet-${shift.id}" rows="3" placeholder="Format: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
+                                    <div class="grid-textarea-container relative">
+                                        <div id="mirror-umumKet-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[100px] border border-transparent"></div>
+                                        <textarea id="umumKet-${shift.id}" oninput="$('mirror-umumKet-${shift.id}').textContent = this.value + '\\n';" placeholder="Format: Nama - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
+                                    </div>
                                 </div>
                             </div>
 
@@ -561,27 +582,42 @@
                                  
                                  <div class="space-y-1">
                                      <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">DOA (Death on Arrival)</label>
-                                     <textarea id="doa-${shift.id}" rows="2" placeholder="Format: Nama - Jam" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                     <div class="grid-textarea-container relative">
+                                         <div id="mirror-doa-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[80px] border border-transparent"></div>
+                                         <textarea id="doa-${shift.id}" oninput="$('mirror-doa-${shift.id}').textContent = this.value + '\\n';" placeholder="Format: Nama - Jam" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                     </div>
                                  </div>
                                  
                                  <div class="space-y-1">
                                      <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Meninggal di IGD</label>
-                                     <textarea id="meninggal-${shift.id}" rows="2" placeholder="Format: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                     <div class="grid-textarea-container relative">
+                                         <div id="mirror-meninggal-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[80px] border border-transparent"></div>
+                                         <textarea id="meninggal-${shift.id}" oninput="$('mirror-meninggal-${shift.id}').textContent = this.value + '\\n';" placeholder="Format: Nama - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                     </div>
                                  </div>
                                  
                                  <div class="space-y-1">
                                      <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">MCU (Medical Check-Up)</label>
-                                     <textarea id="mcu-${shift.id}" rows="2" placeholder="Format: Jenis Pemeriksaan" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                     <div class="grid-textarea-container relative">
+                                         <div id="mirror-mcu-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[80px] border border-transparent"></div>
+                                         <textarea id="mcu-${shift.id}" oninput="$('mirror-mcu-${shift.id}').textContent = this.value + '\\n';" placeholder="Format: Jenis Pemeriksaan" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                     </div>
                                  </div>
                                  
                                  <div class="space-y-1">
                                      <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Rujukan Puskesmas</label>
-                                     <textarea id="pkmRujukKet-${shift.id}" rows="2" placeholder="Format: Nama PKM - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                     <div class="grid-textarea-container relative">
+                                         <div id="mirror-pkmRujukKet-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[80px] border border-transparent"></div>
+                                         <textarea id="pkmRujukKet-${shift.id}" oninput="$('mirror-pkmRujukKet-${shift.id}').textContent = this.value + '\\n';" placeholder="Format: Nama PKM - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                     </div>
                                  </div>
                                  
                                  <div class="space-y-1">
                                      <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Rujuk ke RS Lain</label>
-                                     <textarea id="rsLain-${shift.id}" rows="2" placeholder="Format: Nama Pasien - RS Tujuan" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                     <div class="grid-textarea-container relative">
+                                         <div id="mirror-rsLain-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[80px] border border-transparent"></div>
+                                         <textarea id="rsLain-${shift.id}" oninput="$('mirror-rsLain-${shift.id}').textContent = this.value + '\\n';" placeholder="Format: Nama Pasien - RS Tujuan" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                     </div>
                                  </div>
                             </div>
                         </div>
@@ -633,10 +669,6 @@
             } else {
                 content.classList.add('expanded');
                 arrow.classList.remove('-rotate-90');
-
-                if (sectionId === 'section2') {
-                    setTimeout(adjustAllHandoverHeights, 40);
-                }
             }
         }
 
@@ -666,7 +698,7 @@
             return dateVal.trim().replace(/\//g, '_').replace(/\s+/g, '_');
         }
 
-        // update sync badge
+        // Update indikator sinkronisasi
         function updateSyncBadge(status, customMsg = '') {
             const badge = $('syncStatus');
             if (!badge) return;
@@ -733,27 +765,29 @@
         function updateInputsFromFirestore(data) {
             isSyncingFromDb = true; 
 
-            // Sinkronisasi Data Handover (Menggunakan rekonsiliasi DOM untuk mengeliminasi flicker/lompatan kursor)
+            // Sinkronisasi Data Handover secara aman
             if (data.handovers) {
                 handoverPatients = data.handovers;
                 renderHandovers();
             }
 
-            // Sinkronisasi Semua Kolom Form (Kecuali kolom yang saat ini aktif sedang diketik dokter)
+            // Sinkronisasi Semua Kolom Form (Kecuali yang sedang difokuskan oleh dokter pengetik)
             const inputs = document.querySelectorAll('input, select, textarea');
             inputs.forEach(el => {
                 if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity' && data[el.id] !== undefined) {
                     if (document.activeElement !== el) {
                         el.value = data[el.id];
-                        // Kecualikan outputReport agar tingginya tidak menyusut secara paksa ketika dipicu sinkronisasi
-                        if (el.tagName === 'TEXTAREA' && el.id !== 'outputReport') {
-                            autoResizeTextarea(el);
+                        
+                        // Perbarui teks mirror secara instan untuk sinkronisasi layout auto-height
+                        const mirror = $(`mirror-${el.id}`);
+                        if (mirror) {
+                            mirror.textContent = data[el.id] + '\n';
                         }
                     }
                 }
             });
 
-            processData(false); // Update output preview lokal saja tanpa memicu loop penulisan
+            processData(false); // Perbarui preview output lokal saja tanpa memicu loop penulisan
             isSyncingFromDb = false;
         }
 
@@ -771,6 +805,11 @@
                     } else {
                         el.value = '';
                     }
+                    
+                    const mirror = $(`mirror-${el.id}`);
+                    if (mirror) {
+                        mirror.textContent = '';
+                    }
                 }
             });
             handoverPatients = [];
@@ -780,7 +819,7 @@
             isSyncingFromDb = false;
         }
 
-        // ================= REAL-TIME LISTENER BERDASARKAN TANGGAL AKTIF =================
+        // ================= REAL-TIME LISTENER DATA LAPORAN =================
         function setupRealtimeSync() {
             if (!currentUser) return;
 
@@ -803,14 +842,14 @@
             }, (error) => {
                 console.error("Firestore Listener Error:", error);
                 if (error.code === 'permission-denied') {
-                    updateSyncBadge('error', 'Aktifkan Firestore Database di Firebase Console!');
+                    updateSyncBadge('error', 'Aktifkan Firestore Database!');
                 } else {
                     updateSyncBadge('error', 'Gagal Sinkronisasi');
                 }
             });
         }
 
-        // ================= KOORDINASI SINKRONISASI TEMA GELAP/TERANG VIA FIRESTORE =================
+        // ================= SINKRONISASI PREFERENSI TEMA GELAP/TERANG VIA CLOUD =================
         function setupThemeSync(userId) {
             if (unsubscribeTheme) {
                 unsubscribeTheme();
@@ -823,7 +862,7 @@
                     applyTheme(savedTheme);
                 }
             }, (error) => {
-                console.error("Theme sync read error:", error);
+                console.error("Gagal sinkronisasi tema:", error);
             });
         }
 
@@ -840,39 +879,7 @@
             }
         }
 
-        // ================= OPERAN JAGA (HANDOVER) LOGIC =================
-        // FIX: Fungsi auto-resize non-destruktif untuk meniadakan visual jumping/scrolling
-        function autoResizeTextarea(el) {
-            if (!el) return;
-            const oldScrollTop = window.scrollY; // Amankan posisi scroll layar saat ini
-            const oldHeight = el.style.height;
-            
-            el.style.overflowY = 'hidden'; 
-            el.style.height = '140px'; // Set ke tinggi minimum
-            
-            const newHeight = Math.max(el.scrollHeight, 140);
-            el.style.height = oldHeight; // Kembalikan tinggi lama sejenak agar tidak berkedip
-            
-            if (parseInt(oldHeight) !== newHeight) {
-                el.style.height = newHeight + 'px'; // Terapkan tinggi baru yang pas
-            }
-            
-            // Jaga posisi scroll window agar tetap konstan tanpa terhentak
-            if (window.scrollY !== oldScrollTop) {
-                window.scrollTo(window.scrollX, oldScrollTop);
-            }
-        }
-
-        function adjustAllHandoverHeights() {
-            const activeEl = document.activeElement;
-            document.querySelectorAll('#handoverContainer textarea').forEach(textarea => {
-                // Lewati textarea yang sedang diketik aktif agar kursor tidak terganggu
-                if (textarea !== activeEl) {
-                    autoResizeTextarea(textarea);
-                }
-            });
-        }
-
+        // ================= LOGIC HANDOVER (OPERAN JAGA) =================
         function addHandoverRow(bed = '', name = '', consul = '', reply = '') {
             const uniqueId = 'ho-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
             const newPatient = { id: uniqueId, bed, name, consul, reply };
@@ -885,7 +892,6 @@
             if (newRow) newRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        // Pemicu Modal Dialog Hapus Pasien (Lebih Aman)
         function removeHandoverRow(id) {
             patientIdToDelete = id;
             toggleDeletePatientModal(true);
@@ -913,7 +919,7 @@
             }
         }
 
-        // FUNGSI REKONSILIASI DOM PASIEN - MENGHAPUS FLICKER & SENTAKAN TEXTBOX
+        // FUNGSI REKONSILIASI DOM SANGAT AMAN (REARRANGE DOM SECARA REUSABLE)
         function renderHandovers() {
             const container = $('handoverContainer');
             const emptyState = $('handoverEmptyState');
@@ -930,7 +936,7 @@
             if (emptyState) emptyState.classList.add('hidden');
             if (handoverActions) handoverActions.classList.remove('hidden');
 
-            // 1. Bersihkan baris pasien yang sudah tidak ada di basis data cloud
+            // 1. Bersihkan elemen baris yang sudah dihapus secara real-time di cloud
             const existingRows = container.querySelectorAll('[id^="row-"]');
             existingRows.forEach(row => {
                 const id = row.id.replace('row-', '');
@@ -939,7 +945,7 @@
                 }
             });
 
-            // 2. Tambah baris baru atau lakukan update selektif pada input yang tidak aktif mengetik
+            // 2. Terapkan rekonsiliasi struktur DOM non-destruktif
             handoverPatients.forEach((patient, idx) => {
                 let row = $(`row-${patient.id}`);
                 
@@ -947,11 +953,8 @@
                     row = document.createElement('div');
                     row.id = `row-${patient.id}`;
                     row.className = "relative bg-slate-50 dark:bg-slate-900/40 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all space-y-3 animate-slide-in";
-                    container.appendChild(row);
-                }
-
-                const checkExistInput = $(`bed-${patient.id}`);
-                if (!checkExistInput) {
+                    
+                    // Render isi input dengan template auto-resizer CSS Grid Mirroring
                     row.innerHTML = `
                         <!-- Row Header -->
                         <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
@@ -990,28 +993,35 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div>
                                 <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Konsulan & Diagnosa / Masalah</label>
-                                <textarea id="consul-${patient.id}"
-                                          oninput="autoResizeTextarea(this); handleHandoverChange('${patient.id}', 'consul', this.value)" 
-                                          placeholder="Tulis diagnosa lengkap, hasil laboratorium abnormal, status hemodinamik, atau konsul dokter spesialis..." 
-                                          rows="5" 
-                                          class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none min-h-[140px] resize-none overflow-hidden">${patient.consul || ''}</textarea>
+                                <div class="grid-textarea-container relative">
+                                    <div id="mirror-consul-${patient.id}" class="grid-textarea-mirror text-xs p-2.5 min-h-[140px] border border-transparent whitespace-pre-wrap break-all">${patient.consul || ''}\n</div>
+                                    <textarea id="consul-${patient.id}"
+                                              oninput="$('mirror-consul-${patient.id}').textContent = this.value + '\\n'; handleHandoverChange('${patient.id}', 'consul', this.value)" 
+                                              placeholder="Tulis diagnosa lengkap..." 
+                                              class="grid-textarea-input w-full h-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none">${patient.consul || ''}</textarea>
+                                </div>
                             </div>
                             <div>
                                 <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Balasan Konsulan / Tindak Lanjut</label>
-                                <textarea id="reply-${patient.id}"
-                                          oninput="autoResizeTextarea(this); handleHandoverChange('${patient.id}', 'reply', this.value)" 
-                                          placeholder="Tulis rencana terapi, advis spesialis, atau tindakan selanjutnya..." 
-                                          rows="5" 
-                                          class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none min-h-[140px] resize-none overflow-hidden">${patient.reply || ''}</textarea>
+                                <div class="grid-textarea-container relative">
+                                    <div id="mirror-reply-${patient.id}" class="grid-textarea-mirror text-xs p-2.5 min-h-[140px] border border-transparent whitespace-pre-wrap break-all">${patient.reply || ''}\n</div>
+                                    <textarea id="reply-${patient.id}"
+                                              oninput="$('mirror-reply-${patient.id}').textContent = this.value + '\\n'; handleHandoverChange('${patient.id}', 'reply', this.value)" 
+                                              placeholder="Tulis rencana terapi..." 
+                                              class="grid-textarea-input w-full h-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none">${patient.reply || ''}</textarea>
+                                </div>
                             </div>
                         </div>
                     `;
+                    container.appendChild(row);
                 } else {
-                    // Update konten data selektif (menghindari hilangnya fokus atau lompatan kursor saat orang lain sedang mengetik)
+                    // Update konten input selektif tanpa merusak posisi kursor ketik dokter lain
                     const bedInput = $(`bed-${patient.id}`);
                     const nameInput = $(`name-${patient.id}`);
                     const consulInput = $(`consul-${patient.id}`);
                     const replyInput = $(`reply-${patient.id}`);
+                    const mirrorConsul = $(`mirror-consul-${patient.id}`);
+                    const mirrorReply = $(`mirror-reply-${patient.id}`);
 
                     if (document.activeElement !== bedInput && bedInput.value !== (patient.bed || '')) {
                         bedInput.value = patient.bed || '';
@@ -1021,30 +1031,22 @@
                     }
                     if (document.activeElement !== consulInput && consulInput.value !== (patient.consul || '')) {
                         consulInput.value = patient.consul || '';
-                        autoResizeTextarea(consulInput);
+                        if (mirrorConsul) mirrorConsul.textContent = (patient.consul || '') + '\n';
                     }
                     if (document.activeElement !== replyInput && replyInput.value !== (patient.reply || '')) {
                         replyInput.value = patient.reply || '';
-                        autoResizeTextarea(replyInput);
+                        if (mirrorReply) mirrorReply.textContent = (patient.reply || '') + '\n';
                     }
 
-                    // Perbarui teks nomor urut baris pasien
+                    // Enforce urutan elemen di DOM agar tetap presisi
+                    container.appendChild(row);
+
                     const labelIndex = row.querySelector('.label-index');
                     if (labelIndex) {
                         labelIndex.textContent = `Pasien #${idx + 1}`;
                     }
                 }
             });
-            
-            // OPTIMASI: Hanya sesuaikan tinggi secara massal jika user tidak sedang mengetik di dalam handover container
-            const activeEl = document.activeElement;
-            const isTypingInHandover = activeEl && activeEl.closest('#handoverContainer');
-            
-            if (!isTypingInHandover) {
-                setTimeout(adjustAllHandoverHeights, 50);
-            } else if (activeEl && activeEl.tagName === 'TEXTAREA') {
-                autoResizeTextarea(activeEl);
-            }
         }
 
         // ================= MENYUSUN TEKS OPERAN JAGA MANDIRI =================
@@ -1097,7 +1099,10 @@
 
         // ================= RESET KHUSUS LAPORAN HARIAN (ISOLATED) =================
         function resetLaporanOnly() {
-            if ($('inputKendala')) $('inputKendala').value = '';
+            if ($('inputKendala')) {
+                $('inputKendala').value = '';
+                $('mirror-inputKendala').textContent = '';
+            }
             
             SHIFTS_CONFIG.forEach(shift => {
                 const sId = shift.id;
@@ -1105,13 +1110,13 @@
                 if ($(`drExtra-${sId}`)) $(`drExtra-${sId}`).value = '';
                 if ($(`bpjs-${sId}`)) $(`bpjs-${sId}`).value = '0';
                 if ($(`umum-${sId}`)) $(`umum-${sId}`).value = '0';
-                if ($(`bpjsKet-${sId}`)) $(`bpjsKet-${sId}`).value = '';
-                if ($(`umumKet-${sId}`)) $(`umumKet-${sId}`).value = '';
-                if ($(`doa-${sId}`)) $(`doa-${sId}`).value = '';
-                if ($(`meninggal-${sId}`)) $(`meninggal-${sId}`).value = '';
-                if ($(`mcu-${sId}`)) $(`mcu-${sId}`).value = '';
-                if ($(`pkmRujukKet-${sId}`)) $(`pkmRujukKet-${sId}`).value = '';
-                if ($(`rsLain-${sId}`)) $(`rsLain-${sId}`).value = '';
+                if ($(`bpjsKet-${sId}`)) { $(`bpjsKet-${sId}`).value = ''; $(`mirror-bpjsKet-${sId}`).textContent = ''; }
+                if ($(`umumKet-${sId}`)) { $(`umumKet-${sId}`).value = ''; $(`mirror-umumKet-${sId}`).textContent = ''; }
+                if ($(`doa-${sId}`)) { $(`doa-${sId}`).value = ''; $(`mirror-doa-${sId}`).textContent = ''; }
+                if ($(`meninggal-${sId}`)) { $(`meninggal-${sId}`).value = ''; $(`mirror-meninggal-${sId}`).textContent = ''; }
+                if ($(`mcu-${sId}`)) { $(`mcu-${sId}`).value = ''; $(`mirror-mcu-${sId}`).textContent = ''; }
+                if ($(`pkmRujukKet-${sId}`)) { $(`pkmRujukKet-${sId}`).value = ''; $(`mirror-pkmRujukKet-${sId}`).textContent = ''; }
+                if ($(`rsLain-${sId}`)) { $(`rsLain-${sId}`).value = ''; $(`mirror-rsLain-${sId}`).textContent = ''; }
                 
                 SOURCES.forEach(src => {
                     if ($(`${src.id}RI-${sId}`)) $(`${src.id}RI-${sId}`).value = '0';
@@ -1125,7 +1130,7 @@
             showToast('Laporan Jaga Harian Direset!');
         }
 
-        // ================= PROCESS DATA & GENERATE OUTPUT =================
+        // ================= PENYUSUNAN DRAP PREVIEW LAPORAN HARIAN =================
         function processData(shouldTriggerSave = true) {
             let totalAll = 0;
             const nowTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }); 
@@ -1236,7 +1241,7 @@
             }
         }
 
-        // Auth initialization helper
+        // Jalur inisialisasi autentikasi
         const initAuth = async () => {
             try {
                 updateSyncBadge('syncing', 'Menghubungkan Auth...');
@@ -1246,7 +1251,7 @@
                     await signInAnonymously(auth);
                 }
             } catch (err) {
-                console.error("Auth Exception:", err);
+                console.error("Gagal melakukan autentikasi:", err);
                 updateSyncBadge('error', 'Gagal Autentikasi');
             }
         };
@@ -1263,10 +1268,9 @@
         window.setDefaultDate = setDefaultDate;
         window.toggleModal = toggleModal;
         window.resetLaporanOnly = resetLaporanOnly;
-        window.autoResizeTextarea = autoResizeTextarea;
         window.toggleDeletePatientModal = toggleDeletePatientModal;
 
-        // ================= INSTANSIASI SISTEM =================
+        // ================= INISIALISASI UTAMA SISTEM =================
         window.onload = async () => {
             renderShifts();
             setDefaultDate();
@@ -1275,13 +1279,13 @@
             setInterval(updateLiveClock, 1000);
             setInterval(() => processData(false), 60000); // Sinkronisasi lokal berkala 60 detik
 
-            // Mendaftarkan Listener Firebase Auth
+            // Listener Autentikasi Firebase
             onAuthStateChanged(auth, (user) => {
                 currentUser = user;
                 if (user) {
                     console.log("Logged in successfully as UID:", user.uid);
                     setupRealtimeSync();
-                    setupThemeSync(user.uid); // Muat & sinkronisasikan preferensi tema dari cloud
+                    setupThemeSync(user.uid); // Muat preferensi tema
                 } else {
                     updateSyncBadge('error', 'Auth Diperlukan');
                 }
@@ -1290,7 +1294,7 @@
             // Jalankan autentikasi
             await initAuth();
 
-            // Mencegah reset form ketika pengguna masih mengetik tanggal baru (Aman Kursor)
+            // Mencegah gangguan kursor ketika data diinput dokter
             document.body.addEventListener('input', (e) => {
                 if (isSyncingFromDb) return;
                 const tag = e.target.tagName;
@@ -1301,7 +1305,7 @@
                 }
             });
 
-            // Memicu pencarian ulang database cloud setelah kursor selesai didelete/pindah dari kolom tanggal
+            // Sinkronisasi data ketika tanggal diganti
             if ($('inputDate')) {
                 $('inputDate').addEventListener('change', () => {
                     setupRealtimeSync();
@@ -1329,13 +1333,13 @@
                         newTheme = 'dark';
                     }
 
-                    // Tulis preferensi tema baru ke Firestore
+                    // Simpan tema ke Firestore secara dinamis
                     if (currentUser) {
                         try {
                             const themeRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'settings', 'themePreference');
                             await setDoc(themeRef, { theme: newTheme }, { merge: true });
                         } catch (err) {
-                            console.error("Error saving theme preference:", err);
+                            console.error("Gagal menyimpan preferensi tema:", err);
                         }
                     }
                 };
@@ -1363,7 +1367,7 @@
             if ($('cancelReset')) $('cancelReset').onclick = () => toggleModal(false);
             if ($('confirmReset')) $('confirmReset').onclick = resetLaporanOnly;
 
-            // Listener Modal Hapus Pasien Handover (Aman Kursor & Cloud Sync)
+            // Listener Modal Hapus Pasien Handover
             if ($('cancelDeletePatient')) $('cancelDeletePatient').onclick = () => toggleDeletePatientModal(false);
             if ($('confirmDeletePatient')) {
                 $('confirmDeletePatient').onclick = () => {
