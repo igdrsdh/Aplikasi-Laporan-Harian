@@ -51,8 +51,9 @@
         }
         
         textarea {
-            field-sizing: content; 
             min-height: 80px;
+            resize: none;
+            overflow: hidden;
         }
         
         .large-area {
@@ -77,7 +78,6 @@
             to { opacity: 1; }
         }
         .collapsible-inner {
-            /* Mengisolasi layout internal dari kalkulasi reflow global browser agar bebas jank */
             contain: layout; 
         }
     </style>
@@ -129,7 +129,7 @@
                         <circle cx="12" cy="12" r="4" />
                         <path d="M12 2v2" />
                         <path d="M12 20v2" />
-                        <path d="M4.93(4.93l1.41 1.41" />
+                        <path d="M4.93 4.93l1.41 1.41" />
                         <path d="M17.66 17.66l1.41 1.41" />
                         <path d="M2 12h2" />
                         <path d="M20 12h2" />
@@ -247,13 +247,12 @@
                                     <button id="waBtn" disabled class="py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                                        </svg>
-                                        Kirim WhatsApp
-                                    </button>
-                                </div>
+                                    </svg>
+                                    Kirim WhatsApp
+                                </button>
                             </div>
-                        </section>
-                    </div>
+                        </div>
+                    </section>
                 </div>
             </div>
 
@@ -341,7 +340,7 @@
         </div>
     </div>
 
-    <!-- Modal 2: Konfirmasi Hapus Pasien Handover (Aman Kursor & Cegah Salah Klik) -->
+    <!-- Modal 2: Konfirmasi Hapus Pasien Handover -->
     <div id="deletePatientModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-sm p-6 shadow-2xl scale-95 opacity-0 transition-all duration-300" id="deletePatientContent">
             <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
@@ -420,7 +419,7 @@
         let unsubscribeCurrentReport = null;
         let writeTimeout = null;
         let isSyncingFromDb = false;
-        let patientIdToDelete = null; // Menyimpan ID sementara pasien yang akan didelete
+        let patientIdToDelete = null;
 
         const $ = (id) => document.getElementById(id);
         const getVal = (id) => $(id) ? $(id).value : '';
@@ -681,37 +680,17 @@
                         updateSyncBadge('error', 'Gagal Tulis Cloud');
                     }
                 }
-            }, 750); // Penundaan penulisan 750ms untuk keamanan performa kursor
+            }, 750); 
         }
 
         // ================= UPDATE UI DARI DATA CLOUD =================
         function updateInputsFromFirestore(data) {
             isSyncingFromDb = true; 
 
-            // Sinkronisasi Data Handover (Cursor-Safety)
+            // Sinkronisasi Data Handover (Menggunakan rekonsiliasi DOM untuk mengeliminasi flicker/lompatan kursor)
             if (data.handovers) {
-                const activeElement = document.activeElement;
-                const isEditingHandover = activeElement && activeElement.closest('#handoverContainer');
-                
-                if (!isEditingHandover) {
-                    handoverPatients = data.handovers;
-                    renderHandovers();
-                } else {
-                    handoverPatients = data.handovers;
-                    const focusedId = activeElement.id;
-                    const selectionStart = activeElement.selectionStart;
-                    const selectionEnd = activeElement.selectionEnd;
-                    
-                    renderHandovers();
-                    
-                    const refocused = $(focusedId);
-                    if (refocused) {
-                        refocused.focus();
-                        try {
-                            refocused.setSelectionRange(selectionStart, selectionEnd);
-                        } catch (e) {}
-                    }
-                }
+                handoverPatients = data.handovers;
+                renderHandovers();
             }
 
             // Sinkronisasi Semua Kolom Form (Kecuali kolom yang saat ini aktif sedang diketik dokter)
@@ -720,6 +699,10 @@
                 if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity' && data[el.id] !== undefined) {
                     if (document.activeElement !== el) {
                         el.value = data[el.id];
+                        // Jika itu textarea, sesuaikan tinggi otomatisnya agar tidak terpotong
+                        if (el.tagName === 'TEXTAREA') {
+                            autoResizeTextarea(el);
+                        }
                     }
                 }
             });
@@ -783,8 +766,11 @@
 
         // ================= OPERAN JAGA (HANDOVER) LOGIC =================
         function autoResizeTextarea(el) {
+            // Mencegah lompatan/kedipan scroll halaman saat tinggi element disesuaikan
+            const scrollPos = window.scrollY;
             el.style.height = 'auto';
             el.style.height = el.scrollHeight + 'px';
+            window.scrollTo(window.scrollX, scrollPos);
         }
 
         function adjustAllHandoverHeights() {
@@ -833,6 +819,7 @@
             }
         }
 
+        // FUNGSI REKONSILIASI DOM PASIEN - MENGHAPUS FLICKER & SENTAKAN TEXTBOX
         function renderHandovers() {
             const container = $('handoverContainer');
             const emptyState = $('handoverEmptyState');
@@ -849,66 +836,111 @@
             if (emptyState) emptyState.classList.add('hidden');
             if (handoverActions) handoverActions.classList.remove('hidden');
 
-            let html = '';
-            handoverPatients.forEach((patient, idx) => {
-                html += `
-                <div id="row-${patient.id}" class="relative bg-slate-50 dark:bg-slate-900/40 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all space-y-3 animate-slide-in">
-                    <!-- Row Header -->
-                    <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
-                        <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Pasien #${idx + 1}</span>
-                        <button type="button" onclick="removeHandoverRow('${patient.id}')" class="text-xs font-bold text-red-500 hover:text-red-600 flex items-center gap-1 transition-all" title="Hapus Pasien">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                            Hapus
-                        </button>
-                    </div>
-
-                    <!-- Bed & Name Fields -->
-                    <div class="grid grid-cols-3 gap-2">
-                        <div class="col-span-1">
-                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">No. Bed</label>
-                            <input type="text" 
-                                   id="bed-${patient.id}"
-                                   value="${patient.bed}" 
-                                   oninput="handleHandoverChange('${patient.id}', 'bed', this.value)" 
-                                   placeholder="Bed 1" 
-                                   class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none" />
-                        </div>
-                        <div class="col-span-2">
-                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Nama Pasien</label>
-                            <input type="text" 
-                                   id="name-${patient.id}"
-                                   value="${patient.name}" 
-                                   oninput="handleHandoverChange('${patient.id}', 'name', this.value)" 
-                                   placeholder="Contoh: Ny. S (45th)" 
-                                   class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none" />
-                        </div>
-                    </div>
-
-                    <!-- Consultation & Response Fields (Dimensi Seragam & Desktop-Optimized) -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div>
-                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Konsulan & Diagnosa / Masalah</label>
-                            <textarea id="consul-${patient.id}"
-                                      oninput="autoResizeTextarea(this); handleHandoverChange('${patient.id}', 'consul', this.value)" 
-                                      placeholder="Tulis diagnosa lengkap, hasil laboratorium abnormal, status hemodinamik, atau konsul dokter spesialis..." 
-                                      rows="5" 
-                                      class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none min-h-[140px] resize-none overflow-hidden">${patient.consul}</textarea>
-                        </div>
-                        <div>
-                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Balasan Konsulan / Tindak Lanjut</label>
-                            <textarea id="reply-${patient.id}"
-                                      oninput="autoResizeTextarea(this); handleHandoverChange('${patient.id}', 'reply', this.value)" 
-                                      placeholder="Tulis rencana terapi, advis spesialis, atau tindakan selanjutnya..." 
-                                      rows="5" 
-                                      class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none min-h-[140px] resize-none overflow-hidden">${patient.reply}</textarea>
-                        </div>
-                    </div>
-                </div>
-                `;
+            // 1. Bersihkan baris pasien yang sudah tidak ada di basis data cloud
+            const existingRows = container.querySelectorAll('[id^="row-"]');
+            existingRows.forEach(row => {
+                const id = row.id.replace('row-', '');
+                if (!handoverPatients.some(p => p.id === id)) {
+                    row.remove();
+                }
             });
-            container.innerHTML = html;
+
+            // 2. Tambah baris baru atau lakukan update selektif pada input yang tidak aktif mengetik
+            handoverPatients.forEach((patient, idx) => {
+                let row = $(`row-${patient.id}`);
+                
+                if (!row) {
+                    row = document.createElement('div');
+                    row.id = `row-${patient.id}`;
+                    row.className = "relative bg-slate-50 dark:bg-slate-900/40 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all space-y-3 animate-slide-in";
+                    container.appendChild(row);
+                }
+
+                const checkExistInput = $(`bed-${patient.id}`);
+                if (!checkExistInput) {
+                    row.innerHTML = `
+                        <!-- Row Header -->
+                        <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
+                            <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider label-index">Pasien #${idx + 1}</span>
+                            <button type="button" onclick="removeHandoverRow('${patient.id}')" class="text-xs font-bold text-red-500 hover:text-red-600 flex items-center gap-1 transition-all" title="Hapus Pasien">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                Hapus
+                            </button>
+                        </div>
+
+                        <!-- Bed & Name Fields -->
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="col-span-1">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">No. Bed</label>
+                                <input type="text" 
+                                       id="bed-${patient.id}"
+                                       value="${patient.bed || ''}" 
+                                       oninput="handleHandoverChange('${patient.id}', 'bed', this.value)" 
+                                       placeholder="Bed 1" 
+                                       class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none" />
+                            </div>
+                            <div class="col-span-2">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Nama Pasien</label>
+                                <input type="text" 
+                                       id="name-${patient.id}"
+                                       value="${patient.name || ''}" 
+                                       oninput="handleHandoverChange('${patient.id}', 'name', this.value)" 
+                                       placeholder="Contoh: Ny. S (45th)" 
+                                       class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none" />
+                            </div>
+                        </div>
+
+                        <!-- Consultation & Response Fields -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Konsulan & Diagnosa / Masalah</label>
+                                <textarea id="consul-${patient.id}"
+                                          oninput="autoResizeTextarea(this); handleHandoverChange('${patient.id}', 'consul', this.value)" 
+                                          placeholder="Tulis diagnosa lengkap, hasil laboratorium abnormal, status hemodinamik, atau konsul dokter spesialis..." 
+                                          rows="5" 
+                                          class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none min-h-[140px] resize-none overflow-hidden">${patient.consul || ''}</textarea>
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Balasan Konsulan / Tindak Lanjut</label>
+                                <textarea id="reply-${patient.id}"
+                                          oninput="autoResizeTextarea(this); handleHandoverChange('${patient.id}', 'reply', this.value)" 
+                                          placeholder="Tulis rencana terapi, advis spesialis, atau tindakan selanjutnya..." 
+                                          rows="5" 
+                                          class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none min-h-[140px] resize-none overflow-hidden">${patient.reply || ''}</textarea>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Update konten data selektif (menghindari hilangnya fokus atau lompatan kursor saat orang lain sedang mengetik)
+                    const bedInput = $(`bed-${patient.id}`);
+                    const nameInput = $(`name-${patient.id}`);
+                    const consulInput = $(`consul-${patient.id}`);
+                    const replyInput = $(`reply-${patient.id}`);
+
+                    if (document.activeElement !== bedInput && bedInput.value !== (patient.bed || '')) {
+                        bedInput.value = patient.bed || '';
+                    }
+                    if (document.activeElement !== nameInput && nameInput.value !== (patient.name || '')) {
+                        nameInput.value = patient.name || '';
+                    }
+                    if (document.activeElement !== consulInput && consulInput.value !== (patient.consul || '')) {
+                        consulInput.value = patient.consul || '';
+                        autoResizeTextarea(consulInput);
+                    }
+                    if (document.activeElement !== replyInput && replyInput.value !== (patient.reply || '')) {
+                        replyInput.value = patient.reply || '';
+                        autoResizeTextarea(replyInput);
+                    }
+
+                    // Perbarui teks nomor urut baris pasien
+                    const labelIndex = row.querySelector('.label-index');
+                    if (labelIndex) {
+                        labelIndex.textContent = `Pasien #${idx + 1}`;
+                    }
+                }
+            });
             
             setTimeout(adjustAllHandoverHeights, 50);
         }
@@ -1165,7 +1197,7 @@
                 }
             });
 
-            // Memicu pencarian ulang database cloud setelah kursor selesai diedit/pindah dari kolom tanggal
+            // Memicu pencarian ulang database cloud setelah kursor selesai didelete/pindah dari kolom tanggal
             if ($('inputDate')) {
                 $('inputDate').addEventListener('change', () => {
                     setupRealtimeSync();
