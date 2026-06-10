@@ -62,24 +62,22 @@
             stroke-dasharray: 100;
         }
 
-        /* --- PENYEMPURNAAN ANIMASI BUKA TUTUP ELEGAN & BEBAS LAG --- */
+        /* --- ANIMASI SNAP SANGAT RINGAN (BEBAS LAG / STUTTER) --- */
         .collapsible-content {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 320ms cubic-bezier(0.25, 1, 0.5, 1), opacity 300ms ease;
-            opacity: 0;
-            will-change: grid-template-rows, opacity;
-            transform: translateZ(0);
-            backface-visibility: hidden;
+            display: none;
+            will-change: opacity;
         }
         .collapsible-content.expanded {
-            grid-template-rows: 1fr;
-            opacity: 1;
+            display: block;
+            animation: quickFade 120ms ease-out forwards;
+        }
+        @keyframes quickFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         .collapsible-inner {
-            overflow: hidden;
-            min-height: 0;
-            contain: layout; /* Mengisolasi layout internal dari kalkulasi reflow global browser agar bebas jank */
+            /* Mengisolasi layout internal dari kalkulasi reflow global browser agar bebas jank */
+            contain: layout; 
         }
     </style>
 </head>
@@ -266,8 +264,8 @@
                     </svg>
                 </button>
 
-                <!-- Konten Bagian 2 (Collapsed by default, hidden class prevents gap spaces) -->
-                <div id="section2Content" class="collapsible-content hidden">
+                <!-- Konten Bagian 2 (Collapsed by default, custom CSS display manages layout) -->
+                <div id="section2Content" class="collapsible-content">
                     <div class="collapsible-inner pt-4 space-y-6">
                         <!-- Operan Jaga / Deposit Pasien IGD -->
                         <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors space-y-4">
@@ -411,7 +409,7 @@
                         <svg id="icon-${shift.id}" class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
                     </button>
                     
-                    <div id="content-${shift.id}" class="collapsible-content hidden">
+                    <div id="content-${shift.id}" class="collapsible-content">
                         <div class="collapsible-inner p-6 space-y-6">
                             <div class="space-y-1">
                                 <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Dokter Jaga</label>
@@ -521,18 +519,13 @@
 
             const isExpanded = content.classList.contains('expanded');
             
-            // Close other shifts smoothly
+            // Close other shifts smoothly without layout transitions
             SHIFTS_CONFIG.forEach(s => {
                 const c = $(`content-${s.id}`);
                 const i = $(`icon-${s.id}`);
                 if (c && c.classList.contains('expanded')) {
                     c.classList.remove('expanded');
                     if (i) i.classList.remove('rotate-180');
-                    setTimeout(() => {
-                        if (!c.classList.contains('expanded')) {
-                            c.classList.add('hidden');
-                        }
-                    }, 320);
                 }
             });
 
@@ -540,24 +533,15 @@
                 // Collapse current
                 content.classList.remove('expanded');
                 icon.classList.remove('rotate-180');
-                setTimeout(() => {
-                    if (!content.classList.contains('expanded')) {
-                        content.classList.add('hidden');
-                    }
-                }, 320);
             } else {
                 // Expand current
-                content.classList.remove('hidden');
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        content.classList.add('expanded');
-                        icon.classList.add('rotate-180');
-                    });
-                });
+                content.classList.add('expanded');
+                icon.classList.add('rotate-180');
 
+                // Lembutkan scroll tanpa sentakan frame
                 setTimeout(() => {
                     content.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 330);
+                }, 80);
             }
         }
 
@@ -567,29 +551,20 @@
             const arrow = $(`arrow-${sectionId}`);
             if (!content || !arrow) return;
 
-            const isHidden = content.classList.contains('hidden');
-            if (isHidden) {
-                // Open panel
-                content.classList.remove('hidden');
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        content.classList.add('expanded');
-                        arrow.classList.remove('-rotate-90');
-                    });
-                });
-
-                if (sectionId === 'section2') {
-                    setTimeout(adjustAllHandoverHeights, 150);
-                }
-            } else {
+            const isExpanded = content.classList.contains('expanded');
+            if (isExpanded) {
                 // Close panel
                 content.classList.remove('expanded');
                 arrow.classList.add('-rotate-90');
-                setTimeout(() => {
-                    if (!content.classList.contains('expanded')) {
-                        content.classList.add('hidden');
-                    }
-                }, 320);
+            } else {
+                // Open panel
+                content.classList.add('expanded');
+                arrow.classList.remove('-rotate-90');
+
+                if (sectionId === 'section2') {
+                    // Berikan jeda sangat tipis untuk penyesuaian textarea
+                    setTimeout(adjustAllHandoverHeights, 40);
+                }
             }
         }
 
@@ -686,7 +661,7 @@
                     <!-- Consultation & Response Fields -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div>
-                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Konsulan & Diagnosa / Masalah (Lebih Besar)</label>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Konsulan & Diagnosa / Masalah</label>
                             <textarea oninput="autoResizeTextarea(this); handleHandoverChange('${patient.id}', 'consul', this.value)" 
                                       placeholder="Tulis diagnosa lengkap, hasil laboratorium abnormal, status hemodinamik, atau konsul dokter spesialis..." 
                                       rows="5" 
@@ -696,8 +671,8 @@
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Balasan Konsulan / Tindak Lanjut</label>
                             <textarea oninput="autoResizeTextarea(this); handleHandoverChange('${patient.id}', 'reply', this.value)" 
                                       placeholder="Tulis rencana terapi, advis spesialis, atau tindakan selanjutnya..." 
-                                      rows="2" 
-                                      class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none min-h-[60px] resize-none overflow-hidden">${patient.reply}</textarea>
+                                      rows="5" 
+                                      class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none min-h-[140px] resize-none overflow-hidden">${patient.reply}</textarea>
                         </div>
                     </div>
                 </div>
@@ -810,9 +785,6 @@
                 detailsBlock += `-------------------------------\n\n`;
             });
 
-            // Catatan: Sesuai permintaan user, data operan jaga / handover pasien 
-            // sekarang dikeluarkan dari preview text WhatsApp agar murni berdiri sendiri di web app.
-
             const isValid = missingDoctors.length === 0;
             $('validationBadge').textContent = isValid ? "DATA LENGKAP" : "DOKTER BELUM LENGKAP";
             $('validationBadge').className = isValid ? "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" : "px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30";
@@ -904,7 +876,7 @@
         }
 
         function applyTheme(mode) {
-            const sunIcon = $('sunIcon');
+            const sunIcon = SunIcon = $('sunIcon');
             const moonIcon = $('moonIcon');
             const html = document.documentElement;
             if (mode === 'dark') {
