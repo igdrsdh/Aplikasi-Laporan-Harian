@@ -50,15 +50,23 @@
             box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
         }
         
-        /* FIX: Kecualikan box preview (#outputReport) agar tidak terkena overflow: hidden */
+        /* Mengatur tinggi minimum input teks biasa */
         textarea:not(#outputReport) {
             min-height: 80px;
             resize: none;
             overflow: hidden;
         }
 
+        /* FIX: Mengunci tinggi box preview secara mutlak agar tidak bisa dikecilkan oleh JS saat refresh */
         #outputReport {
             overflow-y: auto !important;
+            height: 450px !important; /* Tinggi default perangkat mobile */
+        }
+        
+        @media (min-width: 768px) {
+            #outputReport {
+                height: 650px !important; /* Tinggi perangkat desktop */
+            }
         }
         
         .large-area {
@@ -224,7 +232,7 @@
                                 </svg>
                                 Kendala / Masalah Operasional
                             </div>
-                            <textarea id="inputKendala" rows="3" class="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all placeholder:text-slate-400 dark:text-white input-focus-ring" placeholder="Tuliskan kendala hari ini..."></textarea>
+                            <textarea id="inputKendala" rows="3" class="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all placeholder:text-slate-400 dark:text-white input-focus-ring" placeholder="Tuliskan kendala hari ini..."></textarea>
                         </section>
 
                         <!-- Report Output (Preview - COLLAPSIBLE) -->
@@ -249,8 +257,8 @@
 
                             <!-- Collapsible Content Wrapper (Default Collapsed) -->
                             <div id="previewContent" class="collapsible-content">
-                                <!-- MODIFIKASI TINGGI DI SINI: Diperbesar dari h-64 md:h-[500px] menjadi h-[450px] md:h-[650px] -->
-                                <textarea id="outputReport" readonly class="w-full h-[450px] md:h-[650px] p-6 bg-transparent text-emerald-400 font-mono text-xs md:text-sm resize-none outline-none custom-scrollbar" spellcheck="false"></textarea>
+                                <!-- Menggunakan tinggi statis yang dikunci via tag <style> agar kebal dari manipulasi JS saat refresh -->
+                                <textarea id="outputReport" readonly class="w-full p-6 bg-transparent text-emerald-400 font-mono text-xs md:text-sm resize-none outline-none custom-scrollbar" spellcheck="false"></textarea>
                                 <div class="p-4 bg-slate-800 dark:bg-slate-950 flex flex-col gap-3 border-t border-slate-800">
                                     <div class="grid grid-cols-2 gap-3">
                                         <button id="copyBtn" disabled class="py-3 rounded-xl bg-slate-700 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
@@ -736,8 +744,8 @@
                 if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity' && data[el.id] !== undefined) {
                     if (document.activeElement !== el) {
                         el.value = data[el.id];
-                        // Jika itu textarea, sesuaikan tinggi otomatisnya agar tidak terpotong
-                        if (el.tagName === 'TEXTAREA') {
+                        // FIX: Kecualikan outputReport agar tingginya tidak menyusut secara paksa ketika dipicu sinkronisasi
+                        if (el.tagName === 'TEXTAREA' && el.id !== 'outputReport') {
                             autoResizeTextarea(el);
                         }
                     }
