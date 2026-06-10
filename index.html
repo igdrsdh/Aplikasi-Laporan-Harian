@@ -114,9 +114,9 @@
                             <span id="liveClock" class="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400">Loading...</span>
                         </div>
                         <!-- Indikator Sinkronisasi Cloud -->
-                        <div id="syncStatus" class="flex items-center gap-1 text-[9px] font-bold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            Terhubung (Cloud Sync)
+                        <div id="syncStatus" class="flex items-center gap-1 text-[9px] font-bold text-amber-500 uppercase tracking-wider">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                            Menghubungkan...
                         </div>
                     </div>
                 </div>
@@ -313,12 +313,11 @@
                                 <button type="button" onclick="shareHandoverToWA()" class="flex-1 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs transition-all shadow flex items-center justify-center gap-2 active:scale-95">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                                    </svg>
-                                    Kirim WA Handover
-                                </button>
-                            </div>
-                        </section>
-                    </div>
+                                </svg>
+                                Kirim WA Handover
+                            </button>
+                        </div>
+                    </section>
                 </div>
             </div>
 
@@ -357,7 +356,7 @@
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Firebase Configuration (Grounded and adaptable for local or preview environment)
+        // Konfigurasi Firebase Anda (Sistem otomatis mendeteksi adaptasi lokal/web)
         const firebaseConfig = typeof __firebase_config !== 'undefined' 
             ? JSON.parse(__firebase_config) 
             : {
@@ -370,7 +369,7 @@
                 appId: "1:105675683087:web:fc853158e7489713f3fa7a"
             };
 
-        // Initialize Firebase Services
+        // Memulai Layanan Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -398,7 +397,7 @@
             { id: 'sendiri', label: 'Datang Sendiri' }
         ];
 
-        // Global State for Handover Patients
+        // Global State
         let handoverPatients = [];
         let currentUser = null;
         let unsubscribeCurrentReport = null;
@@ -602,17 +601,17 @@
         // ================= SINKRONISASI DATA FIRESTORE (DEBUNCED) =================
         function getSanitizedDateId() {
             const dateVal = getVal('inputDate') || 'No_Date';
-            return dateVal.trim().replace(/[^a-zA-Z0-9-_]/g, '_');
+            return dateVal.trim().replace(/\//g, '_').replace(/\s+/g, '_');
         }
 
-        function updateSyncBadge(status) {
+        function updateSyncBadge(status, customMsg = '') {
             const badge = $('syncStatus');
             if (!badge) return;
 
             if (status === 'syncing') {
                 badge.innerHTML = `
                     <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
-                    Menyinkronkan...
+                    ${customMsg || 'Menyinkronkan...'}
                 `;
                 badge.className = "flex items-center gap-1 text-[9px] font-bold text-amber-500 uppercase tracking-wider";
             } else if (status === 'connected') {
@@ -624,9 +623,9 @@
             } else if (status === 'error') {
                 badge.innerHTML = `
                     <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-                    Offline / Error
+                    ${customMsg || 'Offline / Error'}
                 `;
-                badge.className = "flex items-center gap-1 text-[9px] font-bold text-red-500 uppercase tracking-wider";
+                badge.className = "flex items-center gap-1 text-[9px] font-bold text-red-500 uppercase tracking-wider animate-pulse";
             }
         }
 
@@ -648,7 +647,7 @@
                 
                 const inputs = document.querySelectorAll('input, select, textarea');
                 inputs.forEach(el => {
-                    if (el.id && el.id !== 'inputCity') {
+                    if (el.id && el.id !== 'inputCity' && el.id !== 'inputDate') {
                         dataToSave[el.id] = el.value;
                     }
                 });
@@ -658,16 +657,20 @@
                     updateSyncBadge('connected');
                 } catch (err) {
                     console.error("Firestore Write Error:", err);
-                    updateSyncBadge('error');
+                    if (err.code === 'permission-denied') {
+                        updateSyncBadge('error', 'Aktifkan Firestore Database di Firebase Console!');
+                    } else {
+                        updateSyncBadge('error', 'Gagal Tulis Cloud');
+                    }
                 }
-            }, 750); // Debounce delay 750ms untuk menghindari spam tulis ke Firebase
+            }, 750); // Penundaan penulisan 750ms untuk keamanan performa kursor
         }
 
         // ================= UPDATE UI DARI DATA CLOUD =================
         function updateInputsFromFirestore(data) {
             isSyncingFromDb = true; 
 
-            // Sinkronisasi Data Handover (Kursor Aman / Cursor-Safety)
+            // Sinkronisasi Data Handover (Cursor-Safety)
             if (data.handovers) {
                 const activeElement = document.activeElement;
                 const isEditingHandover = activeElement && activeElement.closest('#handoverContainer');
@@ -693,7 +696,7 @@
                 }
             }
 
-            // Sinkronisasi Semua Kolom Form (Kecuali yang sedang difokuskan user)
+            // Sinkronisasi Semua Kolom Form (Kecuali kolom yang saat ini aktif sedang diketik dokter)
             const inputs = document.querySelectorAll('input, select, textarea');
             inputs.forEach(el => {
                 if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity' && data[el.id] !== undefined) {
@@ -741,7 +744,7 @@
             const dateId = getSanitizedDateId();
             const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
 
-            updateSyncBadge('syncing');
+            updateSyncBadge('syncing', 'Memuat Cloud...');
 
             unsubscribeCurrentReport = onSnapshot(docRef, (docSnap) => {
                 if (docSnap.exists()) {
@@ -752,7 +755,11 @@
                 updateSyncBadge('connected');
             }, (error) => {
                 console.error("Firestore Listener Error:", error);
-                updateSyncBadge('error');
+                if (error.code === 'permission-denied') {
+                    updateSyncBadge('error', 'Aktifkan Firestore Database di Firebase Console!');
+                } else {
+                    updateSyncBadge('error', 'Gagal Sinkronisasi');
+                }
             });
         }
 
@@ -774,7 +781,7 @@
             handoverPatients.push(newPatient);
             
             renderHandovers();
-            processData(true); // Pemicu penyimpanan
+            processData(true); 
             
             const newRow = $(`row-${uniqueId}`);
             if (newRow) newRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -947,7 +954,7 @@
             });
 
             setDefaultDate();
-            processData(true); // Langsung simpan kosongnya ke cloud secara real-time
+            processData(true); // Kirim data kosong ke cloud secara real-time
             toggleModal(false);
             showToast('Laporan Jaga Harian Direset!');
         }
@@ -1063,7 +1070,22 @@
             }
         }
 
-        // ================= PENGIKATAN GLOBAL (Wajib untuk modul di HTML) =================
+        // Auth initialization helper
+        const initAuth = async () => {
+            try {
+                updateSyncBadge('syncing', 'Menghubungkan Auth...');
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.error("Auth Exception:", err);
+                updateSyncBadge('error', 'Gagal Autentikasi');
+            }
+        };
+
+        // ================= GLOBAL BINDINGS =================
         window.toggleMainSection = toggleMainSection;
         window.toggleShift = toggleShift;
         window.addHandoverRow = addHandoverRow;
@@ -1076,45 +1098,49 @@
         window.resetLaporanOnly = resetLaporanOnly;
         window.autoResizeTextarea = autoResizeTextarea;
 
-        // ================= INSTANSIASI SISTEM PADA WINDOW LOAD =================
+        // ================= INSTANSIASI SISTEM =================
         window.onload = async () => {
             renderShifts();
             setDefaultDate();
             
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
-            setInterval(() => processData(false), 60000); // Sinkronisasi ulang data setiap 60 detik secara internal
+            setInterval(() => processData(false), 60000); // Sinkronisasi lokal berkala 60 detik
 
-            // Mengautentikasi pengguna secara otomatis dan mengaktifkan integrasi realtime
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            } catch (err) {
-                console.error("Auth Exception:", err);
-                updateSyncBadge('error');
-            }
-
+            // Mendaftarkan Listener Firebase Auth
             onAuthStateChanged(auth, (user) => {
                 currentUser = user;
                 if (user) {
+                    console.log("Logged in successfully as UID:", user.uid);
                     setupRealtimeSync();
+                } else {
+                    updateSyncBadge('error', 'Auth Diperlukan');
                 }
             });
 
-            // Deteksi perubahan input pengguna
+            // Jalankan autentikasi
+            await initAuth();
+
+            // Mencegah reset form ketika pengguna masih mengetik tanggal baru (Aman Kursor)
             document.body.addEventListener('input', (e) => {
+                if (isSyncingFromDb) return;
                 const tag = e.target.tagName;
                 if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
-                    if (e.target.id === 'inputDate') {
-                        setupRealtimeSync(); // Muat data tanggal baru
-                    } else {
-                        processData(true); // Pemicu pembaruan ke cloud
+                    if (e.target.id !== 'inputDate') {
+                        processData(true);
                     }
                 }
             });
+
+            // Memicu pencarian ulang database cloud setelah kursor selesai diedit/pindah dari kolom tanggal
+            if ($('inputDate')) {
+                $('inputDate').addEventListener('change', () => {
+                    setupRealtimeSync();
+                });
+                $('inputDate').addEventListener('blur', () => {
+                    setupRealtimeSync();
+                });
+            }
 
             if ($('darkToggle')) {
                 $('darkToggle').onclick = () => {
