@@ -703,7 +703,13 @@
             const badge = $('syncStatus');
             if (!badge) return;
 
-            if (status === 'syncing') {
+            if (status === 'waiting') {
+                badge.innerHTML = `
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 opacity-60"></span>
+                    ${customMsg || 'Menunggu...'}
+                `;
+                badge.className = "flex items-center gap-1 text-[9px] font-bold text-amber-600 dark:text-amber-500 uppercase tracking-wider";
+            } else if (status === 'syncing') {
                 badge.innerHTML = `
                     <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
                     ${customMsg || 'Menyinkronkan...'}
@@ -727,12 +733,17 @@
         function triggerDbUpdate() {
             if (isSyncingFromDb || !currentUser) return;
             
-            updateSyncBadge('syncing');
+            // Indikator bahwa ada perubahan yang sedang menunggu jeda pengetikan (debounce)
+            updateSyncBadge('waiting', 'Menunggu...');
             clearTimeout(writeTimeout);
             
+            // Jeda 3000 ms (3 detik) setelah user berhenti mengetik
             writeTimeout = setTimeout(async () => {
                 const dateId = getSanitizedDateId();
                 if (!dateId) return;
+
+                // Indikator bahwa proses simpan ke cloud mulai berjalan
+                updateSyncBadge('syncing', 'Menyimpan...');
 
                 const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
                 
@@ -758,7 +769,7 @@
                         updateSyncBadge('error', 'Gagal Tulis Cloud');
                     }
                 }
-            }, 750); 
+            }, 3000); 
         }
 
         // ================= UPDATE UI DARI DATA CLOUD =================
