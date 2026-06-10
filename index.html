@@ -61,12 +61,32 @@
         .ecg-path {
             stroke-dasharray: 100;
         }
+
+        /* --- PENYEMPURNAAN ANIMASI BUKA TUTUP ELEGAN & BEBAS LAG --- */
+        .collapsible-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 320ms cubic-bezier(0.25, 1, 0.5, 1), opacity 300ms ease;
+            opacity: 0;
+            will-change: grid-template-rows, opacity;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+        .collapsible-content.expanded {
+            grid-template-rows: 1fr;
+            opacity: 1;
+        }
+        .collapsible-inner {
+            overflow: hidden;
+            min-height: 0;
+            contain: layout; /* Mengisolasi layout internal dari kalkulasi reflow global browser agar bebas jank */
+        }
     </style>
 </head>
 <body class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
 
-    <!-- Header & Controls -->
-    <div class="fixed top-0 left-0 right-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-300 dark:border-slate-800 px-4 py-3">
+    <!-- Header & Controls (Terakselerasi GPU untuk mengeliminasi lag pada efek backdrop-blur) -->
+    <div class="fixed top-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-300 dark:border-slate-800 px-4 py-3" style="will-change: transform; transform: translateZ(0);">
         <div class="max-w-3xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="w-12 h-12 flex items-center justify-center overflow-hidden rounded-xl bg-white dark:bg-slate-800 shadow-md border border-slate-300 dark:border-slate-700">
@@ -98,7 +118,7 @@
             <div class="flex items-center gap-2">
                 <!-- Tombol Tema Gelap Terang -->
                 <button id="darkToggle" class="w-10 h-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all border border-slate-300 dark:border-slate-700 shadow-sm" title="Ubah Tema">
-                    <!-- Sun Icon (Tampil saat mode gelap untuk beralih ke mode terang) -->
+                    <!-- Sun Icon -->
                     <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="4" />
                         <path d="M12 2v2" />
@@ -110,7 +130,7 @@
                         <path d="M6.34 17.66l-1.41 1.41" />
                         <path d="M19.07 4.93l-1.41 1.41" />
                     </svg>
-                    <!-- Moon Icon (Tampil saat mode terang untuk beralih ke mode gelap) -->
+                    <!-- Moon Icon -->
                     <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                     </svg>
@@ -134,74 +154,165 @@
 
     <main class="max-w-3xl mx-auto pt-24 pb-20 px-4">
         <div class="space-y-6">
-            <!-- Data Umum -->
-            <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-2 text-sky-600 dark:text-sky-400 font-bold uppercase text-xs tracking-widest">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        Informasi Umum
+            
+            <!-- ================= BAGIAN 1: LAPORAN HARIAN (COLLAPSIBLE) ================= -->
+            <div class="space-y-4">
+                <!-- Header Kolaps Bagian 1 -->
+                <button type="button" onclick="toggleMainSection('section1')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 border border-slate-300 dark:border-slate-700 rounded-2xl transition-all shadow-sm focus:outline-none">
+                    <div class="flex items-center gap-3">
+                        <!-- Ikon Representasi Laporan Harian Jaga -->
+                        <div class="w-10 h-10 flex items-center justify-center bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 rounded-xl transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5.5 h-5.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <h2 class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white uppercase tracking-wider">Laporan Jaga Harian</h2>
                     </div>
-                    <button onclick="setDefaultDate()" class="text-[10px] font-bold text-sky-500 hover:text-sky-600 uppercase">Set Hari Ini</button>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="space-y-1">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-400 ml-1">Hari & Tanggal</label>
-                        <input type="text" id="inputDate" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all dark:text-white input-focus-ring" />
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-400 ml-1">Kota</label>
-                        <input type="text" id="inputCity" value="Mojokerto" readonly class="w-full p-3 rounded-xl bg-slate-200 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 text-slate-500 cursor-not-allowed" />
-                    </div>
-                </div>
-            </section>
-
-            <!-- Shifts Container (JS Generated) -->
-            <div id="shiftsContainer" class="space-y-4"></div>
-
-            <!-- Kendala -->
-            <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
-                <div class="flex items-center gap-2 mb-4 text-amber-600 dark:text-amber-500 font-bold uppercase text-xs tracking-widest">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    <svg id="arrow-section1" class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                     </svg>
-                    Kendala / Masalah Operasional
-                </div>
-                <textarea id="inputKendala" rows="3" class="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all placeholder:text-slate-400 dark:text-white input-focus-ring" placeholder="Tuliskan kendala hari ini..."></textarea>
-            </section>
+                </button>
 
-            <!-- Report Output -->
-            <section class="bg-slate-900 dark:bg-black rounded-2xl shadow-2xl overflow-hidden border border-slate-800">
-                <div class="px-6 py-4 bg-slate-800 dark:bg-slate-950 border-b border-slate-700 flex justify-between items-center">
-                    <div class="flex items-center gap-2 text-white font-bold text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        PREVIEW LAPORAN
-                    </div>
-                    <div id="validationBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30">
-                        DOKTER BELUM LENGKAP
+                <!-- Konten Bagian 1 -->
+                <div id="section1Content" class="collapsible-content expanded">
+                    <div class="collapsible-inner pt-4 space-y-6">
+                        <!-- Data Umum -->
+                        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-2 text-sky-600 dark:text-sky-400 font-bold uppercase text-xs tracking-widest">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    Informasi Umum
+                                </div>
+                                <button onclick="setDefaultDate()" class="text-[10px] font-bold text-sky-500 hover:text-sky-600 uppercase">Set Hari Ini</button>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="space-y-1">
+                                    <label class="text-xs font-bold text-slate-600 dark:text-slate-400 ml-1">Hari & Tanggal</label>
+                                    <input type="text" id="inputDate" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all dark:text-white input-focus-ring" />
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-xs font-bold text-slate-600 dark:text-slate-400 ml-1">Kota</label>
+                                    <input type="text" id="inputCity" value="Mojokerto" readonly class="w-full p-3 rounded-xl bg-slate-200 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 text-slate-500 cursor-not-allowed" />
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Shifts Container (JS Generated) -->
+                        <div id="shiftsContainer" class="space-y-4"></div>
+
+                        <!-- Kendala -->
+                        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
+                            <div class="flex items-center gap-2 mb-4 text-amber-600 dark:text-amber-500 font-bold uppercase text-xs tracking-widest">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                Kendala / Masalah Operasional
+                            </div>
+                            <textarea id="inputKendala" rows="3" class="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all placeholder:text-slate-400 dark:text-white input-focus-ring" placeholder="Tuliskan kendala hari ini..."></textarea>
+                        </section>
+
+                        <!-- Report Output (Preview) -->
+                        <section class="bg-slate-900 dark:bg-black rounded-2xl shadow-2xl overflow-hidden border border-slate-800">
+                            <div class="px-6 py-4 bg-slate-800 dark:bg-slate-950 border-b border-slate-700 flex justify-between items-center">
+                                <div class="flex items-center gap-2 text-white font-bold text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    PREVIEW LAPORAN HARIAN
+                                </div>
+                                <div id="validationBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30">
+                                    DOKTER BELUM LENGKAP
+                                </div>
+                            </div>
+                            <textarea id="outputReport" readonly class="w-full h-96 p-6 bg-transparent text-emerald-400 font-mono text-xs md:text-sm resize-none outline-none custom-scrollbar" spellcheck="false"></textarea>
+                            <div class="p-4 bg-slate-800 dark:bg-slate-950 flex flex-col gap-3">
+                                <div class="grid grid-cols-2 gap-3">
+                                    <button id="copyBtn" disabled class="py-3 rounded-xl bg-slate-700 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-1 4h.01M9 16h.01" />
+                                        </svg>
+                                        Salin Laporan
+                                    </button>
+                                    <button id="waBtn" disabled class="py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                                        </svg>
+                                        Kirim WhatsApp
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
-                <textarea id="outputReport" readonly class="w-full h-96 p-6 bg-transparent text-emerald-400 font-mono text-xs md:text-sm resize-none outline-none custom-scrollbar" spellcheck="false"></textarea>
-                <div class="p-4 bg-slate-800 dark:bg-slate-950 flex flex-col gap-3">
-                    <div class="grid grid-cols-2 gap-3">
-                        <button id="copyBtn" disabled class="py-3 rounded-xl bg-slate-700 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-1 4h.01M9 16h.01" />
+            </div>
+
+            <!-- ================= BAGIAN 2: HANDOVER JAGA (COLLAPSIBLE) ================= -->
+            <div class="space-y-4 pt-6 border-t border-slate-300 dark:border-slate-800">
+                <!-- Header Kolaps Bagian 2 -->
+                <button type="button" onclick="toggleMainSection('section2')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-755 border border-slate-300 dark:border-slate-700 rounded-2xl transition-all shadow-sm focus:outline-none">
+                    <div class="flex items-center gap-3">
+                        <!-- Ikon Representasi Handover Pasien -->
+                        <div class="w-10 h-10 flex items-center justify-center bg-violet-500/10 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400 rounded-xl transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5.5 h-5.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                             </svg>
-                            Salin
-                        </button>
-                        <button id="waBtn" disabled class="py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                            </svg>
-                            Kirim WhatsApp
-                        </button>
+                        </div>
+                        <h2 class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white uppercase tracking-wider">Handover IGD</h2>
                     </div>
+                    <svg id="arrow-section2" class="w-5 h-5 transform transition-transform duration-300 -rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <!-- Konten Bagian 2 (Collapsed by default, hidden class prevents gap spaces) -->
+                <div id="section2Content" class="collapsible-content hidden">
+                    <div class="collapsible-inner pt-4 space-y-6">
+                        <!-- Operan Jaga / Deposit Pasien IGD -->
+                        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors space-y-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold uppercase text-xs tracking-widest">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                    </svg>
+                                    Handover IGD Mandiri
+                                </div>
+                                <button type="button" onclick="addHandoverRow()" class="px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 transition-all">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                    Tambah Pasien
+                                </button>
+                            </div>
+                            
+                            <div id="handoverContainer" class="space-y-4">
+                                <!-- Baris operan akan dibuat secara dinamis menggunakan JS -->
+                            </div>
+                            
+                            <div id="handoverEmptyState" class="text-center py-6 text-slate-400 dark:text-slate-500 text-xs italic">
+                                Belum ada pasien operan. Klik "Tambah Pasien" untuk membuat daftar operan jaga.
+                            </div>
+
+                            <!-- Tombol Ekspor Khusus Handover Jaga -->
+                            <div id="handoverActions" class="hidden pt-4 border-t border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row gap-3">
+                                <button type="button" onclick="copyHandover()" class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold text-xs transition-all shadow flex items-center justify-center gap-2 active:scale-95">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2" />
+                                    </svg>
+                                    Salin Handover
+                                </button>
+                                <button type="button" onclick="shareHandoverToWA()" class="flex-1 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs transition-all shadow flex items-center justify-center gap-2 active:scale-95">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                                </svg>
+                                Kirim WA Handover
+                            </button>
+                        </div>
+                    </section>
                 </div>
-            </section>
+            </div>
+
         </div>
     </main>
 
@@ -254,6 +365,9 @@
             { id: 'sendiri', label: 'Datang Sendiri' }
         ];
 
+        // Global State for Handover Patients
+        let handoverPatients = [];
+
         const $ = (id) => document.getElementById(id);
         const getVal = (id) => $(id) ? $(id).value : '';
         const getNum = (id) => parseInt(getVal(id)) || 0;
@@ -294,102 +408,104 @@
                                 <span class="text-[10px] opacity-90 uppercase font-bold tracking-wider">${shift.time}</span>
                             </div>
                         </div>
-                        <svg id="icon-${shift.id}" class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        <svg id="icon-${shift.id}" class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
                     </button>
                     
-                    <div id="content-${shift.id}" class="hidden p-6 space-y-6 animate-slide-in">
-                        <div class="space-y-1">
-                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Dokter Jaga</label>
-                            <div class="flex gap-2">
-                                <select id="dr-${shift.id}" class="flex-1 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 outline-none text-sm dark:text-white input-focus-ring">
-                                    <option value="">-- Pilih Dokter --</option>
-                                    ${DOCTORS_LIST.map(d => `<option value="${d}">${d}</option>`).join('')}
-                                </select>
-                                <input type="text" id="drExtra-${shift.id}" placeholder="Pengganti" class="w-1/3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 outline-none text-sm dark:text-white input-focus-ring" />
+                    <div id="content-${shift.id}" class="collapsible-content hidden">
+                        <div class="collapsible-inner p-6 space-y-6">
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Dokter Jaga</label>
+                                <div class="flex gap-2">
+                                    <select id="dr-${shift.id}" class="flex-1 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 outline-none text-sm dark:text-white input-focus-ring">
+                                        <option value="">-- Pilih Dokter --</option>
+                                        ${DOCTORS_LIST.map(d => `<option value="${d}">${d}</option>`).join('')}
+                                    </select>
+                                    <input type="text" id="drExtra-${shift.id}" placeholder="Pengganti" class="w-1/3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 outline-none text-sm dark:text-white input-focus-ring" />
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="p-3 bg-sky-100/50 dark:bg-sky-900/20 rounded-xl border border-sky-200 dark:border-sky-800">
-                                <div class="text-[10px] font-bold text-sky-600 dark:text-sky-400 uppercase tracking-tighter">Total Pasien</div>
-                                <input type="text" id="summaryTotal-${shift.id}" value="0" readonly class="bg-transparent font-extrabold text-xl outline-none dark:text-sky-400 text-sky-700" />
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="p-3 bg-sky-100/50 dark:bg-sky-900/20 rounded-xl border border-sky-200 dark:border-sky-800">
+                                    <div class="text-[10px] font-bold text-sky-600 dark:text-sky-400 uppercase tracking-tighter">Total Pasien</div>
+                                    <input type="text" id="summaryTotal-${shift.id}" value="0" readonly class="bg-transparent font-extrabold text-xl outline-none dark:text-sky-400 text-sky-700" />
+                                </div>
+                                <div class="p-3 bg-emerald-100/50 dark:bg-emerald-900/20 rounded-xl border border-emerald-200 dark:border-emerald-800">
+                                    <div class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-tighter">Rawat Inap (MRS)</div>
+                                    <input type="text" id="summaryMrs-${shift.id}" value="0" readonly class="bg-transparent font-extrabold text-xl outline-none dark:text-emerald-400 text-emerald-700" />
+                                </div>
                             </div>
-                            <div class="p-3 bg-emerald-100/50 dark:bg-emerald-900/20 rounded-xl border border-emerald-200 dark:border-emerald-800">
-                                <div class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-tighter">Rawat Inap (MRS)</div>
-                                <input type="text" id="summaryMrs-${shift.id}" value="0" readonly class="bg-transparent font-extrabold text-xl outline-none dark:text-emerald-400 text-emerald-700" />
-                            </div>
-                        </div>
 
-                        <div class="space-y-3">
-                            <div class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Rincian Kedatangan</div>
-                            <div class="grid grid-cols-1 gap-4 bg-slate-100 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-300 dark:border-slate-700 transition-colors shadow-inner">
-                                ${SOURCES.map(src => `
-                                    <div class="flex items-center gap-4">
-                                        <div class="flex-1 text-xs font-bold text-slate-600 dark:text-slate-400">${src.label}</div>
-                                        <div class="flex gap-2">
-                                            <div class="relative w-24">
-                                                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] text-slate-500 font-extrabold uppercase pointer-events-none">MRS</span>
-                                                <input type="number" id="${src.id}RI-${shift.id}" value="0" min="0" class="w-full pl-11 pr-2 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring" />
-                                            </div>
-                                            <div class="relative w-20">
-                                                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] text-slate-500 font-extrabold uppercase pointer-events-none">RJ</span>
-                                                <input type="number" id="${src.id}RJ-${shift.id}" value="0" min="0" class="w-full pl-8 pr-2 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring" />
+                            <div class="space-y-3">
+                                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Rincian Kedatangan</div>
+                                <div class="grid grid-cols-1 gap-4 bg-slate-100 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-300 dark:border-slate-700 transition-colors shadow-inner">
+                                    ${SOURCES.map(src => `
+                                        <div class="flex items-center gap-4">
+                                            <div class="flex-1 text-xs font-bold text-slate-600 dark:text-slate-400">${src.label}</div>
+                                            <div class="flex gap-2">
+                                                <div class="relative w-24">
+                                                    <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] text-slate-500 font-extrabold uppercase pointer-events-none">MRS</span>
+                                                    <input type="number" id="${src.id}RI-${shift.id}" value="0" min="0" class="w-full pl-11 pr-2 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring" />
+                                                </div>
+                                                <div class="relative w-20">
+                                                    <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] text-slate-500 font-extrabold uppercase pointer-events-none">RJ</span>
+                                                    <input type="number" id="${src.id}RJ-${shift.id}" value="0" min="0" class="w-full pl-8 pr-2 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring" />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                `).join('')}
+                                    `).join('')}
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="space-y-1">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase">Pasien BPJS</label>
-                                <input type="number" id="bpjs-${shift.id}" value="0" min="0" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 outline-none text-sm font-bold dark:text-white input-focus-ring" />
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="space-y-1">
+                                    <label class="text-[10px] font-bold text-slate-500 uppercase">Pasien BPJS</label>
+                                    <input type="number" id="bpjs-${shift.id}" value="0" min="0" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 outline-none text-sm font-bold dark:text-white input-focus-ring" />
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[10px] font-bold text-slate-500 uppercase">Pasien UMUM</label>
+                                    <input type="number" id="umum-${shift.id}" value="0" min="0" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 outline-none text-sm font-bold dark:text-white input-focus-ring" />
+                                </div>
                             </div>
-                            <div class="space-y-1">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase">Pasien UMUM</label>
-                                <input type="number" id="umum-${shift.id}" value="0" min="0" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 outline-none text-sm font-bold dark:text-white input-focus-ring" />
-                            </div>
-                        </div>
 
-                        <div class="space-y-3">
-                            <div class="space-y-1">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Keterangan / Kasus Rawat Jalan BPJS</label>
-                                <textarea id="bpjsKet-${shift.id}" rows="3" placeholder="Format: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
+                            <div class="space-y-3">
+                                <div class="space-y-1">
+                                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Keterangan / Kasus Rawat Jalan BPJS</label>
+                                    <textarea id="bpjsKet-${shift.id}" rows="3" placeholder="Format: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Keterangan / Kasus Rawat Jalan UMUM</label>
+                                    <textarea id="umumKet-${shift.id}" rows="3" placeholder="Format: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
+                                </div>
                             </div>
-                            <div class="space-y-1">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Keterangan / Kasus Rawat Jalan UMUM</label>
-                                <textarea id="umumKet-${shift.id}" rows="3" placeholder="Format: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
-                            </div>
-                        </div>
 
-                        <div class="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-700">
-                             <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Status Akhir & Kasus Khusus</div>
-                             
-                             <div class="space-y-1">
-                                 <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">DOA (Death on Arrival)</label>
-                                 <textarea id="doa-${shift.id}" rows="2" placeholder="Format: Nama - Jam" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
-                             </div>
-                             
-                             <div class="space-y-1">
-                                 <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Meninggal di IGD</label>
-                                 <textarea id="meninggal-${shift.id}" rows="2" placeholder="Format: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
-                             </div>
-                             
-                             <div class="space-y-1">
-                                 <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">MCU (Medical Check-Up)</label>
-                                 <textarea id="mcu-${shift.id}" rows="2" placeholder="Format: Jenis Pemeriksaan" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
-                             </div>
-                             
-                             <div class="space-y-1">
-                                 <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Rujukan Puskesmas</label>
-                                 <textarea id="pkmRujukKet-${shift.id}" rows="2" placeholder="Format: Nama PKM - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
-                             </div>
-                             
-                             <div class="space-y-1">
-                                 <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Rujuk ke RS Lain</label>
-                                 <textarea id="rsLain-${shift.id}" rows="2" placeholder="Format: Nama Pasien - RS Tujuan" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
-                             </div>
+                            <div class="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+                                 <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Status Akhir & Kasus Khusus</div>
+                                 
+                                 <div class="space-y-1">
+                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">DOA (Death on Arrival)</label>
+                                     <textarea id="doa-${shift.id}" rows="2" placeholder="Format: Nama - Jam" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                 </div>
+                                 
+                                 <div class="space-y-1">
+                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Meninggal di IGD</label>
+                                     <textarea id="meninggal-${shift.id}" rows="2" placeholder="Format: Nama - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                 </div>
+                                 
+                                 <div class="space-y-1">
+                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">MCU (Medical Check-Up)</label>
+                                     <textarea id="mcu-${shift.id}" rows="2" placeholder="Format: Jenis Pemeriksaan" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                 </div>
+                                 
+                                 <div class="space-y-1">
+                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Rujukan Puskesmas</label>
+                                     <textarea id="pkmRujukKet-${shift.id}" rows="2" placeholder="Format: Nama PKM - Diagnosa" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                 </div>
+                                 
+                                 <div class="space-y-1">
+                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Rujuk ke RS Lain</label>
+                                     <textarea id="rsLain-${shift.id}" rows="2" placeholder="Format: Nama Pasien - RS Tujuan" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -403,22 +519,245 @@
             const icon = $(`icon-${id}`);
             if (!content || !icon) return;
 
-            const isHidden = content.classList.contains('hidden');
+            const isExpanded = content.classList.contains('expanded');
             
+            // Close other shifts smoothly
             SHIFTS_CONFIG.forEach(s => {
                 const c = $(`content-${s.id}`);
                 const i = $(`icon-${s.id}`);
-                if (c) c.classList.add('hidden');
-                if (i) i.classList.remove('rotate-180');
+                if (c && c.classList.contains('expanded')) {
+                    c.classList.remove('expanded');
+                    if (i) i.classList.remove('rotate-180');
+                    setTimeout(() => {
+                        if (!c.classList.contains('expanded')) {
+                            c.classList.add('hidden');
+                        }
+                    }, 320);
+                }
             });
 
-            if (isHidden) {
+            if (isExpanded) {
+                // Collapse current
+                content.classList.remove('expanded');
+                icon.classList.remove('rotate-180');
+                setTimeout(() => {
+                    if (!content.classList.contains('expanded')) {
+                        content.classList.add('hidden');
+                    }
+                }, 320);
+            } else {
+                // Expand current
                 content.classList.remove('hidden');
-                icon.classList.add('rotate-180');
-                content.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        content.classList.add('expanded');
+                        icon.classList.add('rotate-180');
+                    });
+                });
+
+                setTimeout(() => {
+                    content.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 330);
             }
         }
 
+        // ================= COLLAPSIBLE SECTIONS FOR MAIN PAGE (RequestAnimationFrame Optimised) =================
+        function toggleMainSection(sectionId) {
+            const content = $(`${sectionId}Content`);
+            const arrow = $(`arrow-${sectionId}`);
+            if (!content || !arrow) return;
+
+            const isHidden = content.classList.contains('hidden');
+            if (isHidden) {
+                // Open panel
+                content.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        content.classList.add('expanded');
+                        arrow.classList.remove('-rotate-90');
+                    });
+                });
+
+                if (sectionId === 'section2') {
+                    setTimeout(adjustAllHandoverHeights, 150);
+                }
+            } else {
+                // Close panel
+                content.classList.remove('expanded');
+                arrow.classList.add('-rotate-90');
+                setTimeout(() => {
+                    if (!content.classList.contains('expanded')) {
+                        content.classList.add('hidden');
+                    }
+                }, 320);
+            }
+        }
+
+        // ================= OPERAN JAGA (HANDOVER) LOGIC =================
+        function autoResizeTextarea(el) {
+            el.style.height = 'auto';
+            el.style.height = el.scrollHeight + 'px';
+        }
+
+        function adjustAllHandoverHeights() {
+            document.querySelectorAll('#handoverContainer textarea').forEach(textarea => {
+                autoResizeTextarea(textarea);
+            });
+        }
+
+        function addHandoverRow(bed = '', name = '', consul = '', reply = '') {
+            const uniqueId = 'ho-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+            const newPatient = { id: uniqueId, bed, name, consul, reply };
+            handoverPatients.push(newPatient);
+            
+            renderHandovers();
+            processData();
+            
+            // Scroll ke baris baru yang ditambahkan
+            const newRow = $(`row-${uniqueId}`);
+            if (newRow) newRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function removeHandoverRow(id) {
+            handoverPatients = handoverPatients.filter(p => p.id !== id);
+            renderHandovers();
+            processData();
+        }
+
+        function handleHandoverChange(id, field, value) {
+            const patient = handoverPatients.find(p => p.id === id);
+            if (patient) {
+                patient[field] = value;
+                processData(); // Melakukan autosave dan update data internal
+            }
+        }
+
+        function renderHandovers() {
+            const container = $('handoverContainer');
+            const emptyState = $('handoverEmptyState');
+            const handoverActions = $('handoverActions');
+            if (!container) return;
+
+            if (handoverPatients.length === 0) {
+                container.innerHTML = '';
+                if (emptyState) emptyState.classList.remove('hidden');
+                if (handoverActions) handoverActions.classList.add('hidden');
+                return;
+            }
+
+            if (emptyState) emptyState.classList.add('hidden');
+            if (handoverActions) handoverActions.classList.remove('hidden');
+
+            let html = '';
+            handoverPatients.forEach((patient, idx) => {
+                html += `
+                <div id="row-${patient.id}" class="relative bg-slate-50 dark:bg-slate-900/40 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all space-y-3 animate-slide-in">
+                    <!-- Row Header -->
+                    <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
+                        <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Pasien #${idx + 1}</span>
+                        <button type="button" onclick="removeHandoverRow('${patient.id}')" class="text-xs font-bold text-red-500 hover:text-red-600 flex items-center gap-1 transition-all" title="Hapus Pasien">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Hapus
+                        </button>
+                    </div>
+
+                    <!-- Bed & Name Fields -->
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="col-span-1">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">No. Bed</label>
+                            <input type="text" 
+                                   value="${patient.bed}" 
+                                   oninput="handleHandoverChange('${patient.id}', 'bed', this.value)" 
+                                   placeholder="Bed 1" 
+                                   class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none" />
+                        </div>
+                        <div class="col-span-2">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Nama Pasien</label>
+                            <input type="text" 
+                                   value="${patient.name}" 
+                                   oninput="handleHandoverChange('${patient.id}', 'name', this.value)" 
+                                   placeholder="Contoh: Ny. S (45th)" 
+                                   class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none" />
+                        </div>
+                    </div>
+
+                    <!-- Consultation & Response Fields -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Konsulan & Diagnosa / Masalah (Lebih Besar)</label>
+                            <textarea oninput="autoResizeTextarea(this); handleHandoverChange('${patient.id}', 'consul', this.value)" 
+                                      placeholder="Tulis diagnosa lengkap, hasil laboratorium abnormal, status hemodinamik, atau konsul dokter spesialis..." 
+                                      rows="5" 
+                                      class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none min-h-[140px] resize-none overflow-hidden">${patient.consul}</textarea>
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Balasan Konsulan / Tindak Lanjut</label>
+                            <textarea oninput="autoResizeTextarea(this); handleHandoverChange('${patient.id}', 'reply', this.value)" 
+                                      placeholder="Tulis rencana terapi, advis spesialis, atau tindakan selanjutnya..." 
+                                      rows="2" 
+                                      class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none min-h-[60px] resize-none overflow-hidden">${patient.reply}</textarea>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+            container.innerHTML = html;
+            
+            // Atur ulang tinggi seluruh textarea operan setelah merender
+            setTimeout(adjustAllHandoverHeights, 50);
+        }
+
+        // ================= MENYUSUN TEKS OPERAN JAGA MANDIRI =================
+        function getHandoverReportText() {
+            const dateStr = getVal('inputDate') || new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            let text = `*HANDOVER IGD*\nHari, Tanggal: ${dateStr}\n\n`;
+            
+            if (handoverPatients.length === 0) {
+                text += `Tidak ada operan pasien saat ini.`;
+            } else {
+                handoverPatients.forEach((p, idx) => {
+                    text += `${idx + 1}. *Bed: ${p.bed || '-'}* | *Pasien: ${p.name || '-'}*\n`;
+                    text += `   \u2022 *Konsulan/Masalah:*\n     ${(p.consul || '-').replace(/\n/g, '\n     ')}\n`;
+                    text += `   \u2022 *Tindak Lanjut/Balasan:*\n     ${(p.reply || '-').replace(/\n/g, '\n     ')}\n\n`;
+                });
+            }
+            text += `Terima Kasih.`;
+            return text;
+        }
+
+        function copyHandover() {
+            const text = getHandoverReportText();
+            const tempEl = document.createElement('textarea');
+            tempEl.value = text;
+            document.body.appendChild(tempEl);
+            tempEl.select();
+            try {
+                document.execCommand('copy');
+                showToast('Handover IGD Disalin!');
+            } catch (err) {
+                showToast('Gagal menyalin operan');
+            }
+            document.body.removeChild(tempEl);
+        }
+
+        function shareHandoverToWA() {
+            const text = getHandoverReportText();
+            const encodedText = encodeURIComponent(text);
+            const deepLink = `whatsapp://send?text=${encodedText}`;
+            const universalLink = `https://wa.me/?text=${encodedText}`;
+
+            window.location.assign(deepLink);
+
+            setTimeout(() => {
+                if (document.hasFocus()) {
+                    window.location.assign(universalLink);
+                }
+            }, 500);
+        }
+
+        // ================= PROCESS DATA & GENERATE OUTPUT =================
         function processData() {
             let totalAll = 0;
             const nowTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }); 
@@ -471,6 +810,9 @@
                 detailsBlock += `-------------------------------\n\n`;
             });
 
+            // Catatan: Sesuai permintaan user, data operan jaga / handover pasien 
+            // sekarang dikeluarkan dari preview text WhatsApp agar murni berdiri sendiri di web app.
+
             const isValid = missingDoctors.length === 0;
             $('validationBadge').textContent = isValid ? "DATA LENGKAP" : "DOKTER BELUM LENGKAP";
             $('validationBadge').className = isValid ? "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" : "px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30";
@@ -493,19 +835,12 @@
             const text = $('outputReport').value;
             const encodedText = encodeURIComponent(text);
             
-            // Menggunakan Deep Link Protocol: whatsapp://
-            // Protokol ini memanggil aplikasi WhatsApp secara langsung tanpa navigasi browser
             const deepLink = `whatsapp://send?text=${encodedText}`;
             const universalLink = `https://wa.me/?text=${encodedText}`;
 
-            // Cek apakah browser mendukung navigasi tersembunyi
-            // Kita mencoba memicu Deep Link terlebih dahulu
             window.location.assign(deepLink);
 
-            // Kita tambahkan timeout kecil: jika dalam 500ms browser tidak "keluar" (artinya aplikasi WA tidak terbuka/tidak ada)
-            // Maka kita arahkan ke link universal sebagai cadangan
             setTimeout(() => {
-                // Jika halaman masih fokus, kemungkinan deep link gagal (misal di PC Desktop)
                 if (document.hasFocus()) {
                     window.location.assign(universalLink);
                 }
@@ -515,7 +850,8 @@
         function saveToLocal() {
             const inputs = document.querySelectorAll('input, select, textarea');
             const data = { 
-                theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light' 
+                theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
+                handovers: handoverPatients // Simpan data operan juga ke LocalStorage
             };
             inputs.forEach(el => { if(el.id) data[el.id] = el.value; });
             localStorage.setItem('rsdh_report_data_v2', JSON.stringify(data));
@@ -536,6 +872,14 @@
                 const data = JSON.parse(raw);
                 applyTheme(data.theme || (systemPrefersDark ? 'dark' : 'light'));
                 
+                // Muat daftar pasien operan jika ada
+                if (data.handovers && Array.isArray(data.handovers)) {
+                    handoverPatients = data.handovers;
+                } else {
+                    handoverPatients = [];
+                }
+                renderHandovers();
+
                 Object.keys(data).forEach(id => {
                     const el = $(id);
                     if (el && id !== 'inputCity' && id !== 'theme') {
