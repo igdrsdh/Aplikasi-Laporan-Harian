@@ -15,6 +15,7 @@
                     },
                     animation: {
                         'ecg-scan': 'ecg-draw 2s linear infinite',
+                        'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         'ecg-draw': {
@@ -83,7 +84,7 @@
 </head>
 <body class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
 
-    <!-- Header & Controls (Terakselerasi GPU untuk mengeliminasi lag pada efek backdrop-blur) -->
+    <!-- Header & Controls -->
     <div class="fixed top-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-300 dark:border-slate-800 px-4 py-3" style="will-change: transform; transform: translateZ(0);">
         <div class="max-w-3xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -97,19 +98,26 @@
                 </div>
                 <div>
                     <h1 class="font-extrabold text-sm md:text-base leading-none text-slate-900 dark:text-white">Laporan Jaga IGD</h1>
-                    <div class="flex items-center gap-2 mt-1">
-                        <div class="w-10 h-4 flex items-center overflow-hidden">
-                            <svg viewBox="0 0 50 20" class="w-full h-full text-emerald-500 dark:text-emerald-400">
-                                <path class="ecg-path animate-ecg-scan" 
-                                      d="M0 10 h8 l2 -4 l2 4 h2 l2 -12 l2 18 l2 -6 h2 l2 3 l2 -3 h14" 
-                                      fill="none" 
-                                      stroke="currentColor" 
-                                      stroke-width="1.5" 
-                                      stroke-linecap="round" 
-                                      stroke-linejoin="round" />
-                            </svg>
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 mt-1">
+                        <div class="flex items-center gap-1.5">
+                            <div class="w-10 h-4 flex items-center overflow-hidden">
+                                <svg viewBox="0 0 50 20" class="w-full h-full text-emerald-500 dark:text-emerald-400">
+                                    <path class="ecg-path animate-ecg-scan" 
+                                          d="M0 10 h8 l2 -4 l2 4 h2 l2 -12 l2 18 l2 -6 h2 l2 3 l2 -3 h14" 
+                                          fill="none" 
+                                          stroke="currentColor" 
+                                          stroke-width="1.5" 
+                                          stroke-linecap="round" 
+                                          stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                            <span id="liveClock" class="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400">Loading...</span>
                         </div>
-                        <span id="liveClock" class="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400">Loading...</span>
+                        <!-- Indikator Sinkronisasi Cloud -->
+                        <div id="syncStatus" class="flex items-center gap-1 text-[9px] font-bold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            Terhubung (Cloud Sync)
+                        </div>
                     </div>
                 </div>
             </div>
@@ -152,7 +160,6 @@
                 <!-- Header Kolaps Bagian 1 -->
                 <button type="button" onclick="toggleMainSection('section1')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 border border-slate-300 dark:border-slate-700 rounded-2xl transition-all shadow-sm focus:outline-none">
                     <div class="flex items-center gap-3">
-                        <!-- Ikon Representasi Laporan Harian Jaga -->
                         <div class="w-10 h-10 flex items-center justify-center bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 rounded-xl transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5.5 h-5.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -240,12 +247,13 @@
                                     <button id="waBtn" disabled class="py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                                    </svg>
-                                    Kirim WhatsApp
-                                </button>
+                                        </svg>
+                                        Kirim WhatsApp
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    </section>
+                        </section>
+                    </div>
                 </div>
             </div>
 
@@ -254,7 +262,6 @@
                 <!-- Header Kolaps Bagian 2 -->
                 <button type="button" onclick="toggleMainSection('section2')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-755 border border-slate-300 dark:border-slate-700 rounded-2xl transition-all shadow-sm focus:outline-none">
                     <div class="flex items-center gap-3">
-                        <!-- Ikon Representasi Handover Pasien -->
                         <div class="w-10 h-10 flex items-center justify-center bg-violet-500/10 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400 rounded-xl transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5.5 h-5.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
@@ -267,7 +274,7 @@
                     </svg>
                 </button>
 
-                <!-- Konten Bagian 2 (Collapsed by default, custom CSS display manages layout) -->
+                <!-- Konten Bagian 2 -->
                 <div id="section2Content" class="collapsible-content">
                     <div class="collapsible-inner pt-4 space-y-6">
                         <!-- Operan Jaga / Deposit Pasien IGD -->
@@ -306,11 +313,12 @@
                                 <button type="button" onclick="shareHandoverToWA()" class="flex-1 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs transition-all shadow flex items-center justify-center gap-2 active:scale-95">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                                </svg>
-                                Kirim WA Handover
-                            </button>
-                        </div>
-                    </section>
+                                    </svg>
+                                    Kirim WA Handover
+                                </button>
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </div>
 
@@ -326,7 +334,7 @@
                 </svg>
             </div>
             <h3 class="text-xl font-bold text-center mb-2 text-slate-800 dark:text-white">Reset Laporan Harian?</h3>
-            <p class="text-slate-500 dark:text-slate-400 text-center text-sm mb-6">Seluruh inputan Laporan Jaga Harian akan dikosongkan. Data Handover IGD Anda tetap tersimpan aman.</p>
+            <p class="text-slate-500 dark:text-slate-400 text-center text-sm mb-6">Seluruh inputan Laporan Jaga Harian akan dikosongkan secara real-time. Data Handover IGD Anda tetap tersimpan aman.</p>
             <div class="flex gap-3">
                 <button id="cancelReset" class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 font-bold text-sm dark:text-white">Batal</button>
                 <button id="confirmReset" class="flex-1 py-3 rounded-xl bg-red-500 text-white font-bold text-sm shadow-lg shadow-red-500/20">Ya, Hapus</button>
@@ -343,7 +351,31 @@
         <span id="toastMsg">Laporan Disalin!</span>
     </div>
 
-    <script>
+    <!-- Firebase SDK (ES Modules) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Configuration (Grounded and adaptable for local or preview environment)
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : {
+                apiKey: "AIzaSyBX4BETROyo2VacszXnZSpTIyfhh4lwjKg",
+                authDomain: "laporan-harian-igd.firebaseapp.com",
+                databaseURL: "https://laporan-harian-igd-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "laporan-harian-igd",
+                storageBucket: "laporan-harian-igd.firebasestorage.app",
+                messagingSenderId: "105675683087",
+                appId: "1:105675683087:web:fc853158e7489713f3fa7a"
+            };
+
+        // Initialize Firebase Services
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'laporan-harian-igd';
+
         const SHIFTS_CONFIG = [
             { id: 'Pagi1', label: 'Dini Hari', time: '00.00 - 07.00', icon: '🌑', color: 'from-slate-600 to-slate-400' },
             { id: 'Pagi2', label: 'Shift Pagi', time: '07.00 - 14.00', icon: '☀️', color: 'from-sky-600 to-sky-400' },
@@ -368,6 +400,10 @@
 
         // Global State for Handover Patients
         let handoverPatients = [];
+        let currentUser = null;
+        let unsubscribeCurrentReport = null;
+        let writeTimeout = null;
+        let isSyncingFromDb = false;
 
         const $ = (id) => document.getElementById(id);
         const getVal = (id) => $(id) ? $(id).value : '';
@@ -522,7 +558,6 @@
 
             const isExpanded = content.classList.contains('expanded');
             
-            // Close other shifts smoothly without layout transitions
             SHIFTS_CONFIG.forEach(s => {
                 const c = $(`content-${s.id}`);
                 const i = $(`icon-${s.id}`);
@@ -533,22 +568,18 @@
             });
 
             if (isExpanded) {
-                // Collapse current
                 content.classList.remove('expanded');
                 icon.classList.remove('rotate-180');
             } else {
-                // Expand current
                 content.classList.add('expanded');
                 icon.classList.add('rotate-180');
 
-                // Lembutkan scroll tanpa sentakan frame
                 setTimeout(() => {
                     content.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }, 80);
             }
         }
 
-        // ================= COLLAPSIBLE SECTIONS FOR MAIN PAGE (RequestAnimationFrame Optimised) =================
         function toggleMainSection(sectionId) {
             const content = $(`${sectionId}Content`);
             const arrow = $(`arrow-${sectionId}`);
@@ -556,19 +587,173 @@
 
             const isExpanded = content.classList.contains('expanded');
             if (isExpanded) {
-                // Close panel
                 content.classList.remove('expanded');
                 arrow.classList.add('-rotate-90');
             } else {
-                // Open panel
                 content.classList.add('expanded');
                 arrow.classList.remove('-rotate-90');
 
                 if (sectionId === 'section2') {
-                    // Berikan jeda sangat tipis untuk penyesuaian textarea
                     setTimeout(adjustAllHandoverHeights, 40);
                 }
             }
+        }
+
+        // ================= SINKRONISASI DATA FIRESTORE (DEBUNCED) =================
+        function getSanitizedDateId() {
+            const dateVal = getVal('inputDate') || 'No_Date';
+            return dateVal.trim().replace(/[^a-zA-Z0-9-_]/g, '_');
+        }
+
+        function updateSyncBadge(status) {
+            const badge = $('syncStatus');
+            if (!badge) return;
+
+            if (status === 'syncing') {
+                badge.innerHTML = `
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
+                    Menyinkronkan...
+                `;
+                badge.className = "flex items-center gap-1 text-[9px] font-bold text-amber-500 uppercase tracking-wider";
+            } else if (status === 'connected') {
+                badge.innerHTML = `
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Terhubung & Sinkron
+                `;
+                badge.className = "flex items-center gap-1 text-[9px] font-bold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider";
+            } else if (status === 'error') {
+                badge.innerHTML = `
+                    <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                    Offline / Error
+                `;
+                badge.className = "flex items-center gap-1 text-[9px] font-bold text-red-500 uppercase tracking-wider";
+            }
+        }
+
+        function triggerDbUpdate() {
+            if (isSyncingFromDb || !currentUser) return;
+            
+            updateSyncBadge('syncing');
+            clearTimeout(writeTimeout);
+            
+            writeTimeout = setTimeout(async () => {
+                const dateId = getSanitizedDateId();
+                if (!dateId) return;
+
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
+                
+                const dataToSave = {
+                    handovers: handoverPatients
+                };
+                
+                const inputs = document.querySelectorAll('input, select, textarea');
+                inputs.forEach(el => {
+                    if (el.id && el.id !== 'inputCity') {
+                        dataToSave[el.id] = el.value;
+                    }
+                });
+
+                try {
+                    await setDoc(docRef, dataToSave, { merge: true });
+                    updateSyncBadge('connected');
+                } catch (err) {
+                    console.error("Firestore Write Error:", err);
+                    updateSyncBadge('error');
+                }
+            }, 750); // Debounce delay 750ms untuk menghindari spam tulis ke Firebase
+        }
+
+        // ================= UPDATE UI DARI DATA CLOUD =================
+        function updateInputsFromFirestore(data) {
+            isSyncingFromDb = true; 
+
+            // Sinkronisasi Data Handover (Kursor Aman / Cursor-Safety)
+            if (data.handovers) {
+                const activeElement = document.activeElement;
+                const isEditingHandover = activeElement && activeElement.closest('#handoverContainer');
+                
+                if (!isEditingHandover) {
+                    handoverPatients = data.handovers;
+                    renderHandovers();
+                } else {
+                    handoverPatients = data.handovers;
+                    const focusedId = activeElement.id;
+                    const selectionStart = activeElement.selectionStart;
+                    const selectionEnd = activeElement.selectionEnd;
+                    
+                    renderHandovers();
+                    
+                    const refocused = $(focusedId);
+                    if (refocused) {
+                        refocused.focus();
+                        try {
+                            refocused.setSelectionRange(selectionStart, selectionEnd);
+                        } catch (e) {}
+                    }
+                }
+            }
+
+            // Sinkronisasi Semua Kolom Form (Kecuali yang sedang difokuskan user)
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(el => {
+                if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity' && data[el.id] !== undefined) {
+                    if (document.activeElement !== el) {
+                        el.value = data[el.id];
+                    }
+                }
+            });
+
+            processData(false); // Update output preview lokal saja tanpa memicu loop penulisan
+            isSyncingFromDb = false;
+        }
+
+        // ================= MEMBERSIHKAN KOLOM UNTUK HARI BARU =================
+        function clearLocalInputsForNewDate() {
+            isSyncingFromDb = true;
+            
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(el => {
+                if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity') {
+                    if (el.tagName === 'INPUT' && el.type === 'number') {
+                        el.value = '0';
+                    } else if (el.tagName === 'SELECT') {
+                        el.value = '';
+                    } else {
+                        el.value = '';
+                    }
+                }
+            });
+            handoverPatients = [];
+            renderHandovers();
+            processData(false);
+            
+            isSyncingFromDb = false;
+        }
+
+        // ================= REAL-TIME LISTENER BERDASARKAN TANGGAL AKTIF =================
+        function setupRealtimeSync() {
+            if (!currentUser) return;
+
+            if (unsubscribeCurrentReport) {
+                unsubscribeCurrentReport();
+            }
+
+            const dateId = getSanitizedDateId();
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
+
+            updateSyncBadge('syncing');
+
+            unsubscribeCurrentReport = onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    updateInputsFromFirestore(docSnap.data());
+                } else {
+                    clearLocalInputsForNewDate();
+                }
+                updateSyncBadge('connected');
+            }, (error) => {
+                console.error("Firestore Listener Error:", error);
+                updateSyncBadge('error');
+            });
         }
 
         // ================= OPERAN JAGA (HANDOVER) LOGIC =================
@@ -589,9 +774,8 @@
             handoverPatients.push(newPatient);
             
             renderHandovers();
-            processData();
+            processData(true); // Pemicu penyimpanan
             
-            // Scroll ke baris baru yang ditambahkan
             const newRow = $(`row-${uniqueId}`);
             if (newRow) newRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
@@ -599,14 +783,14 @@
         function removeHandoverRow(id) {
             handoverPatients = handoverPatients.filter(p => p.id !== id);
             renderHandovers();
-            processData();
+            processData(true);
         }
 
         function handleHandoverChange(id, field, value) {
             const patient = handoverPatients.find(p => p.id === id);
             if (patient) {
                 patient[field] = value;
-                processData(); // Melakukan autosave dan update data internal
+                processData(true);
             }
         }
 
@@ -646,6 +830,7 @@
                         <div class="col-span-1">
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">No. Bed</label>
                             <input type="text" 
+                                   id="bed-${patient.id}"
                                    value="${patient.bed}" 
                                    oninput="handleHandoverChange('${patient.id}', 'bed', this.value)" 
                                    placeholder="Bed 1" 
@@ -654,6 +839,7 @@
                         <div class="col-span-2">
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Nama Pasien</label>
                             <input type="text" 
+                                   id="name-${patient.id}"
                                    value="${patient.name}" 
                                    oninput="handleHandoverChange('${patient.id}', 'name', this.value)" 
                                    placeholder="Contoh: Ny. S (45th)" 
@@ -665,14 +851,16 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div>
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Konsulan & Diagnosa / Masalah</label>
-                            <textarea oninput="autoResizeTextarea(this); handleHandoverChange('${patient.id}', 'consul', this.value)" 
+                            <textarea id="consul-${patient.id}"
+                                      oninput="autoResizeTextarea(this); handleHandoverChange('${patient.id}', 'consul', this.value)" 
                                       placeholder="Tulis diagnosa lengkap, hasil laboratorium abnormal, status hemodinamik, atau konsul dokter spesialis..." 
                                       rows="5" 
                                       class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none min-h-[140px] resize-none overflow-hidden">${patient.consul}</textarea>
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Balasan Konsulan / Tindak Lanjut</label>
-                            <textarea oninput="autoResizeTextarea(this); handleHandoverChange('${patient.id}', 'reply', this.value)" 
+                            <textarea id="reply-${patient.id}"
+                                      oninput="autoResizeTextarea(this); handleHandoverChange('${patient.id}', 'reply', this.value)" 
                                       placeholder="Tulis rencana terapi, advis spesialis, atau tindakan selanjutnya..." 
                                       rows="5" 
                                       class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none min-h-[140px] resize-none overflow-hidden">${patient.reply}</textarea>
@@ -683,7 +871,6 @@
             });
             container.innerHTML = html;
             
-            // Atur ulang tinggi seluruh textarea operan setelah merender
             setTimeout(adjustAllHandoverHeights, 50);
         }
 
@@ -737,7 +924,6 @@
 
         // ================= RESET KHUSUS LAPORAN HARIAN (ISOLATED) =================
         function resetLaporanOnly() {
-            // Kosongkan seluruh kolom yang terafiliasi dengan Laporan Jaga Harian saja
             if ($('inputKendala')) $('inputKendala').value = '';
             
             SHIFTS_CONFIG.forEach(shift => {
@@ -760,15 +946,14 @@
                 });
             });
 
-            // Set ulang tanggal ke hari ini & update preview secara instan
             setDefaultDate();
-            processData();
+            processData(true); // Langsung simpan kosongnya ke cloud secara real-time
             toggleModal(false);
             showToast('Laporan Jaga Harian Direset!');
         }
 
         // ================= PROCESS DATA & GENERATE OUTPUT =================
-        function processData() {
+        function processData(shouldTriggerSave = true) {
             let totalAll = 0;
             const nowTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }); 
             
@@ -834,95 +1019,24 @@
             reportText += `Terima Kasih.`;
 
             if ($('outputReport')) $('outputReport').value = reportText;
-            saveToLocal();
+            
+            if (shouldTriggerSave) {
+                triggerDbUpdate();
+            }
         }
 
-        // FUNGSI SHARE DENGAN PROTOKOL DEEP LINK
         function shareToWA() {
             const text = $('outputReport').value;
             const encodedText = encodeURIComponent(text);
-            
             const deepLink = `whatsapp://send?text=${encodedText}`;
             const universalLink = `https://wa.me/?text=${encodedText}`;
 
             window.location.assign(deepLink);
-
             setTimeout(() => {
                 if (document.hasFocus()) {
                     window.location.assign(universalLink);
                 }
             }, 500);
-        }
-
-        function saveToLocal() {
-            const inputs = document.querySelectorAll('input, select, textarea');
-            const data = { 
-                theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
-                handovers: handoverPatients // Simpan data operan juga ke LocalStorage
-            };
-            inputs.forEach(el => { if(el.id) data[el.id] = el.value; });
-            localStorage.setItem('rsdh_report_data_v2', JSON.stringify(data));
-        }
-
-        function loadFromLocal() {
-            const raw = localStorage.getItem('rsdh_report_data_v2');
-            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            
-            if (!raw) { 
-                applyTheme(systemPrefersDark ? 'dark' : 'light');
-                setDefaultDate(); 
-                processData(); 
-                return; 
-            }
-
-            try {
-                const data = JSON.parse(raw);
-                applyTheme(data.theme || (systemPrefersDark ? 'dark' : 'light'));
-                
-                // Muat daftar pasien operan jika ada
-                if (data.handovers && Array.isArray(data.handovers)) {
-                    handoverPatients = data.handovers;
-                } else {
-                    handoverPatients = [];
-                }
-                renderHandovers();
-
-                Object.keys(data).forEach(id => {
-                    const el = $(id);
-                    if (el && id !== 'inputCity' && id !== 'theme') {
-                        el.value = data[id];
-                    }
-                });
-
-                const now = new Date();
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                const today = now.toLocaleDateString('id-ID', options);
-                
-                if (getVal('inputDate') !== today) {
-                    if(!getVal('inputDate')) setDefaultDate();
-                }
-                
-                processData();
-            } catch (e) {
-                applyTheme(systemPrefersDark ? 'dark' : 'light');
-                setDefaultDate();
-                processData();
-            }
-        }
-
-        function applyTheme(mode) {
-            const sunIcon = $('sunIcon');
-            const moonIcon = $('moonIcon');
-            const html = document.documentElement;
-            if (mode === 'dark') {
-                html.classList.add('dark');
-                if (sunIcon) sunIcon.classList.remove('hidden');
-                if (moonIcon) moonIcon.classList.add('hidden');
-            } else {
-                html.classList.remove('dark');
-                if (sunIcon) sunIcon.classList.add('hidden');
-                if (moonIcon) moonIcon.classList.remove('hidden');
-            }
         }
 
         function showToast(msg) {
@@ -949,26 +1063,72 @@
             }
         }
 
-        window.onload = () => {
+        // ================= PENGIKATAN GLOBAL (Wajib untuk modul di HTML) =================
+        window.toggleMainSection = toggleMainSection;
+        window.toggleShift = toggleShift;
+        window.addHandoverRow = addHandoverRow;
+        window.removeHandoverRow = removeHandoverRow;
+        window.handleHandoverChange = handleHandoverChange;
+        window.copyHandover = copyHandover;
+        window.shareHandoverToWA = shareHandoverToWA;
+        window.setDefaultDate = setDefaultDate;
+        window.toggleModal = toggleModal;
+        window.resetLaporanOnly = resetLaporanOnly;
+        window.autoResizeTextarea = autoResizeTextarea;
+
+        // ================= INSTANSIASI SISTEM PADA WINDOW LOAD =================
+        window.onload = async () => {
             renderShifts();
-            loadFromLocal();
+            setDefaultDate();
             
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
-            setInterval(processData, 60000);
+            setInterval(() => processData(false), 60000); // Sinkronisasi ulang data setiap 60 detik secara internal
 
+            // Mengautentikasi pengguna secara otomatis dan mengaktifkan integrasi realtime
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.error("Auth Exception:", err);
+                updateSyncBadge('error');
+            }
+
+            onAuthStateChanged(auth, (user) => {
+                currentUser = user;
+                if (user) {
+                    setupRealtimeSync();
+                }
+            });
+
+            // Deteksi perubahan input pengguna
             document.body.addEventListener('input', (e) => {
                 const tag = e.target.tagName;
                 if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
-                    processData();
+                    if (e.target.id === 'inputDate') {
+                        setupRealtimeSync(); // Muat data tanggal baru
+                    } else {
+                        processData(true); // Pemicu pembaruan ke cloud
+                    }
                 }
             });
 
             if ($('darkToggle')) {
                 $('darkToggle').onclick = () => {
-                    const isNowDark = !document.documentElement.classList.contains('dark');
-                    applyTheme(isNowDark ? 'dark' : 'light');
-                    saveToLocal();
+                    const html = document.documentElement;
+                    const isDark = html.classList.contains('dark');
+                    if (isDark) {
+                        html.classList.remove('dark');
+                        $('sunIcon').classList.add('hidden');
+                        $('moonIcon').classList.remove('hidden');
+                    } else {
+                        html.classList.add('dark');
+                        $('sunIcon').classList.remove('hidden');
+                        $('moonIcon').classList.add('hidden');
+                    }
                 };
             }
 
@@ -990,11 +1150,7 @@
             if ($('waBtn')) $('waBtn').onclick = shareToWA;
             if ($('refreshBtn')) $('refreshBtn').onclick = () => window.location.reload();
             if ($('cancelReset')) $('cancelReset').onclick = () => toggleModal(false);
-            if ($('confirmReset')) {
-                $('confirmReset').onclick = () => {
-                    resetLaporanOnly();
-                };
-            }
+            if ($('confirmReset')) $('confirmReset').onclick = resetLaporanOnly;
         };
     </script>
 </body>
