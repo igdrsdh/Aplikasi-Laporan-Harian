@@ -108,13 +108,11 @@
         }
         @keyframes flashSuccess {
             0% { 
-                background-color: #d1fae5 !important; /* emerald-100 */
-                border-color: #10b981 !important; /* emerald-500 */
+                background-color: #d1fae5 !important;
+                border-color: #10b981 !important;
                 box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
             }
-            100% { 
-                background-color: inherit;
-            }
+            100% { background-color: inherit; }
         }
         .dark .flash-update {
             animation: flashSuccessDark 1.5s ease-out !important;
@@ -125,9 +123,7 @@
                 border-color: #10b981 !important;
                 box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
             }
-            100% { 
-                background-color: inherit;
-            }
+            100% { background-color: inherit; }
         }
     </style>
 </head>
@@ -151,13 +147,7 @@
                         <div class="flex items-center gap-1.5">
                             <div class="w-10 h-4 flex items-center overflow-hidden">
                                 <svg viewBox="0 0 50 20" class="w-full h-full text-emerald-500 dark:text-emerald-400">
-                                    <path class="ecg-path animate-ecg-scan" 
-                                          d="M0 10 h8 l2 -4 l2 4 h2 l2 -12 l2 18 l2 -6 h2 l2 3 l2 -3 h14" 
-                                          fill="none" 
-                                          stroke="currentColor" 
-                                          stroke-width="1.5" 
-                                          stroke-linecap="round" 
-                                          stroke-linejoin="round" />
+                                    <path class="ecg-path animate-ecg-scan" d="M0 10 h8 l2 -4 l2 4 h2 l2 -12 l2 18 l2 -6 h2 l2 3 l2 -3 h14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                             </div>
                             <span id="liveClock" class="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400">Loading...</span>
@@ -171,18 +161,9 @@
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <!-- Tombol Tema Gelap Terang -->
                 <button id="darkToggle" class="w-10 h-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all border border-slate-300 dark:border-slate-700 shadow-sm" title="Ubah Tema">
                     <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="4" />
-                        <path d="M12 2v2" />
-                        <path d="M12 20v2" />
-                        <path d="M4.93 4.93l1.41 1.41" />
-                        <path d="M17.66 17.66l1.41 1.41" />
-                        <path d="M2 12h2" />
-                        <path d="M20 12h2" />
-                        <path d="M6.34 17.66l-1.41 1.41" />
-                        <path d="M19.07 4.93l-1.41 1.41" />
+                        <circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="M4.93 4.93l1.41 1.41" /><path d="M17.66 17.66l1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="M6.34 17.66l-1.41 1.41" /><path d="M19.07 4.93l-1.41 1.41" />
                     </svg>
                     <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
@@ -283,15 +264,11 @@
                                 <div class="p-4 bg-slate-800 dark:bg-slate-950 flex flex-col gap-3 border-t border-slate-800">
                                     <div class="grid grid-cols-2 gap-3">
                                         <button id="copyBtn" disabled class="py-3 rounded-xl bg-slate-700 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-1 4h.01M9 16h.01" />
-                                            </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-1 4h.01M9 16h.01" /></svg>
                                             Salin Laporan
                                         </button>
                                         <button id="waBtn" disabled class="py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                                            </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                                             Kirim WhatsApp
                                         </button>
                                     </div>
@@ -451,7 +428,7 @@
             const formattedDate = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             if ($('inputDate')) {
                 $('inputDate').value = formattedDate;
-                processData(); 
+                processData(false); 
             }
         }
 
@@ -615,7 +592,7 @@
             }
         }
 
-        // ================= SINKRONISASI DATA FIRESTORE =================
+        // ================= SINKRONISASI DATA FIRESTORE (ANTI-FREEZE) =================
         function getSanitizedDateId() {
             return (getVal('inputDate') || 'No_Date').trim().replace(/\//g, '_').replace(/\s+/g, '_');
         }
@@ -645,7 +622,6 @@
             updateSyncBadge('waiting', 'Mengetik...');
             clearTimeout(writeTimeout);
             
-            // JEDA DIPERCEPAT: Hanya 0.6 detik (600ms) agar terasa Real-time
             writeTimeout = setTimeout(async () => {
                 const dateId = getSanitizedDateId();
                 if (!dateId) return;
@@ -656,14 +632,9 @@
                 
                 const inputs = document.querySelectorAll('input, select, textarea');
                 inputs.forEach(el => {
-                    // Kecualikan input Handover agar tidak terjadi data ganda di root cloud
-                    if (el.id && 
-                        el.id !== 'inputCity' && 
-                        el.id !== 'inputDate' && 
-                        !el.id.startsWith('bed-') && 
-                        !el.id.startsWith('name-') && 
-                        !el.id.startsWith('consul-') && 
-                        !el.id.startsWith('reply-')) {
+                    if (el.id && el.id !== 'inputCity' && el.id !== 'inputDate' && 
+                        !el.id.startsWith('bed-') && !el.id.startsWith('name-') && 
+                        !el.id.startsWith('consul-') && !el.id.startsWith('reply-')) {
                         dataToSave[el.id] = el.value;
                     }
                 });
@@ -677,13 +648,15 @@
             }, 600); 
         }
 
-        // --- Fungsi Bantuan untuk Inject Value dan Efek Flash ---
+        // Fungsi Bantuan dengan Proteksi Keamanan Null Elements
         function applyRemoteValue(el, newValue) {
-            // Cek apakah kursor dokter tidak sedang di kolom ini, dan nilai datanya benar-benar berbeda
+            if (!el) return false; 
+            
+            // Cek apakah kursor dokter tidak sedang di kolom ini, dan nilainya benar-benar berbeda
             if (document.activeElement !== el && el.value !== newValue) {
                 el.value = newValue;
-                el.classList.add('flash-update'); // Panggil efek visual menyala hijau
-                setTimeout(() => el.classList.remove('flash-update'), 1500);
+                el.classList.add('flash-update'); 
+                setTimeout(() => { if (el) el.classList.remove('flash-update'); }, 1500);
                 return true;
             }
             return false;
@@ -691,65 +664,68 @@
 
         function updateInputsFromFirestore(data) {
             isSyncingFromDb = true; 
-
-            if (data.handovers) {
-                // Deteksi kursor aktif untuk melindungi data yang sedang diketik
-                const activeId = document.activeElement ? document.activeElement.id : null;
-                
-                let mergedHandovers = [];
-                
-                // 1. Sinkronisasi data dari Cloud ke Lokal
-                data.handovers.forEach(cloudPatient => {
-                    let localPatient = handoverPatients.find(p => p.id === cloudPatient.id);
-                    if (localPatient) {
-                        let mergedPatient = { ...cloudPatient };
-                        
-                        // Proteksi State: JANGAN timpa array dengan data cloud JIKA user SEDANG mengetik di field ini
-                        if (activeId === `bed-${localPatient.id}`) mergedPatient.bed = localPatient.bed;
-                        if (activeId === `name-${localPatient.id}`) mergedPatient.name = localPatient.name;
-                        if (activeId === `consul-${localPatient.id}`) mergedPatient.consul = localPatient.consul;
-                        if (activeId === `reply-${localPatient.id}`) mergedPatient.reply = localPatient.reply;
-                        
-                        mergedHandovers.push(mergedPatient);
-                    } else {
-                        mergedHandovers.push(cloudPatient);
-                    }
-                });
-                
-                // 2. Pertahankan pasien yang baru saja ditambahkan lokal (belum sempat tersimpan ke cloud)
-                handoverPatients.forEach(localPatient => {
-                    if (!mergedHandovers.find(p => p.id === localPatient.id)) {
-                        mergedHandovers.push(localPatient);
-                    }
-                });
-                
-                handoverPatients = mergedHandovers;
-                renderHandovers();
-            }
-
-            const inputs = document.querySelectorAll('input, select, textarea');
-            inputs.forEach(el => {
-                if (el.id && 
-                    el.id !== 'inputDate' && 
-                    el.id !== 'inputCity' && 
-                    !el.id.startsWith('bed-') && 
-                    !el.id.startsWith('name-') && 
-                    !el.id.startsWith('consul-') && 
-                    !el.id.startsWith('reply-') && 
-                    data[el.id] !== undefined) {
+            
+            try {
+                if (data.handovers) {
+                    const activeId = document.activeElement ? document.activeElement.id : null;
+                    let mergedHandovers = [];
                     
-                    // Gunakan fungsi applyRemoteValue agar aman & ada animasinya
-                    if (applyRemoteValue(el, data[el.id])) {
-                        const mirror = $(`mirror-${el.id}`);
-                        if (mirror) {
-                            mirror.textContent = data[el.id] + '\n';
+                    data.handovers.forEach(cloudPatient => {
+                        let localPatient = handoverPatients.find(p => p.id === cloudPatient.id);
+                        if (localPatient) {
+                            let mergedPatient = { ...cloudPatient };
+                            
+                            // Amankan field yang sedang aktif diketik agar tidak tertimpa cloud
+                            if (activeId === `bed-${localPatient.id}`) mergedPatient.bed = localPatient.bed;
+                            if (activeId === `name-${localPatient.id}`) mergedPatient.name = localPatient.name;
+                            if (activeId === `consul-${localPatient.id}`) mergedPatient.consul = localPatient.consul;
+                            if (activeId === `reply-${localPatient.id}`) mergedPatient.reply = localPatient.reply;
+                            
+                            mergedHandovers.push(mergedPatient);
+                        } else {
+                            mergedHandovers.push(cloudPatient);
+                        }
+                    });
+                    
+                    // PERBAIKAN LOGIKA DELETE CLOUD vs LOCAL DELAY
+                    handoverPatients.forEach(localPatient => {
+                        if (!mergedHandovers.find(p => p.id === localPatient.id)) {
+                            try {
+                                const timestamp = parseInt(localPatient.id.split('-')[1]);
+                                // JIKA pasien usianya KURANG dari 10 detik, berarti dia pasien lokal yang belum tersimpan (pertahankan)
+                                // JIKA lebih dari 10 detik, berarti dia memang DIHAPUS dari device lain (buang/hapus)
+                                if (Date.now() - timestamp < 10000) {
+                                    mergedHandovers.push(localPatient);
+                                }
+                            } catch (err) {}
+                        }
+                    });
+                    
+                    handoverPatients = mergedHandovers;
+                    renderHandovers();
+                }
+
+                const inputs = document.querySelectorAll('input, select, textarea');
+                inputs.forEach(el => {
+                    if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity' && 
+                        !el.id.startsWith('bed-') && !el.id.startsWith('name-') && 
+                        !el.id.startsWith('consul-') && !el.id.startsWith('reply-') && 
+                        data[el.id] !== undefined) {
+                        
+                        if (applyRemoteValue(el, data[el.id])) {
+                            const mirror = $(`mirror-${el.id}`);
+                            if (mirror) mirror.textContent = data[el.id] + '\n';
                         }
                     }
-                }
-            });
+                });
 
-            processData(false); 
-            isSyncingFromDb = false;
+                processData(false);
+            } catch (error) {
+                console.error("Terjadi kesalahan sistem:", error);
+            } finally {
+                // Selalu kembalikan saklar sync ke false agar sistem tidak macet (freeze)
+                isSyncingFromDb = false;
+            }
         }
 
         function setupRealtimeSync() {
@@ -782,6 +758,7 @@
         }
 
         function addHandoverRow() {
+            // ID menggunakan kombinasi prefix dan timestamp mutlak
             const uniqueId = 'ho-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
             handoverPatients.push({ id: uniqueId, bed: '', name: '', consul: '', reply: '' });
             renderHandovers();
@@ -872,10 +849,16 @@
                     const consulInput = $(`consul-${patient.id}`);
                     const replyInput = $(`reply-${patient.id}`);
                     
-                    applyRemoteValue(bedInput, patient.bed || '');
-                    applyRemoteValue(nameInput, patient.name || '');
-                    if (applyRemoteValue(consulInput, patient.consul || '')) $(`mirror-consul-${patient.id}`).textContent = (patient.consul || '') + '\n';
-                    if (applyRemoteValue(replyInput, patient.reply || '')) $(`mirror-reply-${patient.id}`).textContent = (patient.reply || '') + '\n';
+                    if (bedInput) applyRemoteValue(bedInput, patient.bed || '');
+                    if (nameInput) applyRemoteValue(nameInput, patient.name || '');
+                    if (consulInput && applyRemoteValue(consulInput, patient.consul || '')) {
+                        const mirror = $(`mirror-consul-${patient.id}`);
+                        if (mirror) mirror.textContent = (patient.consul || '') + '\n';
+                    }
+                    if (replyInput && applyRemoteValue(replyInput, patient.reply || '')) {
+                        const mirror = $(`mirror-reply-${patient.id}`);
+                        if (mirror) mirror.textContent = (patient.reply || '') + '\n';
+                    }
 
                     const labelIndex = row.querySelector('.label-index');
                     if (labelIndex) labelIndex.textContent = `Pasien #${idx + 1}`;
