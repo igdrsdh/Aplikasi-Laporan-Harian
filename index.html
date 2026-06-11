@@ -50,7 +50,7 @@
             box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
         }
 
-        /* --- TEKNIK CSS GRID AUTO-RESIZER (MENIADAKAN GEJALAH LAYAR LONCAT) --- */
+        /* --- TEKNIK CSS GRID AUTO-RESIZER --- */
         .grid-textarea-container {
             display: grid;
         }
@@ -71,15 +71,14 @@
             height: 100%;
         }
 
-        /* Mengunci tinggi box preview secara mutlak agar tidak bisa dikecilkan saat sinkronisasi */
         #outputReport {
             overflow-y: auto !important;
-            height: 450px !important; /* Tinggi perangkat mobile */
+            height: 450px !important;
         }
         
         @media (min-width: 768px) {
             #outputReport {
-                height: 650px !important; /* Tinggi perangkat desktop */
+                height: 650px !important;
             }
         }
 
@@ -87,7 +86,6 @@
             stroke-dasharray: 100;
         }
 
-        /* --- ANIMASI SNAP SANGAT RINGAN --- */
         .collapsible-content {
             display: none;
             will-change: opacity;
@@ -102,6 +100,34 @@
         }
         .collapsible-inner {
             contain: layout; 
+        }
+
+        /* --- ANIMASI FLASH UPDATE REALTIME --- */
+        .flash-update {
+            animation: flashSuccess 1.5s ease-out !important;
+        }
+        @keyframes flashSuccess {
+            0% { 
+                background-color: #d1fae5 !important; /* emerald-100 */
+                border-color: #10b981 !important; /* emerald-500 */
+                box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
+            }
+            100% { 
+                background-color: inherit;
+            }
+        }
+        .dark .flash-update {
+            animation: flashSuccessDark 1.5s ease-out !important;
+        }
+        @keyframes flashSuccessDark {
+            0% { 
+                background-color: rgba(16, 185, 129, 0.2) !important;
+                border-color: #10b981 !important;
+                box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
+            }
+            100% { 
+                background-color: inherit;
+            }
         }
     </style>
 </head>
@@ -147,7 +173,6 @@
             <div class="flex items-center gap-2">
                 <!-- Tombol Tema Gelap Terang -->
                 <button id="darkToggle" class="w-10 h-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all border border-slate-300 dark:border-slate-700 shadow-sm" title="Ubah Tema">
-                    <!-- Sun Icon -->
                     <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="4" />
                         <path d="M12 2v2" />
@@ -159,17 +184,9 @@
                         <path d="M6.34 17.66l-1.41 1.41" />
                         <path d="M19.07 4.93l-1.41 1.41" />
                     </svg>
-                    <!-- Moon Icon -->
                     <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                     </svg>
-                </button>
-                <!-- Tombol Refresh -->
-                <button id="refreshBtn" class="w-10 sm:w-auto h-10 px-0 sm:px-4 flex items-center justify-center gap-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-sm font-bold transition-all shadow-md" title="Refresh Halaman">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                    </svg>
-                    <span class="hidden sm:inline">Refresh</span>
                 </button>
             </div>
         </div>
@@ -178,10 +195,9 @@
     <main class="max-w-3xl mx-auto pt-24 pb-20 px-4">
         <div class="space-y-6">
             
-            <!-- ================= BAGIAN 1: LAPORAN HARIAN (COLLAPSIBLE) ================= -->
+            <!-- ================= BAGIAN 1: LAPORAN HARIAN ================= -->
             <div class="space-y-4">
-                <!-- Header Kolaps Bagian 1 -->
-                <button type="button" onclick="toggleMainSection('section1')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-755 border border-slate-300 dark:border-slate-700 rounded-2xl transition-all shadow-sm focus:outline-none">
+                <button type="button" onclick="toggleMainSection('section1')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 border border-slate-300 dark:border-slate-700 rounded-2xl transition-all shadow-sm focus:outline-none">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 flex items-center justify-center bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 rounded-xl transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5.5 h-5.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -195,10 +211,8 @@
                     </svg>
                 </button>
 
-                <!-- Konten Bagian 1 -->
                 <div id="section1Content" class="collapsible-content expanded">
                     <div class="collapsible-inner pt-4 space-y-6">
-                        <!-- Data Umum -->
                         <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center gap-2 text-sky-600 dark:text-sky-400 font-bold uppercase text-xs tracking-widest">
@@ -210,7 +224,6 @@
                                 <div class="flex items-center gap-3">
                                     <button onclick="setDefaultDate()" class="text-[10px] font-bold text-sky-500 hover:text-sky-600 uppercase">Set Hari Ini</button>
                                     <span class="text-slate-300 dark:text-slate-700">|</span>
-                                    <!-- Tombol Reset Laporan Harian Terisolasi -->
                                     <button onclick="toggleModal(true)" class="text-[10px] font-bold text-red-500 hover:text-red-600 uppercase flex items-center gap-1">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -231,10 +244,9 @@
                             </div>
                         </section>
 
-                        <!-- Shifts Container (JS Generated) -->
+                        <!-- Shifts Container -->
                         <div id="shiftsContainer" class="space-y-4"></div>
 
-                        <!-- Kendala -->
                         <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
                             <div class="flex items-center gap-2 mb-4 text-amber-600 dark:text-amber-500 font-bold uppercase text-xs tracking-widest">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -248,9 +260,7 @@
                             </div>
                         </section>
 
-                        <!-- Report Output (Preview - COLLAPSIBLE) -->
                         <section class="bg-slate-900 dark:bg-black rounded-2xl shadow-2xl overflow-hidden border border-slate-800">
-                            <!-- Clickable Header Button -->
                             <button type="button" onclick="togglePreviewSection()" class="w-full px-6 py-4 bg-slate-800 hover:bg-slate-700/80 dark:bg-slate-950 dark:hover:bg-slate-900/80 border-b border-slate-700 flex justify-between items-center text-left focus:outline-none transition-all duration-200">
                                 <div class="flex items-center gap-2 text-white font-bold text-xs sm:text-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -268,7 +278,6 @@
                                 </div>
                             </button>
 
-                            <!-- Collapsible Content Wrapper -->
                             <div id="previewContent" class="collapsible-content">
                                 <textarea id="outputReport" readonly class="w-full p-6 bg-transparent text-emerald-400 font-mono text-xs md:text-sm resize-none outline-none custom-scrollbar" spellcheck="false"></textarea>
                                 <div class="p-4 bg-slate-800 dark:bg-slate-950 flex flex-col gap-3 border-t border-slate-800">
@@ -293,9 +302,8 @@
                 </div>
             </div>
 
-            <!-- ================= BAGIAN 2: HANDOVER JAGA (COLLAPSIBLE) ================= -->
+            <!-- ================= BAGIAN 2: HANDOVER JAGA ================= -->
             <div class="space-y-4 pt-6 border-t border-slate-300 dark:border-slate-800">
-                <!-- Header Kolaps Bagian 2 -->
                 <button type="button" onclick="toggleMainSection('section2')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-755 border border-slate-300 dark:border-slate-700 rounded-2xl transition-all shadow-sm focus:outline-none">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 flex items-center justify-center bg-violet-500/10 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400 rounded-xl transition-colors">
@@ -310,10 +318,8 @@
                     </svg>
                 </button>
 
-                <!-- Konten Bagian 2 -->
                 <div id="section2Content" class="collapsible-content">
                     <div class="collapsible-inner pt-4 space-y-6">
-                        <!-- Operan Jaga / Deposit Pasien IGD -->
                         <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors space-y-4">
                             <div class="flex items-center justify-between mb-2">
                                 <div class="flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold uppercase text-xs tracking-widest">
@@ -330,9 +336,7 @@
                                 </button>
                             </div>
                             
-                            <div id="handoverContainer" class="space-y-4">
-                                <!-- Baris operan dibuat secara dinamis -->
-                            </div>
+                            <div id="handoverContainer" class="space-y-4"></div>
                             
                             <div id="handoverEmptyState" class="text-center py-6 text-slate-400 dark:text-slate-500 text-xs italic">
                                 Belum ada pasien operan. Klik "Tambah Pasien" untuk membuat daftar operan jaga.
@@ -345,13 +349,11 @@
         </div>
     </main>
 
-    <!-- Modal 1: Reset Laporan Harian -->
+    <!-- Modals & Toasts -->
     <div id="modalOverlay" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-sm p-6 shadow-2xl scale-95 opacity-0 transition-all duration-300" id="modalContent">
             <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
             </div>
             <h3 class="text-xl font-bold text-center mb-2 text-slate-800 dark:text-white">Reset Laporan Harian?</h3>
             <p class="text-slate-500 dark:text-slate-400 text-center text-sm mb-6">Seluruh inputan Laporan Jaga Harian akan dikosongkan secara real-time. Data Handover IGD Anda tetap tersimpan aman.</p>
@@ -362,16 +364,13 @@
         </div>
     </div>
 
-    <!-- Modal 2: Konfirmasi Hapus Pasien Handover -->
     <div id="deletePatientModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-sm p-6 shadow-2xl scale-95 opacity-0 transition-all duration-300" id="deletePatientContent">
             <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
             </div>
             <h3 class="text-xl font-bold text-center mb-2 text-slate-800 dark:text-white">Hapus Pasien?</h3>
-            <p class="text-slate-500 dark:text-slate-400 text-center text-sm mb-6">Data operan pasien ini akan dihapus secara permanen dari penyimpanan cloud semua perangkat dokter.</p>
+            <p class="text-slate-500 dark:text-slate-400 text-center text-sm mb-6">Data operan pasien ini akan dihapus secara permanen dari cloud semua perangkat.</p>
             <div class="flex gap-3">
                 <button id="cancelDeletePatient" class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 font-bold text-sm dark:text-white">Batal</button>
                 <button id="confirmDeletePatient" class="flex-1 py-3 rounded-xl bg-red-500 text-white font-bold text-sm shadow-lg shadow-red-500/20">Ya, Hapus</button>
@@ -379,36 +378,29 @@
         </div>
     </div>
 
-    <!-- Notifikasi Toast -->
     <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-slate-800 text-white rounded-2xl shadow-2xl font-bold text-sm flex items-center gap-3 translate-y-20 transition-all duration-300 pointer-events-none">
         <div class="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
         </div>
         <span id="toastMsg">Laporan Disalin!</span>
     </div>
 
-    <!-- Firebase SDK (ES Modules) -->
+    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Konfigurasi Database Firebase 
-        const firebaseConfig = typeof __firebase_config !== 'undefined' 
-            ? JSON.parse(__firebase_config) 
-            : {
-                apiKey: "AIzaSyBX4BETROyo2VacszXnZSpTIyfhh4lwjKg",
-                authDomain: "laporan-harian-igd.firebaseapp.com",
-                databaseURL: "https://laporan-harian-igd-default-rtdb.asia-southeast1.firebasedatabase.app",
-                projectId: "laporan-harian-igd",
-                storageBucket: "laporan-harian-igd.firebasestorage.app",
-                messagingSenderId: "105675683087",
-                appId: "1:105675683087:web:fc853158e7489713f3fa7a"
-            };
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "AIzaSyBX4BETROyo2VacszXnZSpTIyfhh4lwjKg",
+            authDomain: "laporan-harian-igd.firebaseapp.com",
+            databaseURL: "https://laporan-harian-igd-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "laporan-harian-igd",
+            storageBucket: "laporan-harian-igd.firebasestorage.app",
+            messagingSenderId: "105675683087",
+            appId: "1:105675683087:web:fc853158e7489713f3fa7a"
+        };
 
-        // Inisialisasi Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -436,11 +428,9 @@
             { id: 'sendiri', label: 'Datang Sendiri' }
         ];
 
-        // State Global
         let handoverPatients = [];
         let currentUser = null;
         let unsubscribeCurrentReport = null;
-        let unsubscribeTheme = null;
         let writeTimeout = null;
         let isSyncingFromDb = false;
         let patientIdToDelete = null;
@@ -449,27 +439,22 @@
         const getVal = (id) => $(id) ? $(id).value : '';
         const getNum = (id) => parseInt(getVal(id)) || 0;
 
-        // Jam Real-time
         function updateLiveClock() {
             const now = new Date();
             const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
-            if ($('liveClock')) {
-                $('liveClock').textContent = `${dateStr} - ${timeStr} WIB`;
-            }
+            if ($('liveClock')) $('liveClock').textContent = `${dateStr} - ${timeStr} WIB`;
         }
 
         function setDefaultDate() {
             const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const formattedDate = now.toLocaleDateString('id-ID', options);
+            const formattedDate = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             if ($('inputDate')) {
                 $('inputDate').value = formattedDate;
                 processData(); 
             }
         }
 
-        // Render struktur shift jaga
         function renderShifts() {
             const container = $('shiftsContainer');
             if (!container) return;
@@ -505,11 +490,11 @@
                             <div class="grid grid-cols-2 gap-3">
                                 <div class="p-3 bg-sky-100/50 dark:bg-sky-900/20 rounded-xl border border-sky-200 dark:border-sky-800">
                                     <div class="text-[10px] font-bold text-sky-600 dark:text-sky-400 uppercase tracking-tighter">Total Pasien</div>
-                                    <input type="text" id="summaryTotal-${shift.id}" value="0" readonly class="bg-transparent font-extrabold text-xl outline-none dark:text-sky-400 text-sky-700" />
+                                    <input type="text" id="summaryTotal-${shift.id}" value="0" readonly class="bg-transparent font-extrabold text-xl outline-none dark:text-sky-400 text-sky-700 w-full" />
                                 </div>
                                 <div class="p-3 bg-emerald-100/50 dark:bg-emerald-900/20 rounded-xl border border-emerald-200 dark:border-emerald-800">
                                     <div class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-tighter">Rawat Inap (MRS)</div>
-                                    <input type="text" id="summaryMrs-${shift.id}" value="0" readonly class="bg-transparent font-extrabold text-xl outline-none dark:text-emerald-400 text-emerald-700" />
+                                    <input type="text" id="summaryMrs-${shift.id}" value="0" readonly class="bg-transparent font-extrabold text-xl outline-none dark:text-emerald-400 text-emerald-700 w-full" />
                                 </div>
                             </div>
 
@@ -547,63 +532,35 @@
 
                             <div class="space-y-3">
                                 <div class="space-y-1">
-                                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Keterangan / Kasus Rawat Jalan BPJS</label>
+                                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Kasus Rawat Jalan BPJS</label>
                                     <div class="grid-textarea-container relative">
                                         <div id="mirror-bpjsKet-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[100px] border border-transparent"></div>
-                                        <textarea id="bpjsKet-${shift.id}" oninput="$('mirror-bpjsKet-${shift.id}').textContent = this.value + '\\n';" placeholder="Format: Nama - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
+                                        <textarea id="bpjsKet-${shift.id}" oninput="$('mirror-bpjsKet-${shift.id}').textContent = this.value + '\\n';" placeholder="Format: Nama - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
                                     </div>
                                 </div>
                                 <div class="space-y-1">
-                                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Keterangan / Kasus Rawat Jalan UMUM</label>
+                                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Kasus Rawat Jalan UMUM</label>
                                     <div class="grid-textarea-container relative">
                                         <div id="mirror-umumKet-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[100px] border border-transparent"></div>
-                                        <textarea id="umumKet-${shift.id}" oninput="$('mirror-umumKet-${shift.id}').textContent = this.value + '\\n';" placeholder="Format: Nama - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
+                                        <textarea id="umumKet-${shift.id}" oninput="$('mirror-umumKet-${shift.id}').textContent = this.value + '\\n';" placeholder="Format: Nama - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-700">
-                                 <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Status Akhir & Kasus Khusus</div>
+                                 <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Status Akhir Khusus</div>
                                  
-                                 <div class="space-y-1">
-                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">DOA (Death on Arrival)</label>
-                                     <div class="grid-textarea-container relative">
-                                         <div id="mirror-doa-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[80px] border border-transparent"></div>
-                                         <textarea id="doa-${shift.id}" oninput="$('mirror-doa-${shift.id}').textContent = this.value + '\\n';" placeholder="Format: Nama - Jam" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
-                                     </div>
-                                 </div>
-                                 
-                                 <div class="space-y-1">
-                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Meninggal di IGD</label>
-                                     <div class="grid-textarea-container relative">
-                                         <div id="mirror-meninggal-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[80px] border border-transparent"></div>
-                                         <textarea id="meninggal-${shift.id}" oninput="$('mirror-meninggal-${shift.id}').textContent = this.value + '\\n';" placeholder="Format: Nama - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
-                                     </div>
-                                 </div>
-                                 
-                                 <div class="space-y-1">
-                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">MCU (Medical Check-Up)</label>
-                                     <div class="grid-textarea-container relative">
-                                         <div id="mirror-mcu-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[80px] border border-transparent"></div>
-                                         <textarea id="mcu-${shift.id}" oninput="$('mirror-mcu-${shift.id}').textContent = this.value + '\\n';" placeholder="Format: Jenis Pemeriksaan" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
-                                     </div>
-                                 </div>
-                                 
-                                 <div class="space-y-1">
-                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Rujukan Puskesmas</label>
-                                     <div class="grid-textarea-container relative">
-                                         <div id="mirror-pkmRujukKet-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[80px] border border-transparent"></div>
-                                         <textarea id="pkmRujukKet-${shift.id}" oninput="$('mirror-pkmRujukKet-${shift.id}').textContent = this.value + '\\n';" placeholder="Format: Nama PKM - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
-                                     </div>
-                                 </div>
-                                 
-                                 <div class="space-y-1">
-                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Rujuk ke RS Lain</label>
-                                     <div class="grid-textarea-container relative">
-                                         <div id="mirror-rsLain-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[80px] border border-transparent"></div>
-                                         <textarea id="rsLain-${shift.id}" oninput="$('mirror-rsLain-${shift.id}').textContent = this.value + '\\n';" placeholder="Format: Nama Pasien - RS Tujuan" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
-                                     </div>
-                                 </div>
+                                 ${['doa|DOA (Death on Arrival)', 'meninggal|Meninggal di IGD', 'mcu|MCU (Medical Check-Up)', 'pkmRujukKet|Rujukan Puskesmas', 'rsLain|Rujuk ke RS Lain'].map(item => {
+                                     const [id, label] = item.split('|');
+                                     return `
+                                     <div class="space-y-1">
+                                         <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">${label}</label>
+                                         <div class="grid-textarea-container relative">
+                                             <div id="mirror-${id}-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[80px] border border-transparent"></div>
+                                             <textarea id="${id}-${shift.id}" oninput="$('mirror-${id}-${shift.id}').textContent = this.value + '\\n';" placeholder="Format yang sesuai..." class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                         </div>
+                                     </div>`;
+                                 }).join('')}
                             </div>
                         </div>
                     </div>
@@ -619,26 +576,17 @@
             if (!content || !icon) return;
 
             const isExpanded = content.classList.contains('expanded');
-            
             SHIFTS_CONFIG.forEach(s => {
                 const c = $(`content-${s.id}`);
                 const i = $(`icon-${s.id}`);
-                if (c && c.classList.contains('expanded')) {
-                    c.classList.remove('expanded');
-                    if (i) i.classList.remove('rotate-180');
-                }
+                if (c && c.classList.contains('expanded')) { c.classList.remove('expanded'); if (i) i.classList.remove('rotate-180'); }
             });
 
             if (isExpanded) {
-                content.classList.remove('expanded');
-                icon.classList.remove('rotate-180');
+                content.classList.remove('expanded'); icon.classList.remove('rotate-180');
             } else {
-                content.classList.add('expanded');
-                icon.classList.add('rotate-180');
-
-                setTimeout(() => {
-                    content.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 80);
+                content.classList.add('expanded'); icon.classList.add('rotate-180');
+                setTimeout(() => content.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
             }
         }
 
@@ -647,70 +595,46 @@
             const arrow = $(`arrow-${sectionId}`);
             if (!content || !arrow) return;
 
-            const isExpanded = content.classList.contains('expanded');
-            if (isExpanded) {
-                content.classList.remove('expanded');
-                arrow.classList.add('-rotate-90');
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded'); arrow.classList.add('-rotate-90');
             } else {
-                content.classList.add('expanded');
-                arrow.classList.remove('-rotate-90');
+                content.classList.add('expanded'); arrow.classList.remove('-rotate-90');
             }
         }
 
-        // Toggling khusus untuk bagian Preview Laporan Harian
         function togglePreviewSection() {
             const content = $('previewContent');
             const arrow = $('arrow-preview');
             if (!content || !arrow) return;
 
-            const isExpanded = content.classList.contains('expanded');
-            if (isExpanded) {
-                content.classList.remove('expanded');
-                arrow.classList.add('-rotate-90');
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded'); arrow.classList.add('-rotate-90');
             } else {
-                content.classList.add('expanded');
-                arrow.classList.remove('-rotate-90');
-                
-                setTimeout(() => {
-                    content.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }, 80);
+                content.classList.add('expanded'); arrow.classList.remove('-rotate-90');
+                setTimeout(() => content.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
             }
         }
 
-        // ================= SINKRONISASI DATA FIRESTORE (DEBUNCED) =================
+        // ================= SINKRONISASI DATA FIRESTORE =================
         function getSanitizedDateId() {
-            const dateVal = getVal('inputDate') || 'No_Date';
-            return dateVal.trim().replace(/\//g, '_').replace(/\s+/g, '_');
+            return (getVal('inputDate') || 'No_Date').trim().replace(/\//g, '_').replace(/\s+/g, '_');
         }
 
-        // Update indikator sinkronisasi
         function updateSyncBadge(status, customMsg = '') {
             const badge = $('syncStatus');
             if (!badge) return;
 
             if (status === 'waiting') {
-                badge.innerHTML = `
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 opacity-60"></span>
-                    ${customMsg || 'Menunggu...'}
-                `;
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 opacity-60"></span>${customMsg || 'Menunggu...'}`;
                 badge.className = "flex items-center gap-1 text-[9px] font-bold text-amber-600 dark:text-amber-500 uppercase tracking-wider";
             } else if (status === 'syncing') {
-                badge.innerHTML = `
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
-                    ${customMsg || 'Menyinkronkan...'}
-                `;
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>${customMsg || 'Menyimpan...'}`;
                 badge.className = "flex items-center gap-1 text-[9px] font-bold text-amber-500 uppercase tracking-wider";
             } else if (status === 'connected') {
-                badge.innerHTML = `
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Terhubung & Sinkron
-                `;
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>Terhubung`;
                 badge.className = "flex items-center gap-1 text-[9px] font-bold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider";
             } else if (status === 'error') {
-                badge.innerHTML = `
-                    <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-                    ${customMsg || 'Offline / Error'}
-                `;
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>${customMsg || 'Offline'}`;
                 badge.className = "flex items-center gap-1 text-[9px] font-bold text-red-500 uppercase tracking-wider animate-pulse";
             }
         }
@@ -718,23 +642,17 @@
         function triggerDbUpdate() {
             if (isSyncingFromDb || !currentUser) return;
             
-            // Indikator bahwa ada perubahan yang sedang menunggu jeda pengetikan (debounce)
-            updateSyncBadge('waiting', 'Menunggu...');
+            updateSyncBadge('waiting', 'Mengetik...');
             clearTimeout(writeTimeout);
             
-            // Jeda 3000 ms (3 detik) setelah user berhenti mengetik
+            // JEDA DIPERCEPAT: Hanya 0.6 detik (600ms) agar terasa Real-time
             writeTimeout = setTimeout(async () => {
                 const dateId = getSanitizedDateId();
                 if (!dateId) return;
 
-                // Indikator bahwa proses simpan ke cloud mulai berjalan
                 updateSyncBadge('syncing', 'Menyimpan...');
-
                 const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
-                
-                const dataToSave = {
-                    handovers: handoverPatients
-                };
+                const dataToSave = { handovers: handoverPatients };
                 
                 const inputs = document.querySelectorAll('input, select, textarea');
                 inputs.forEach(el => {
@@ -747,34 +665,36 @@
                     await setDoc(docRef, dataToSave, { merge: true });
                     updateSyncBadge('connected');
                 } catch (err) {
-                    console.error("Firestore Write Error:", err);
-                    if (err.code === 'permission-denied') {
-                        updateSyncBadge('error', 'Aktifkan Firestore Database di Firebase Console!');
-                    } else {
-                        updateSyncBadge('error', 'Gagal Tulis Cloud');
-                    }
+                    updateSyncBadge('error', 'Gagal Tulis Cloud');
                 }
-            }, 3000); 
+            }, 600); 
         }
 
-        // ================= UPDATE UI DARI DATA CLOUD =================
+        // --- Fungsi Bantuan untuk Inject Value dan Efek Flash ---
+        function applyRemoteValue(el, newValue) {
+            // Cek apakah kursor dokter tidak sedang di kolom ini, dan nilai datanya benar-benar berbeda
+            if (document.activeElement !== el && el.value !== newValue) {
+                el.value = newValue;
+                el.classList.add('flash-update'); // Panggil efek visual menyala hijau
+                setTimeout(() => el.classList.remove('flash-update'), 1500);
+                return true;
+            }
+            return false;
+        }
+
         function updateInputsFromFirestore(data) {
             isSyncingFromDb = true; 
 
-            // Sinkronisasi Data Handover secara aman
             if (data.handovers) {
                 handoverPatients = data.handovers;
                 renderHandovers();
             }
 
-            // Sinkronisasi Semua Kolom Form (Kecuali yang sedang difokuskan oleh dokter pengetik)
             const inputs = document.querySelectorAll('input, select, textarea');
             inputs.forEach(el => {
                 if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity' && data[el.id] !== undefined) {
-                    if (document.activeElement !== el) {
-                        el.value = data[el.id];
-                        
-                        // Perbarui teks mirror secara instan untuk sinkronisasi layout auto-height
+                    // Gunakan fungsi applyRemoteValue agar aman & ada animasinya
+                    if (applyRemoteValue(el, data[el.id])) {
                         const mirror = $(`mirror-${el.id}`);
                         if (mirror) {
                             mirror.textContent = data[el.id] + '\n';
@@ -783,107 +703,44 @@
                 }
             });
 
-            processData(false); // Perbarui preview output lokal saja tanpa memicu loop penulisan
+            processData(false); 
             isSyncingFromDb = false;
         }
 
-        // ================= MEMBERSIHKAN KOLOM UNTUK HARI BARU =================
-        function clearLocalInputsForNewDate() {
-            isSyncingFromDb = true;
-            
-            const inputs = document.querySelectorAll('input, select, textarea');
-            inputs.forEach(el => {
-                if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity') {
-                    if (el.tagName === 'INPUT' && el.type === 'number') {
-                        el.value = '0';
-                    } else if (el.tagName === 'SELECT') {
-                        el.value = '';
-                    } else {
-                        el.value = '';
-                    }
-                    
-                    const mirror = $(`mirror-${el.id}`);
-                    if (mirror) {
-                        mirror.textContent = '';
-                    }
-                }
-            });
-            handoverPatients = [];
-            renderHandovers();
-            processData(false);
-            
-            isSyncingFromDb = false;
-        }
-
-        // ================= REAL-TIME LISTENER DATA LAPORAN =================
         function setupRealtimeSync() {
             if (!currentUser) return;
-
-            if (unsubscribeCurrentReport) {
-                unsubscribeCurrentReport();
-            }
+            if (unsubscribeCurrentReport) unsubscribeCurrentReport();
 
             const dateId = getSanitizedDateId();
             const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
 
             updateSyncBadge('syncing', 'Memuat Cloud...');
-
             unsubscribeCurrentReport = onSnapshot(docRef, (docSnap) => {
                 if (docSnap.exists()) {
                     updateInputsFromFirestore(docSnap.data());
                 } else {
-                    clearLocalInputsForNewDate();
+                    isSyncingFromDb = true;
+                    document.querySelectorAll('input, select, textarea').forEach(el => {
+                        if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity') {
+                            if (el.tagName === 'INPUT' && el.type === 'number') el.value = '0';
+                            else el.value = '';
+                            if ($(`mirror-${el.id}`)) $(`mirror-${el.id}`).textContent = '';
+                        }
+                    });
+                    handoverPatients = [];
+                    renderHandovers();
+                    processData(false);
+                    isSyncingFromDb = false;
                 }
                 updateSyncBadge('connected');
-            }, (error) => {
-                console.error("Firestore Listener Error:", error);
-                if (error.code === 'permission-denied') {
-                    updateSyncBadge('error', 'Aktifkan Firestore Database!');
-                } else {
-                    updateSyncBadge('error', 'Gagal Sinkronisasi');
-                }
             });
         }
 
-        // ================= SINKRONISASI PREFERENSI TEMA GELAP/TERANG VIA CLOUD =================
-        function setupThemeSync(userId) {
-            if (unsubscribeTheme) {
-                unsubscribeTheme();
-            }
-
-            const themeRef = doc(db, 'artifacts', appId, 'users', userId, 'settings', 'themePreference');
-            unsubscribeTheme = onSnapshot(themeRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    const savedTheme = docSnap.data().theme;
-                    applyTheme(savedTheme);
-                }
-            }, (error) => {
-                console.error("Gagal sinkronisasi tema:", error);
-            });
-        }
-
-        function applyTheme(theme) {
-            const html = document.documentElement;
-            if (theme === 'dark') {
-                html.classList.add('dark');
-                if ($('sunIcon')) $('sunIcon').classList.remove('hidden');
-                if ($('moonIcon')) $('moonIcon').classList.add('hidden');
-            } else {
-                html.classList.remove('dark');
-                if ($('sunIcon')) $('sunIcon').classList.add('hidden');
-                if ($('moonIcon')) $('moonIcon').classList.remove('hidden');
-            }
-        }
-
-        // ================= LOGIC HANDOVER (OPERAN JAGA) =================
-        function addHandoverRow(bed = '', name = '', consul = '', reply = '') {
+        function addHandoverRow() {
             const uniqueId = 'ho-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
-            const newPatient = { id: uniqueId, bed, name, consul, reply };
-            handoverPatients.push(newPatient);
-            
+            handoverPatients.push({ id: uniqueId, bed: '', name: '', consul: '', reply: '' });
             renderHandovers();
             processData(true); 
-            
             const newRow = $(`row-${uniqueId}`);
             if (newRow) newRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
@@ -891,20 +748,6 @@
         function removeHandoverRow(id) {
             patientIdToDelete = id;
             toggleDeletePatientModal(true);
-        }
-
-        function toggleDeletePatientModal(show) {
-            const overlay = $('deletePatientModal');
-            const content = $('deletePatientContent');
-            if (!overlay || !content) return;
-            
-            if (show) {
-                overlay.classList.remove('hidden');
-                setTimeout(() => content.classList.remove('scale-95', 'opacity-0'), 10);
-            } else {
-                content.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => overlay.classList.add('hidden'), 300);
-            }
         }
 
         function handleHandoverChange(id, field, value) {
@@ -915,7 +758,6 @@
             }
         }
 
-        // FUNGSI REKONSILIASI DOM SANGAT AMAN (REARRANGE DOM SECARA REUSABLE)
         function renderHandovers() {
             const container = $('handoverContainer');
             const emptyState = $('handoverEmptyState');
@@ -929,16 +771,12 @@
 
             if (emptyState) emptyState.classList.add('hidden');
 
-            // 1. Bersihkan elemen baris yang sudah dihapus secara real-time di cloud
             const existingRows = container.querySelectorAll('[id^="row-"]');
             existingRows.forEach(row => {
                 const id = row.id.replace('row-', '');
-                if (!handoverPatients.some(p => p.id === id)) {
-                    row.remove();
-                }
+                if (!handoverPatients.some(p => p.id === id)) row.remove();
             });
 
-            // 2. Terapkan rekonsiliasi struktur DOM non-destruktif
             handoverPatients.forEach((patient, idx) => {
                 let row = $(`row-${patient.id}`);
                 
@@ -947,135 +785,60 @@
                     row.id = `row-${patient.id}`;
                     row.className = "relative bg-slate-50 dark:bg-slate-900/40 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all space-y-3 animate-slide-in";
                     
-                    // Render isi input dengan template auto-resizer CSS Grid Mirroring
                     row.innerHTML = `
-                        <!-- Row Header -->
                         <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
                             <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider label-index">Pasien #${idx + 1}</span>
-                            <button type="button" onclick="removeHandoverRow('${patient.id}')" class="text-xs font-bold text-red-500 hover:text-red-600 flex items-center gap-1 transition-all" title="Hapus Pasien">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
+                            <button type="button" onclick="removeHandoverRow('${patient.id}')" class="text-xs font-bold text-red-500 hover:text-red-600 flex items-center gap-1 transition-all">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                 Hapus
                             </button>
                         </div>
-
-                        <!-- Bed & Name Fields -->
                         <div class="grid grid-cols-3 gap-2">
                             <div class="col-span-1">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">No. Bed</label>
-                                <input type="text" 
-                                       id="bed-${patient.id}"
-                                       value="${patient.bed || ''}" 
-                                       oninput="handleHandoverChange('${patient.id}', 'bed', this.value)" 
-                                       placeholder="Bed 1" 
-                                       class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none" />
+                                <label class="text-[10px] font-bold text-slate-500 uppercase block mb-1">No. Bed</label>
+                                <input type="text" id="bed-${patient.id}" value="${patient.bed || ''}" oninput="handleHandoverChange('${patient.id}', 'bed', this.value)" placeholder="Bed 1" class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white outline-none" />
                             </div>
                             <div class="col-span-2">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Nama Pasien</label>
-                                <input type="text" 
-                                       id="name-${patient.id}"
-                                       value="${patient.name || ''}" 
-                                       oninput="handleHandoverChange('${patient.id}', 'name', this.value)" 
-                                       placeholder="Contoh: Ny. S (45th)" 
-                                       class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none" />
+                                <label class="text-[10px] font-bold text-slate-500 uppercase block mb-1">Nama Pasien</label>
+                                <input type="text" id="name-${patient.id}" value="${patient.name || ''}" oninput="handleHandoverChange('${patient.id}', 'name', this.value)" placeholder="Contoh: Ny. S (45th)" class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white outline-none" />
                             </div>
                         </div>
-
-                        <!-- Consultation & Response Fields -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div>
-                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Konsulan & Diagnosa / Masalah</label>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase block mb-1">Konsulan & Diagnosa</label>
                                 <div class="grid-textarea-container relative">
                                     <div id="mirror-consul-${patient.id}" class="grid-textarea-mirror text-xs p-2.5 min-h-[140px] border border-transparent whitespace-pre-wrap break-all">${patient.consul || ''}\n</div>
-                                    <textarea id="consul-${patient.id}"
-                                              oninput="$('mirror-consul-${patient.id}').textContent = this.value + '\\n'; handleHandoverChange('${patient.id}', 'consul', this.value)" 
-                                              placeholder="Tulis diagnosa lengkap..." 
-                                              class="grid-textarea-input w-full h-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none">${patient.consul || ''}</textarea>
+                                    <textarea id="consul-${patient.id}" oninput="$('mirror-consul-${patient.id}').textContent = this.value + '\\n'; handleHandoverChange('${patient.id}', 'consul', this.value)" placeholder="Tulis diagnosa lengkap..." class="grid-textarea-input w-full h-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white outline-none">${patient.consul || ''}</textarea>
                                 </div>
                             </div>
                             <div>
-                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Balasan Konsulan / Tindak Lanjut</label>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase block mb-1">Balasan / Tindak Lanjut</label>
                                 <div class="grid-textarea-container relative">
                                     <div id="mirror-reply-${patient.id}" class="grid-textarea-mirror text-xs p-2.5 min-h-[140px] border border-transparent whitespace-pre-wrap break-all">${patient.reply || ''}\n</div>
-                                    <textarea id="reply-${patient.id}"
-                                              oninput="$('mirror-reply-${patient.id}').textContent = this.value + '\\n'; handleHandoverChange('${patient.id}', 'reply', this.value)" 
-                                              placeholder="Tulis rencana terapi..." 
-                                              class="grid-textarea-input w-full h-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none">${patient.reply || ''}</textarea>
+                                    <textarea id="reply-${patient.id}" oninput="$('mirror-reply-${patient.id}').textContent = this.value + '\\n'; handleHandoverChange('${patient.id}', 'reply', this.value)" placeholder="Tulis rencana terapi..." class="grid-textarea-input w-full h-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white outline-none">${patient.reply || ''}</textarea>
                                 </div>
                             </div>
                         </div>
                     `;
                     container.appendChild(row);
                 } else {
-                    // Update konten input selektif tanpa merusak posisi kursor ketik dokter lain
                     const bedInput = $(`bed-${patient.id}`);
                     const nameInput = $(`name-${patient.id}`);
                     const consulInput = $(`consul-${patient.id}`);
                     const replyInput = $(`reply-${patient.id}`);
-                    const mirrorConsul = $(`mirror-consul-${patient.id}`);
-                    const mirrorReply = $(`mirror-reply-${patient.id}`);
+                    
+                    applyRemoteValue(bedInput, patient.bed || '');
+                    applyRemoteValue(nameInput, patient.name || '');
+                    if (applyRemoteValue(consulInput, patient.consul || '')) $(`mirror-consul-${patient.id}`).textContent = (patient.consul || '') + '\n';
+                    if (applyRemoteValue(replyInput, patient.reply || '')) $(`mirror-reply-${patient.id}`).textContent = (patient.reply || '') + '\n';
 
-                    if (document.activeElement !== bedInput && bedInput.value !== (patient.bed || '')) {
-                        bedInput.value = patient.bed || '';
-                    }
-                    if (document.activeElement !== nameInput && nameInput.value !== (patient.name || '')) {
-                        nameInput.value = patient.name || '';
-                    }
-                    if (document.activeElement !== consulInput && consulInput.value !== (patient.consul || '')) {
-                        consulInput.value = patient.consul || '';
-                        if (mirrorConsul) mirrorConsul.textContent = (patient.consul || '') + '\n';
-                    }
-                    if (document.activeElement !== replyInput && replyInput.value !== (patient.reply || '')) {
-                        replyInput.value = patient.reply || '';
-                        if (mirrorReply) mirrorReply.textContent = (patient.reply || '') + '\n';
-                    }
-
-                    // Enforce urutan elemen di DOM agar tetap presisi
                     container.appendChild(row);
-
                     const labelIndex = row.querySelector('.label-index');
-                    if (labelIndex) {
-                        labelIndex.textContent = `Pasien #${idx + 1}`;
-                    }
+                    if (labelIndex) labelIndex.textContent = `Pasien #${idx + 1}`;
                 }
             });
         }
 
-        // ================= RESET KHUSUS LAPORAN HARIAN (ISOLATED) =================
-        function resetLaporanOnly() {
-            if ($('inputKendala')) {
-                $('inputKendala').value = '';
-                $('mirror-inputKendala').textContent = '';
-            }
-            
-            SHIFTS_CONFIG.forEach(shift => {
-                const sId = shift.id;
-                if ($(`dr-${sId}`)) $(`dr-${sId}`).value = '';
-                if ($(`drExtra-${sId}`)) $(`drExtra-${sId}`).value = '';
-                if ($(`bpjs-${sId}`)) $(`bpjs-${sId}`).value = '0';
-                if ($(`umum-${sId}`)) $(`umum-${sId}`).value = '0';
-                if ($(`bpjsKet-${sId}`)) { $(`bpjsKet-${sId}`).value = ''; $(`mirror-bpjsKet-${sId}`).textContent = ''; }
-                if ($(`umumKet-${sId}`)) { $(`umumKet-${sId}`).value = ''; $(`mirror-umumKet-${sId}`).textContent = ''; }
-                if ($(`doa-${sId}`)) { $(`doa-${sId}`).value = ''; $(`mirror-doa-${sId}`).textContent = ''; }
-                if ($(`meninggal-${sId}`)) { $(`meninggal-${sId}`).value = ''; $(`mirror-meninggal-${sId}`).textContent = ''; }
-                if ($(`mcu-${sId}`)) { $(`mcu-${sId}`).value = ''; $(`mirror-mcu-${sId}`).textContent = ''; }
-                if ($(`pkmRujukKet-${sId}`)) { $(`pkmRujukKet-${sId}`).value = ''; $(`mirror-pkmRujukKet-${sId}`).textContent = ''; }
-                if ($(`rsLain-${sId}`)) { $(`rsLain-${sId}`).value = ''; $(`mirror-rsLain-${sId}`).textContent = ''; }
-                
-                SOURCES.forEach(src => {
-                    if ($(`${src.id}RI-${sId}`)) $(`${src.id}RI-${sId}`).value = '0';
-                    if ($(`${src.id}RJ-${sId}`)) $(`${src.id}RJ-${sId}`).value = '0';
-                });
-            });
-
-            setDefaultDate();
-            processData(true); // Kirim data kosong ke cloud secara real-time
-            toggleModal(false);
-            showToast('Laporan Jaga Harian Direset!');
-        }
-
-        // ================= PENYUSUNAN DRAP PREVIEW LAPORAN HARIAN =================
         function processData(shouldTriggerSave = true) {
             let totalAll = 0;
             const nowTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }); 
@@ -1142,29 +905,17 @@
             reportText += `Terima Kasih.`;
 
             if ($('outputReport')) $('outputReport').value = reportText;
-            
-            if (shouldTriggerSave) {
-                triggerDbUpdate();
-            }
+            if (shouldTriggerSave) triggerDbUpdate();
         }
 
         function shareToWA() {
-            const text = $('outputReport').value;
-            const encodedText = encodeURIComponent(text);
-            const deepLink = `whatsapp://send?text=${encodedText}`;
-            const universalLink = `https://wa.me/?text=${encodedText}`;
-
-            window.location.assign(deepLink);
-            setTimeout(() => {
-                if (document.hasFocus()) {
-                    window.location.assign(universalLink);
-                }
-            }, 500);
+            const encodedText = encodeURIComponent($('outputReport').value);
+            window.location.assign(`whatsapp://send?text=${encodedText}`);
+            setTimeout(() => { if (document.hasFocus()) window.location.assign(`https://wa.me/?text=${encodedText}`); }, 500);
         }
 
         function showToast(msg) {
-            const toast = $('toast');
-            const msgEl = $('toastMsg');
+            const toast = $('toast'), msgEl = $('toastMsg');
             if (toast && msgEl) {
                 msgEl.textContent = msg;
                 toast.classList.remove('translate-y-20');
@@ -1173,157 +924,82 @@
         }
 
         function toggleModal(show) {
-            const overlay = $('modalOverlay');
-            const content = $('modalContent');
-            if (!overlay || !content) return;
-            
-            if (show) {
-                overlay.classList.remove('hidden');
-                setTimeout(() => content.classList.remove('scale-95', 'opacity-0'), 10);
-            } else {
-                content.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => overlay.classList.add('hidden'), 300);
-            }
+            const o = $('modalOverlay'), c = $('modalContent');
+            if (!o || !c) return;
+            if (show) { o.classList.remove('hidden'); setTimeout(() => c.classList.remove('scale-95', 'opacity-0'), 10); } 
+            else { c.classList.add('scale-95', 'opacity-0'); setTimeout(() => o.classList.add('hidden'), 300); }
         }
 
-        // Jalur inisialisasi autentikasi
-        const initAuth = async () => {
-            try {
-                updateSyncBadge('syncing', 'Menghubungkan Auth...');
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
+        function toggleDeletePatientModal(show) {
+            const o = $('deletePatientModal'), c = $('deletePatientContent');
+            if (!o || !c) return;
+            if (show) { o.classList.remove('hidden'); setTimeout(() => c.classList.remove('scale-95', 'opacity-0'), 10); } 
+            else { c.classList.add('scale-95', 'opacity-0'); setTimeout(() => o.classList.add('hidden'), 300); }
+        }
+
+        function resetLaporanOnly() {
+            document.querySelectorAll('input, select, textarea').forEach(el => {
+                if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity' && !el.id.includes('bed-') && !el.id.includes('name-') && !el.id.includes('consul-') && !el.id.includes('reply-')) {
+                    if (el.tagName === 'INPUT' && el.type === 'number') el.value = '0';
+                    else el.value = '';
+                    if ($(`mirror-${el.id}`)) $(`mirror-${el.id}`).textContent = '';
                 }
-            } catch (err) {
-                console.error("Gagal melakukan autentikasi:", err);
-                updateSyncBadge('error', 'Gagal Autentikasi');
-            }
-        };
+            });
+            setDefaultDate(); processData(true); toggleModal(false); showToast('Laporan Direset!');
+        }
 
-        // ================= GLOBAL BINDINGS =================
-        window.toggleMainSection = toggleMainSection;
-        window.togglePreviewSection = togglePreviewSection;
-        window.toggleShift = toggleShift;
-        window.addHandoverRow = addHandoverRow;
-        window.removeHandoverRow = removeHandoverRow;
-        window.handleHandoverChange = handleHandoverChange;
-        window.setDefaultDate = setDefaultDate;
-        window.toggleModal = toggleModal;
-        window.resetLaporanOnly = resetLaporanOnly;
-        window.toggleDeletePatientModal = toggleDeletePatientModal;
+        window.toggleMainSection = toggleMainSection; window.togglePreviewSection = togglePreviewSection;
+        window.toggleShift = toggleShift; window.addHandoverRow = addHandoverRow; window.removeHandoverRow = removeHandoverRow;
+        window.handleHandoverChange = handleHandoverChange; window.setDefaultDate = setDefaultDate;
+        window.toggleModal = toggleModal; window.resetLaporanOnly = resetLaporanOnly; window.toggleDeletePatientModal = toggleDeletePatientModal;
 
-        // ================= INISIALISASI UTAMA SISTEM =================
         window.onload = async () => {
-            renderShifts();
-            setDefaultDate();
-            
-            updateLiveClock();
-            setInterval(updateLiveClock, 1000);
-            setInterval(() => processData(false), 60000); // Sinkronisasi lokal berkala 60 detik
+            renderShifts(); setDefaultDate(); updateLiveClock();
+            setInterval(updateLiveClock, 1000); setInterval(() => processData(false), 60000); 
 
-            // Listener Autentikasi Firebase
             onAuthStateChanged(auth, (user) => {
                 currentUser = user;
-                if (user) {
-                    console.log("Logged in successfully as UID:", user.uid);
-                    setupRealtimeSync();
-                    setupThemeSync(user.uid); // Muat preferensi tema
-                } else {
-                    updateSyncBadge('error', 'Auth Diperlukan');
-                }
+                if (user) setupRealtimeSync();
+                else updateSyncBadge('error', 'Auth Diperlukan');
             });
 
-            // Jalankan autentikasi
-            await initAuth();
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token);
+                else await signInAnonymously(auth);
+            } catch (err) { updateSyncBadge('error', 'Gagal Autentikasi'); }
 
-            // Mencegah gangguan kursor ketika data diinput dokter
             document.body.addEventListener('input', (e) => {
                 if (isSyncingFromDb) return;
-                const tag = e.target.tagName;
-                if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
-                    if (e.target.id !== 'inputDate') {
-                        processData(true);
-                    }
-                }
+                if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName) && e.target.id !== 'inputDate') processData(true);
             });
 
-            // Sinkronisasi data ketika tanggal diganti
             if ($('inputDate')) {
-                $('inputDate').addEventListener('change', () => {
-                    setupRealtimeSync();
-                });
-                $('inputDate').addEventListener('blur', () => {
-                    setupRealtimeSync();
-                });
+                $('inputDate').addEventListener('change', setupRealtimeSync);
+                $('inputDate').addEventListener('blur', setupRealtimeSync);
             }
 
             if ($('darkToggle')) {
-                $('darkToggle').onclick = async () => {
+                $('darkToggle').onclick = () => {
                     const html = document.documentElement;
-                    const isDark = html.classList.contains('dark');
-                    let newTheme = 'light';
-                    
-                    if (isDark) {
-                        html.classList.remove('dark');
-                        $('sunIcon').classList.add('hidden');
-                        $('moonIcon').classList.remove('hidden');
-                        newTheme = 'light';
-                    } else {
-                        html.classList.add('dark');
-                        $('sunIcon').classList.remove('hidden');
-                        $('moonIcon').classList.add('hidden');
-                        newTheme = 'dark';
-                    }
-
-                    // Simpan tema ke Firestore secara dinamis
-                    if (currentUser) {
-                        try {
-                            const themeRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'settings', 'themePreference');
-                            await setDoc(themeRef, { theme: newTheme }, { merge: true });
-                        } catch (err) {
-                            console.error("Gagal menyimpan preferensi tema:", err);
-                        }
-                    }
+                    html.classList.toggle('dark');
+                    $('sunIcon').classList.toggle('hidden'); $('moonIcon').classList.toggle('hidden');
                 };
             }
 
-            if ($('copyBtn')) {
-                $('copyBtn').onclick = () => {
-                    const area = $('outputReport');
-                    if (area) {
-                        area.select();
-                        try {
-                            document.execCommand('copy');
-                            showToast('Laporan Disalin!');
-                        } catch(err) {
-                            showToast('Gagal menyalin');
-                        }
-                    }
-                };
-            }
-
+            if ($('copyBtn')) $('copyBtn').onclick = () => { $('outputReport').select(); document.execCommand('copy'); showToast('Laporan Disalin!'); };
             if ($('waBtn')) $('waBtn').onclick = shareToWA;
-            if ($('refreshBtn')) $('refreshBtn').onclick = () => window.location.reload();
             
-            // Listener Modal Reset Laporan
             if ($('cancelReset')) $('cancelReset').onclick = () => toggleModal(false);
             if ($('confirmReset')) $('confirmReset').onclick = resetLaporanOnly;
 
-            // Listener Modal Hapus Pasien Handover
             if ($('cancelDeletePatient')) $('cancelDeletePatient').onclick = () => toggleDeletePatientModal(false);
-            if ($('confirmDeletePatient')) {
-                $('confirmDeletePatient').onclick = () => {
-                    if (patientIdToDelete) {
-                        handoverPatients = handoverPatients.filter(p => p.id !== patientIdToDelete);
-                        renderHandovers();
-                        processData(true); // Kirim perubahan ke Firebase secara real-time
-                        patientIdToDelete = null;
-                        showToast('Pasien Berhasil Dihapus!');
-                    }
-                    toggleDeletePatientModal(false);
-                };
-            }
+            if ($('confirmDeletePatient')) $('confirmDeletePatient').onclick = () => {
+                if (patientIdToDelete) {
+                    handoverPatients = handoverPatients.filter(p => p.id !== patientIdToDelete);
+                    renderHandovers(); processData(true); patientIdToDelete = null; showToast('Pasien Dihapus!');
+                }
+                toggleDeletePatientModal(false);
+            };
         };
     </script>
 </body>
