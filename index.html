@@ -656,7 +656,14 @@
                 
                 const inputs = document.querySelectorAll('input, select, textarea');
                 inputs.forEach(el => {
-                    if (el.id && el.id !== 'inputCity' && el.id !== 'inputDate') {
+                    // Kecualikan input Handover agar tidak terjadi data ganda di root cloud
+                    if (el.id && 
+                        el.id !== 'inputCity' && 
+                        el.id !== 'inputDate' && 
+                        !el.id.startsWith('bed-') && 
+                        !el.id.startsWith('name-') && 
+                        !el.id.startsWith('consul-') && 
+                        !el.id.startsWith('reply-')) {
                         dataToSave[el.id] = el.value;
                     }
                 });
@@ -686,13 +693,51 @@
             isSyncingFromDb = true; 
 
             if (data.handovers) {
-                handoverPatients = data.handovers;
+                // Deteksi kursor aktif untuk melindungi data yang sedang diketik
+                const activeId = document.activeElement ? document.activeElement.id : null;
+                
+                let mergedHandovers = [];
+                
+                // 1. Sinkronisasi data dari Cloud ke Lokal
+                data.handovers.forEach(cloudPatient => {
+                    let localPatient = handoverPatients.find(p => p.id === cloudPatient.id);
+                    if (localPatient) {
+                        let mergedPatient = { ...cloudPatient };
+                        
+                        // Proteksi State: JANGAN timpa array dengan data cloud JIKA user SEDANG mengetik di field ini
+                        if (activeId === `bed-${localPatient.id}`) mergedPatient.bed = localPatient.bed;
+                        if (activeId === `name-${localPatient.id}`) mergedPatient.name = localPatient.name;
+                        if (activeId === `consul-${localPatient.id}`) mergedPatient.consul = localPatient.consul;
+                        if (activeId === `reply-${localPatient.id}`) mergedPatient.reply = localPatient.reply;
+                        
+                        mergedHandovers.push(mergedPatient);
+                    } else {
+                        mergedHandovers.push(cloudPatient);
+                    }
+                });
+                
+                // 2. Pertahankan pasien yang baru saja ditambahkan lokal (belum sempat tersimpan ke cloud)
+                handoverPatients.forEach(localPatient => {
+                    if (!mergedHandovers.find(p => p.id === localPatient.id)) {
+                        mergedHandovers.push(localPatient);
+                    }
+                });
+                
+                handoverPatients = mergedHandovers;
                 renderHandovers();
             }
 
             const inputs = document.querySelectorAll('input, select, textarea');
             inputs.forEach(el => {
-                if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity' && data[el.id] !== undefined) {
+                if (el.id && 
+                    el.id !== 'inputDate' && 
+                    el.id !== 'inputCity' && 
+                    !el.id.startsWith('bed-') && 
+                    !el.id.startsWith('name-') && 
+                    !el.id.startsWith('consul-') && 
+                    !el.id.startsWith('reply-') && 
+                    data[el.id] !== undefined) {
+                    
                     // Gunakan fungsi applyRemoteValue agar aman & ada animasinya
                     if (applyRemoteValue(el, data[el.id])) {
                         const mirror = $(`mirror-${el.id}`);
