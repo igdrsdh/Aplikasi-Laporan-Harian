@@ -14,15 +14,15 @@
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
                     },
                     animation: {
-                        'ecg-scan': 'ecg-draw 3s linear infinite', // PERBAIKAN: Durasi diperlambat
+                        'ecg-scan': 'ecg-draw 3s linear infinite',
                         'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         'ecg-draw': {
-                            '0%': { 'stroke-dashoffset': '200', 'opacity': '0' }, // PERBAIKAN: Nilai diperbesar
+                            '0%': { 'stroke-dashoffset': '200', 'opacity': '0' },
                             '10%': { 'opacity': '1' },
                             '90%': { 'opacity': '1' },
-                            '100%': { 'stroke-dashoffset': '-200', 'opacity': '0' }, // PERBAIKAN: Nilai diperbesar
+                            '100%': { 'stroke-dashoffset': '-200', 'opacity': '0' },
                         }
                     }
                 }
@@ -54,7 +54,6 @@
             box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
         }
 
-        /* --- TEKNIK CSS GRID AUTO-RESIZER (MENIADAKAN GEJALAH LAYAR LONCAT) --- */
         .grid-textarea-container {
             display: grid;
         }
@@ -75,7 +74,6 @@
             height: 100%;
         }
 
-        /* PERBAIKAN: Tinggi fleksibel */
         #outputReport {
             overflow-y: auto !important;
             min-height: 300px;
@@ -89,13 +87,11 @@
             }
         }
 
-        /* PERBAIKAN: ECG Path */
         .ecg-path {
             stroke-dasharray: 200;
             animation: ecg-draw 3s linear infinite;
         }
 
-        /* --- ANIMASI SNAP SANGAT RINGAN --- */
         .collapsible-content {
             display: none;
         }
@@ -111,7 +107,6 @@
             contain: layout; 
         }
 
-        /* PERBAIKAN: Select di Mobile */
         select {
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -154,7 +149,6 @@
                             </div>
                             <span id="liveClock" class="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400">Loading...</span>
                         </div>
-                        <!-- Indikator Sinkronisasi Cloud -->
                         <div id="syncStatus" class="flex items-center gap-1 text-[9px] font-bold text-amber-500 uppercase tracking-wider">
                             <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                             Menghubungkan...
@@ -163,9 +157,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <!-- Tombol Tema Gelap Terang -->
                 <button id="darkToggle" class="w-10 h-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all border border-slate-300 dark:border-slate-700 shadow-sm" title="Ubah Tema">
-                    <!-- Sun Icon -->
                     <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="4" />
                         <path d="M12 2v2" />
@@ -177,12 +169,10 @@
                         <path d="M6.34 17.66l-1.41 1.41" />
                         <path d="M19.07 4.93l-1.41 1.41" />
                     </svg>
-                    <!-- Moon Icon -->
                     <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                     </svg>
                 </button>
-                <!-- Tombol Refresh -->
                 <button id="refreshBtn" class="w-10 sm:w-auto h-10 px-0 sm:px-4 flex items-center justify-center gap-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-sm font-bold transition-all shadow-md" title="Refresh Halaman">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -198,7 +188,6 @@
             
             <!-- ================= BAGIAN 1: LAPORAN HARIAN (COLLAPSIBLE) ================= -->
             <div class="space-y-4">
-                <!-- Header Kolaps Bagian 1 -->
                 <button type="button" onclick="toggleMainSection('section1')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-755 border border-slate-300 dark:border-slate-700 rounded-2xl transition-all shadow-sm focus:outline-none">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 flex items-center justify-center bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 rounded-xl transition-colors">
@@ -213,10 +202,8 @@
                     </svg>
                 </button>
 
-                <!-- Konten Bagian 1 -->
                 <div id="section1Content" class="collapsible-content expanded">
                     <div class="collapsible-inner pt-4 space-y-6">
-                        <!-- Data Umum -->
                         <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center gap-2 text-sky-600 dark:text-sky-400 font-bold uppercase text-xs tracking-widest">
@@ -228,7 +215,6 @@
                                 <div class="flex items-center gap-3">
                                     <button onclick="setDefaultDate()" class="text-[10px] font-bold text-sky-500 hover:text-sky-600 uppercase">Set Hari Ini</button>
                                     <span class="text-slate-300 dark:text-slate-700">|</span>
-                                    <!-- Tombol Reset Laporan Harian Terisolasi -->
                                     <button onclick="toggleModal(true)" class="text-[10px] font-bold text-red-500 hover:text-red-600 uppercase flex items-center gap-1">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -249,10 +235,8 @@
                             </div>
                         </section>
 
-                        <!-- Shifts Container (JS Generated) -->
                         <div id="shiftsContainer" class="space-y-4"></div>
 
-                        <!-- Kendala -->
                         <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
                             <div class="flex items-center gap-2 mb-4 text-amber-600 dark:text-amber-500 font-bold uppercase text-xs tracking-widest">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -266,9 +250,7 @@
                             </div>
                         </section>
 
-                        <!-- Report Output (Preview - COLLAPSIBLE) -->
                         <section class="bg-slate-900 dark:bg-black rounded-2xl shadow-2xl overflow-hidden border border-slate-800">
-                            <!-- Clickable Header Button -->
                             <button type="button" onclick="togglePreviewSection()" class="w-full px-6 py-4 bg-slate-800 hover:bg-slate-700/80 dark:bg-slate-950 dark:hover:bg-slate-900/80 border-b border-slate-700 flex justify-between items-center text-left focus:outline-none transition-all duration-200">
                                 <div class="flex items-center gap-2 text-white font-bold text-xs sm:text-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -286,7 +268,6 @@
                                 </div>
                             </button>
 
-                            <!-- Collapsible Content Wrapper -->
                             <div id="previewContent" class="collapsible-content">
                                 <textarea id="outputReport" readonly class="w-full p-6 bg-transparent text-emerald-400 font-mono text-xs md:text-sm resize-none outline-none custom-scrollbar" spellcheck="false"></textarea>
                                 <div class="p-4 bg-slate-800 dark:bg-slate-950 flex flex-col gap-3 border-t border-slate-800">
@@ -313,7 +294,6 @@
 
             <!-- ================= BAGIAN 2: HANDOVER JAGA (COLLAPSIBLE) ================= -->
             <div class="space-y-4 pt-6 border-t border-slate-300 dark:border-slate-800">
-                <!-- Header Kolaps Bagian 2 -->
                 <button type="button" onclick="toggleMainSection('section2')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-755 border border-slate-300 dark:border-slate-700 rounded-2xl transition-all shadow-sm focus:outline-none">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 flex items-center justify-center bg-violet-500/10 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400 rounded-xl transition-colors">
@@ -328,10 +308,8 @@
                     </svg>
                 </button>
 
-                <!-- Konten Bagian 2 -->
                 <div id="section2Content" class="collapsible-content">
                     <div class="collapsible-inner pt-4 space-y-6">
-                        <!-- Operan Jaga / Deposit Pasien IGD -->
                         <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors space-y-4">
                             <div class="flex items-center justify-between mb-2">
                                 <div class="flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold uppercase text-xs tracking-widest">
@@ -348,15 +326,12 @@
                                 </button>
                             </div>
                             
-                            <div id="handoverContainer" class="space-y-4">
-                                <!-- Baris operan dibuat secara dinamis -->
-                            </div>
+                            <div id="handoverContainer" class="space-y-4"></div>
                             
                             <div id="handoverEmptyState" class="text-center py-6 text-slate-400 dark:text-slate-500 text-xs italic">
                                 Belum ada pasien operan. Klik "Tambah Pasien" untuk membuat daftar operan jaga.
                             </div>
 
-                            <!-- Tombol Ekspor Khusus Handover Jaga -->
                             <div id="handoverActions" class="hidden pt-4 border-t border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row gap-3">
                                 <button type="button" onclick="copyHandover()" class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold text-xs transition-all shadow flex items-center justify-center gap-2 active:scale-95">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -375,7 +350,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </main>
 
@@ -429,7 +403,6 @@
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // PERBAIKAN 1: Konfigurasi Firebase dengan fallback
         const DEFAULT_FIREBASE_CONFIG = {
             apiKey: "AIzaSyBX4BETROyo2VacszXnZSpTIyfhh4lwjKg",
             authDomain: "laporan-harian-igd.firebaseapp.com",
@@ -440,7 +413,6 @@
             appId: "1:105675683087:web:fc853158e7489713f3fa7a"
         };
 
-        // PERBAIKAN 2: Cek variable global dengan aman
         let firebaseConfig;
         try {
             firebaseConfig = (typeof __firebase_config !== 'undefined' && __firebase_config) 
@@ -453,7 +425,6 @@
 
         const appId = (typeof __app_id !== 'undefined' && __app_id) ? __app_id : 'laporan-harian-igd';
 
-        // Inisialisasi Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -488,13 +459,12 @@
         let writeTimeout = null;
         let isSyncingFromDb = false;
         let patientIdToDelete = null;
-        let isInitialized = false; // PERBAIKAN 3: Flag inisialisasi
+        let isInitialized = false;
 
         const $ = (id) => document.getElementById(id);
         const getVal = (id) => $(id) ? $(id).value : '';
         const getNum = (id) => parseInt(getVal(id)) || 0;
 
-        // Jam Real-time
         function updateLiveClock() {
             const now = new Date();
             const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -510,11 +480,10 @@
             const formattedDate = now.toLocaleDateString('id-ID', options);
             if ($('inputDate')) {
                 $('inputDate').value = formattedDate;
-                if (isInitialized) processData(); // Hanya proses setelah init
+                if (isInitialized) processData();
             }
         }
 
-        // Render struktur shift jaga
         function renderShifts() {
             const container = $('shiftsContainer');
             if (!container) return;
@@ -656,12 +625,9 @@
                 `;
             });
             container.innerHTML = html;
-            
-            // PERBAIKAN 4: Attach event listener setelah render
             attachInputListeners();
         }
 
-        // PERBAIKAN 5: Fungsi untuk attach listener ke semua input
         function attachInputListeners() {
             document.querySelectorAll('input, select, textarea').forEach(el => {
                 if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity') {
@@ -707,7 +673,6 @@
             } else {
                 content.classList.add('expanded');
                 icon.classList.add('rotate-180');
-
                 setTimeout(() => {
                     content.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }, 80);
@@ -729,7 +694,6 @@
             }
         }
 
-        // Toggling khusus untuk bagian Preview Laporan Harian
         function togglePreviewSection() {
             const content = $('previewContent');
             const arrow = $('arrow-preview');
@@ -742,47 +706,32 @@
             } else {
                 content.classList.add('expanded');
                 arrow.classList.remove('-rotate-90');
-                
                 setTimeout(() => {
                     content.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }, 80);
             }
         }
 
-        // ================= SINKRONISASI DATA FIRESTORE (DEBUNCED) =================
         function getSanitizedDateId() {
             const dateVal = getVal('inputDate') || 'No_Date';
             return dateVal.trim().replace(/\//g, '_').replace(/\s+/g, '_');
         }
 
-        // Update indikator sinkronisasi
         function updateSyncBadge(status, customMsg = '') {
             const badge = $('syncStatus');
             if (!badge) return;
 
             if (status === 'waiting') {
-                badge.innerHTML = `
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 opacity-60"></span>
-                    ${customMsg || 'Menunggu...'}
-                `;
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 opacity-60"></span>${customMsg || 'Menunggu...'}`;
                 badge.className = "flex items-center gap-1 text-[9px] font-bold text-amber-600 dark:text-amber-500 uppercase tracking-wider";
             } else if (status === 'syncing') {
-                badge.innerHTML = `
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
-                    ${customMsg || 'Menyinkronkan...'}
-                `;
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>${customMsg || 'Menyinkronkan...'}`;
                 badge.className = "flex items-center gap-1 text-[9px] font-bold text-amber-500 uppercase tracking-wider";
             } else if (status === 'connected') {
-                badge.innerHTML = `
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Terhubung & Sinkron
-                `;
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>Terhubung & Sinkron`;
                 badge.className = "flex items-center gap-1 text-[9px] font-bold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider";
             } else if (status === 'error') {
-                badge.innerHTML = `
-                    <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-                    ${customMsg || 'Offline / Error'}
-                `;
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>${customMsg || 'Offline / Error'}`;
                 badge.className = "flex items-center gap-1 text-[9px] font-bold text-red-500 uppercase tracking-wider animate-pulse";
             }
         }
@@ -826,17 +775,14 @@
             }, 3000); 
         }
 
-        // ================= UPDATE UI DARI DATA CLOUD =================
         function updateInputsFromFirestore(data) {
             isSyncingFromDb = true;
 
-            // Sinkronisasi Data Handover secara aman
             if (data.handovers) {
                 handoverPatients = data.handovers;
                 renderHandovers();
             }
 
-            // PERBAIKAN 6: Update mirror saat sync dari cloud
             const inputs = document.querySelectorAll('input, select, textarea');
             inputs.forEach(el => {
                 if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity' && data[el.id] !== undefined) {
@@ -846,7 +792,6 @@
                         const mirror = $(`mirror-${el.id}`);
                         if (mirror) {
                             mirror.textContent = data[el.id] + '\n';
-                            // Trigger auto-resize
                             el.dispatchEvent(new Event('input', { bubbles: true }));
                         }
                     }
@@ -857,7 +802,6 @@
             isSyncingFromDb = false;
         }
 
-        // ================= MEMBERSIHKAN KOLOM UNTUK HARI BARU =================
         function clearLocalInputsForNewDate() {
             isSyncingFromDb = true;
             
@@ -885,7 +829,6 @@
             isSyncingFromDb = false;
         }
 
-        // ================= REAL-TIME LISTENER DATA LAPORAN =================
         function setupRealtimeSync() {
             if (!currentUser) return;
 
@@ -915,7 +858,6 @@
             });
         }
 
-        // ================= SINKRONISASI PREFERENSI TEMA GELAP/TERANG VIA CLOUD =================
         function setupThemeSync(userId) {
             if (unsubscribeTheme) {
                 unsubscribeTheme();
@@ -945,7 +887,7 @@
             }
         }
 
-        // ================= LOGIC HANDOVER (OPERAN JAGA) =================
+        // ================= LOGIC HANDOVER (DIPERBAIKI) =================
         function addHandoverRow(bed = '', name = '', consul = '', reply = '') {
             const uniqueId = 'ho-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
             const newPatient = { id: uniqueId, bed, name, consul, reply };
@@ -985,7 +927,7 @@
             }
         }
 
-        // FUNGSI REKONSILIASI DOM SANGAT AMAN (REARRANGE DOM SECARA REUSABLE)
+        // PERBAIKAN TOTAL: renderHandovers() dengan DOM reconciliation
         function renderHandovers() {
             const container = $('handoverContainer');
             const emptyState = $('handoverEmptyState');
@@ -1002,7 +944,7 @@
             if (emptyState) emptyState.classList.add('hidden');
             if (handoverActions) handoverActions.classList.remove('hidden');
 
-            // 1. Bersihkan elemen baris yang sudah dihapus secara real-time di cloud
+            // 1. Hapus elemen baris yang sudah tidak ada di data
             const existingRows = container.querySelectorAll('[id^="row-"]');
             existingRows.forEach(row => {
                 const id = row.id.replace('row-', '');
@@ -1011,18 +953,17 @@
                 }
             });
 
-            // 2. Terapkan rekonsiliasi struktur DOM non-destruktif
+            // 2. Update atau buat baris baru
             handoverPatients.forEach((patient, idx) => {
                 let row = $(`row-${patient.id}`);
                 
                 if (!row) {
+                    // Buat baris baru
                     row = document.createElement('div');
                     row.id = `row-${patient.id}`;
                     row.className = "relative bg-slate-50 dark:bg-slate-900/40 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all space-y-3 animate-slide-in";
                     
-                    // Render isi input dengan template auto-resizer CSS Grid Mirroring
                     row.innerHTML = `
-                        <!-- Row Header -->
                         <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
                             <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider label-index">Pasien #${idx + 1}</span>
                             <button type="button" onclick="removeHandoverRow('${patient.id}')" class="text-xs font-bold text-red-500 hover:text-red-600 flex items-center gap-1 transition-all" title="Hapus Pasien">
@@ -1033,38 +974,33 @@
                             </button>
                         </div>
 
-                        <!-- Bed & Name Fields -->
                         <div class="grid grid-cols-3 gap-2">
                             <div class="col-span-1">
                                 <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">No. Bed</label>
                                 <input type="text" 
                                        id="bed-${patient.id}"
                                        value="${patient.bed || ''}" 
-                                       oninput="handleHandoverChange('${patient.id}', 'bed', this.value)" 
                                        placeholder="Bed 1" 
-                                       class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none" />
+                                       class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none handover-input" />
                             </div>
                             <div class="col-span-2">
                                 <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Nama Pasien</label>
                                 <input type="text" 
                                        id="name-${patient.id}"
                                        value="${patient.name || ''}" 
-                                       oninput="handleHandoverChange('${patient.id}', 'name', this.value)" 
                                        placeholder="Contoh: Ny. S (45th)" 
-                                       class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none" />
+                                       class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none handover-input" />
                             </div>
                         </div>
 
-                        <!-- Consultation & Response Fields -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div>
                                 <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Konsulan & Diagnosa / Masalah</label>
                                 <div class="grid-textarea-container relative">
                                     <div id="mirror-consul-${patient.id}" class="grid-textarea-mirror text-xs p-2.5 min-h-[140px] border border-transparent whitespace-pre-wrap break-all">${patient.consul || ''}\n</div>
                                     <textarea id="consul-${patient.id}"
-                                              oninput="$('mirror-consul-${patient.id}').textContent = this.value + '\\n'; handleHandoverChange('${patient.id}', 'consul', this.value)" 
                                               placeholder="Tulis diagnosa lengkap..." 
-                                              class="grid-textarea-input w-full h-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none">${patient.consul || ''}</textarea>
+                                              class="grid-textarea-input handover-textarea w-full h-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none">${patient.consul || ''}</textarea>
                                 </div>
                             </div>
                             <div>
@@ -1072,50 +1008,47 @@
                                 <div class="grid-textarea-container relative">
                                     <div id="mirror-reply-${patient.id}" class="grid-textarea-mirror text-xs p-2.5 min-h-[140px] border border-transparent whitespace-pre-wrap break-all">${patient.reply || ''}\n</div>
                                     <textarea id="reply-${patient.id}"
-                                              oninput="$('mirror-reply-${patient.id}').textContent = this.value + '\\n'; handleHandoverChange('${patient.id}', 'reply', this.value)" 
                                               placeholder="Tulis rencana terapi..." 
-                                              class="grid-textarea-input w-full h-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none">${patient.reply || ''}</textarea>
+                                              class="grid-textarea-input handover-textarea w-full h-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none">${patient.reply || ''}</textarea>
                                 </div>
                             </div>
                         </div>
                     `;
                     container.appendChild(row);
                 } else {
-                    // Update konten input selektif tanpa merusak posisi kursor ketik dokter lain
-                    const bedInput = $(`bed-${patient.id}`);
-                    const nameInput = $(`name-${patient.id}`);
-                    const consulInput = $(`consul-${patient.id}`);
-                    const replyInput = $(`reply-${patient.id}`);
-                    const mirrorConsul = $(`mirror-consul-${patient.id}`);
-                    const mirrorReply = $(`mirror-reply-${patient.id}`);
-
-                    if (document.activeElement !== bedInput && bedInput.value !== (patient.bed || '')) {
-                        bedInput.value = patient.bed || '';
-                    }
-                    if (document.activeElement !== nameInput && nameInput.value !== (patient.name || '')) {
-                        nameInput.value = patient.name || '';
-                    }
-                    if (document.activeElement !== consulInput && consulInput.value !== (patient.consul || '')) {
-                        consulInput.value = patient.consul || '';
-                        if (mirrorConsul) mirrorConsul.textContent = (patient.consul || '') + '\n';
-                    }
-                    if (document.activeElement !== replyInput && replyInput.value !== (patient.reply || '')) {
-                        replyInput.value = patient.reply || '';
-                        if (mirrorReply) mirrorReply.textContent = (patient.reply || '') + '\n';
-                    }
-
-                    // Enforce urutan elemen di DOM agar tetap presisi
-                    container.appendChild(row);
-
+                    // Update label index saja
                     const labelIndex = row.querySelector('.label-index');
                     if (labelIndex) {
                         labelIndex.textContent = `Pasien #${idx + 1}`;
                     }
                 }
+
+                // Update input fields tanpa merusak fokus (hanya jika bukan dari cloud sync)
+                if (!isSyncingFromDb) {
+                    const bedInput = $(`bed-${patient.id}`);
+                    const nameInput = $(`name-${patient.id}`);
+                    const consulInput = $(`consul-${patient.id}`);
+                    const replyInput = $(`reply-${patient.id}`);
+
+                    if (bedInput && document.activeElement !== bedInput) bedInput.value = patient.bed || '';
+                    if (nameInput && document.activeElement !== nameInput) nameInput.value = patient.name || '';
+                    if (consulInput && document.activeElement !== consulInput) {
+                        consulInput.value = patient.consul || '';
+                        const mirrorConsul = $(`mirror-consul-${patient.id}`);
+                        if (mirrorConsul) mirrorConsul.textContent = (patient.consul || '') + '\n';
+                    }
+                    if (replyInput && document.activeElement !== replyInput) {
+                        replyInput.value = patient.reply || '';
+                        const mirrorReply = $(`mirror-reply-${patient.id}`);
+                        if (mirrorReply) mirrorReply.textContent = (patient.reply || '') + '\n';
+                    }
+                }
+
+                // Pastikan urutan di DOM
+                container.appendChild(row);
             });
         }
 
-        // ================= MENYUSUN TEKS OPERAN JAGA MANDIRI =================
         function getHandoverReportText() {
             const dateStr = getVal('inputDate') || new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             let text = `*HANDOVER IGD*\nHari, Tanggal: ${dateStr}\n\n`;
@@ -1155,7 +1088,6 @@
             const universalLink = `https://wa.me/?text=${encodedText}`;
 
             window.location.assign(deepLink);
-
             setTimeout(() => {
                 if (document.hasFocus()) {
                     window.location.assign(universalLink);
@@ -1163,7 +1095,6 @@
             }, 500);
         }
 
-        // ================= RESET KHUSUS LAPORAN HARIAN (ISOLATED) =================
         function resetLaporanOnly() {
             if ($('inputKendala')) {
                 $('inputKendala').value = '';
@@ -1191,12 +1122,11 @@
             });
 
             setDefaultDate();
-            processData(true); // Kirim data kosong ke cloud secara real-time
+            processData(true);
             toggleModal(false);
             showToast('Laporan Jaga Harian Direset!');
         }
 
-        // ================= PENYUSUNAN DRAP PREVIEW LAPORAN HARIAN =================
         function processData(shouldTriggerSave = true) {
             let totalAll = 0;
             const nowTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }); 
@@ -1307,7 +1237,6 @@
             }
         }
 
-        // Jalur inisialisasi autentikasi
         const initAuth = async () => {
             try {
                 updateSyncBadge('syncing', 'Menghubungkan Auth...');
@@ -1336,7 +1265,6 @@
         window.resetLaporanOnly = resetLaporanOnly;
         window.toggleDeletePatientModal = toggleDeletePatientModal;
 
-        // PERBAIKAN 7: Gunakan DOMContentLoaded + init flag
         function initializeApp2() {
             renderShifts();
             setDefaultDate();
@@ -1346,6 +1274,39 @@
             setInterval(() => {
                 if (isInitialized) processData(false);
             }, 60000);
+
+            // PERBAIKAN KRITIS: Delegasi event untuk input handover
+            const handoverContainer = $('handoverContainer');
+            if (handoverContainer) {
+                handoverContainer.addEventListener('input', (e) => {
+                    if (isSyncingFromDb) return;
+                    
+                    const target = e.target;
+                    
+                    // Handle textarea handover (consul & reply)
+                    if (target.classList.contains('handover-textarea')) {
+                        const patientId = target.id.replace('consul-', '').replace('reply-', '');
+                        const field = target.id.startsWith('consul-') ? 'consul' : 'reply';
+                        const value = target.value;
+                        
+                        // Update mirror
+                        const mirror = $(`mirror-${field}-${patientId}`);
+                        if (mirror) {
+                            mirror.textContent = value + '\n';
+                        }
+                        
+                        // Update data
+                        handleHandoverChange(patientId, field, value);
+                    }
+                    
+                    // Handle input handover (bed, name)
+                    if (target.classList.contains('handover-input')) {
+                        const patientId = target.id.replace('bed-', '').replace('name-', '');
+                        const field = target.id.startsWith('bed-') ? 'bed' : 'name';
+                        handleHandoverChange(patientId, field, target.value);
+                    }
+                });
+            }
 
             if ($('darkToggle')) {
                 $('darkToggle').onclick = async () => {
@@ -1417,7 +1378,7 @@
             }
         }
 
-        // PERBAIKAN 8: Gunakan DOMContentLoaded, bukan window.onload
+        // Inisialisasi saat DOM siap
         document.addEventListener('DOMContentLoaded', () => {
             initializeApp2();
             
