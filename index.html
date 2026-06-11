@@ -832,7 +832,6 @@
                     if (applyRemoteValue(consulInput, patient.consul || '')) $(`mirror-consul-${patient.id}`).textContent = (patient.consul || '') + '\n';
                     if (applyRemoteValue(replyInput, patient.reply || '')) $(`mirror-reply-${patient.id}`).textContent = (patient.reply || '') + '\n';
 
-                    container.appendChild(row);
                     const labelIndex = row.querySelector('.label-index');
                     if (labelIndex) labelIndex.textContent = `Pasien #${idx + 1}`;
                 }
