@@ -14,15 +14,15 @@
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
                     },
                     animation: {
-                        'ecg-scan': 'ecg-draw 2s linear infinite',
+                        'ecg-scan': 'ecg-draw 3s linear infinite', // PERBAIKAN: Durasi diperlambat
                         'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         'ecg-draw': {
-                            '0%': { 'stroke-dashoffset': '100', 'opacity': '0' },
+                            '0%': { 'stroke-dashoffset': '200', 'opacity': '0' }, // PERBAIKAN: Nilai diperbesar
                             '10%': { 'opacity': '1' },
                             '90%': { 'opacity': '1' },
-                            '100%': { 'stroke-dashoffset': '-100', 'opacity': '0' },
+                            '100%': { 'stroke-dashoffset': '-200', 'opacity': '0' }, // PERBAIKAN: Nilai diperbesar
                         }
                     }
                 }
@@ -33,7 +33,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overscroll-behavior-y: none;
+            -webkit-overflow-scrolling: touch;
+        }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
@@ -71,26 +75,29 @@
             height: 100%;
         }
 
-        /* Mengunci tinggi box preview secara mutlak agar tidak bisa dikecilkan saat sinkronisasi */
+        /* PERBAIKAN: Tinggi fleksibel */
         #outputReport {
             overflow-y: auto !important;
-            height: 450px !important; /* Tinggi perangkat mobile */
+            min-height: 300px;
+            height: auto;
+            max-height: 450px;
         }
         
         @media (min-width: 768px) {
             #outputReport {
-                height: 650px !important; /* Tinggi perangkat desktop */
+                max-height: 650px;
             }
         }
 
+        /* PERBAIKAN: ECG Path */
         .ecg-path {
-            stroke-dasharray: 100;
+            stroke-dasharray: 200;
+            animation: ecg-draw 3s linear infinite;
         }
 
         /* --- ANIMASI SNAP SANGAT RINGAN --- */
         .collapsible-content {
             display: none;
-            will-change: opacity;
         }
         .collapsible-content.expanded {
             display: block;
@@ -102,6 +109,17 @@
         }
         .collapsible-inner {
             contain: layout; 
+        }
+
+        /* PERBAIKAN: Select di Mobile */
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 32px !important;
         }
     </style>
 </head>
@@ -116,7 +134,7 @@
                         src="https://raw.githubusercontent.com/igdrsdh/Aplikasi-Laporan-Harian/main/LOGO%20IGD.png" 
                         alt="Logo IGD" 
                         class="w-full h-full object-contain p-1"
-                        onerror="this.src='https://img.icons8.com/fluency/96/hospital.png'"
+                        onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%230ea5e9%22/%3E%3Ctext x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22%3E+%3C/text%3E%3C/svg%3E'"
                     />
                 </div>
                 <div>
@@ -124,9 +142,9 @@
                     <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 mt-1">
                         <div class="flex items-center gap-1.5">
                             <div class="w-10 h-4 flex items-center overflow-hidden">
-                                <svg viewBox="0 0 50 20" class="w-full h-full text-emerald-500 dark:text-emerald-400">
-                                    <path class="ecg-path animate-ecg-scan" 
-                                          d="M0 10 h8 l2 -4 l2 4 h2 l2 -12 l2 18 l2 -6 h2 l2 3 l2 -3 h14" 
+                                <svg viewBox="0 0 200 20" class="w-full h-full text-emerald-500 dark:text-emerald-400">
+                                    <path class="ecg-path" 
+                                          d="M0 10 h20 l5 -8 l5 12 l5 -20 l5 25 l5 -15 h20 l5 8 l5 -10 h95" 
                                           fill="none" 
                                           stroke="currentColor" 
                                           stroke-width="1.5" 
@@ -349,11 +367,12 @@
                                 <button type="button" onclick="shareHandoverToWA()" class="flex-1 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs transition-all shadow flex items-center justify-center gap-2 active:scale-95">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                                </svg>
-                                Kirim WA Handover
-                            </button>
-                        </div>
-                    </section>
+                                    </svg>
+                                    Kirim WA Handover
+                                </button>
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </div>
 
@@ -410,24 +429,34 @@
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Konfigurasi Database Firebase 
-        const firebaseConfig = typeof __firebase_config !== 'undefined' 
-            ? JSON.parse(__firebase_config) 
-            : {
-                apiKey: "AIzaSyBX4BETROyo2VacszXnZSpTIyfhh4lwjKg",
-                authDomain: "laporan-harian-igd.firebaseapp.com",
-                databaseURL: "https://laporan-harian-igd-default-rtdb.asia-southeast1.firebasedatabase.app",
-                projectId: "laporan-harian-igd",
-                storageBucket: "laporan-harian-igd.firebasestorage.app",
-                messagingSenderId: "105675683087",
-                appId: "1:105675683087:web:fc853158e7489713f3fa7a"
-            };
+        // PERBAIKAN 1: Konfigurasi Firebase dengan fallback
+        const DEFAULT_FIREBASE_CONFIG = {
+            apiKey: "AIzaSyBX4BETROyo2VacszXnZSpTIyfhh4lwjKg",
+            authDomain: "laporan-harian-igd.firebaseapp.com",
+            databaseURL: "https://laporan-harian-igd-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "laporan-harian-igd",
+            storageBucket: "laporan-harian-igd.firebasestorage.app",
+            messagingSenderId: "105675683087",
+            appId: "1:105675683087:web:fc853158e7489713f3fa7a"
+        };
+
+        // PERBAIKAN 2: Cek variable global dengan aman
+        let firebaseConfig;
+        try {
+            firebaseConfig = (typeof __firebase_config !== 'undefined' && __firebase_config) 
+                ? JSON.parse(__firebase_config) 
+                : DEFAULT_FIREBASE_CONFIG;
+        } catch(e) {
+            console.warn("Gagal parse __firebase_config, menggunakan config default:", e);
+            firebaseConfig = DEFAULT_FIREBASE_CONFIG;
+        }
+
+        const appId = (typeof __app_id !== 'undefined' && __app_id) ? __app_id : 'laporan-harian-igd';
 
         // Inisialisasi Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'laporan-harian-igd';
 
         const SHIFTS_CONFIG = [
             { id: 'Pagi1', label: 'Dini Hari', time: '00.00 - 07.00', icon: '🌑', color: 'from-slate-600 to-slate-400' },
@@ -459,6 +488,7 @@
         let writeTimeout = null;
         let isSyncingFromDb = false;
         let patientIdToDelete = null;
+        let isInitialized = false; // PERBAIKAN 3: Flag inisialisasi
 
         const $ = (id) => document.getElementById(id);
         const getVal = (id) => $(id) ? $(id).value : '';
@@ -480,7 +510,7 @@
             const formattedDate = now.toLocaleDateString('id-ID', options);
             if ($('inputDate')) {
                 $('inputDate').value = formattedDate;
-                processData(); 
+                if (isInitialized) processData(); // Hanya proses setelah init
             }
         }
 
@@ -626,6 +656,33 @@
                 `;
             });
             container.innerHTML = html;
+            
+            // PERBAIKAN 4: Attach event listener setelah render
+            attachInputListeners();
+        }
+
+        // PERBAIKAN 5: Fungsi untuk attach listener ke semua input
+        function attachInputListeners() {
+            document.querySelectorAll('input, select, textarea').forEach(el => {
+                if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity') {
+                    el.removeEventListener('input', handleInputChange);
+                    el.removeEventListener('change', handleInputChange);
+                    el.addEventListener('input', handleInputChange);
+                    el.addEventListener('change', handleInputChange);
+                }
+            });
+        }
+
+        function handleInputChange(e) {
+            if (isSyncingFromDb) return;
+            const target = e.target;
+            if (target.id !== 'inputDate') {
+                const mirror = $(`mirror-${target.id}`);
+                if (mirror) {
+                    mirror.textContent = target.value + '\n';
+                }
+                processData(true);
+            }
         }
 
         function toggleShift(id) {
@@ -733,16 +790,13 @@
         function triggerDbUpdate() {
             if (isSyncingFromDb || !currentUser) return;
             
-            // Indikator bahwa ada perubahan yang sedang menunggu jeda pengetikan (debounce)
             updateSyncBadge('waiting', 'Menunggu...');
             clearTimeout(writeTimeout);
             
-            // Jeda 3000 ms (3 detik) setelah user berhenti mengetik
             writeTimeout = setTimeout(async () => {
                 const dateId = getSanitizedDateId();
                 if (!dateId) return;
 
-                // Indikator bahwa proses simpan ke cloud mulai berjalan
                 updateSyncBadge('syncing', 'Menyimpan...');
 
                 const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
@@ -774,7 +828,7 @@
 
         // ================= UPDATE UI DARI DATA CLOUD =================
         function updateInputsFromFirestore(data) {
-            isSyncingFromDb = true; 
+            isSyncingFromDb = true;
 
             // Sinkronisasi Data Handover secara aman
             if (data.handovers) {
@@ -782,23 +836,24 @@
                 renderHandovers();
             }
 
-            // Sinkronisasi Semua Kolom Form (Kecuali yang sedang difokuskan oleh dokter pengetik)
+            // PERBAIKAN 6: Update mirror saat sync dari cloud
             const inputs = document.querySelectorAll('input, select, textarea');
             inputs.forEach(el => {
                 if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity' && data[el.id] !== undefined) {
                     if (document.activeElement !== el) {
                         el.value = data[el.id];
                         
-                        // Perbarui teks mirror secara instan untuk sinkronisasi layout auto-height
                         const mirror = $(`mirror-${el.id}`);
                         if (mirror) {
                             mirror.textContent = data[el.id] + '\n';
+                            // Trigger auto-resize
+                            el.dispatchEvent(new Event('input', { bubbles: true }));
                         }
                     }
                 }
             });
 
-            processData(false); // Perbarui preview output lokal saja tanpa memicu loop penulisan
+            processData(false);
             isSyncingFromDb = false;
         }
 
@@ -1281,74 +1336,36 @@
         window.resetLaporanOnly = resetLaporanOnly;
         window.toggleDeletePatientModal = toggleDeletePatientModal;
 
-        // ================= INISIALISASI UTAMA SISTEM =================
-        window.onload = async () => {
+        // PERBAIKAN 7: Gunakan DOMContentLoaded + init flag
+        function initializeApp2() {
             renderShifts();
             setDefaultDate();
             
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
-            setInterval(() => processData(false), 60000); // Sinkronisasi lokal berkala 60 detik
-
-            // Listener Autentikasi Firebase
-            onAuthStateChanged(auth, (user) => {
-                currentUser = user;
-                if (user) {
-                    console.log("Logged in successfully as UID:", user.uid);
-                    setupRealtimeSync();
-                    setupThemeSync(user.uid); // Muat preferensi tema
-                } else {
-                    updateSyncBadge('error', 'Auth Diperlukan');
-                }
-            });
-
-            // Jalankan autentikasi
-            await initAuth();
-
-            // Mencegah gangguan kursor ketika data diinput dokter
-            document.body.addEventListener('input', (e) => {
-                if (isSyncingFromDb) return;
-                const tag = e.target.tagName;
-                if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
-                    if (e.target.id !== 'inputDate') {
-                        processData(true);
-                    }
-                }
-            });
-
-            // Sinkronisasi data ketika tanggal diganti
-            if ($('inputDate')) {
-                $('inputDate').addEventListener('change', () => {
-                    setupRealtimeSync();
-                });
-                $('inputDate').addEventListener('blur', () => {
-                    setupRealtimeSync();
-                });
-            }
+            setInterval(() => {
+                if (isInitialized) processData(false);
+            }, 60000);
 
             if ($('darkToggle')) {
                 $('darkToggle').onclick = async () => {
                     const html = document.documentElement;
                     const isDark = html.classList.contains('dark');
-                    let newTheme = 'light';
                     
                     if (isDark) {
                         html.classList.remove('dark');
                         $('sunIcon').classList.add('hidden');
                         $('moonIcon').classList.remove('hidden');
-                        newTheme = 'light';
                     } else {
                         html.classList.add('dark');
                         $('sunIcon').classList.remove('hidden');
                         $('moonIcon').classList.add('hidden');
-                        newTheme = 'dark';
                     }
 
-                    // Simpan tema ke Firestore secara dinamis
                     if (currentUser) {
                         try {
                             const themeRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'settings', 'themePreference');
-                            await setDoc(themeRef, { theme: newTheme }, { merge: true });
+                            await setDoc(themeRef, { theme: isDark ? 'light' : 'dark' }, { merge: true });
                         } catch (err) {
                             console.error("Gagal menyimpan preferensi tema:", err);
                         }
@@ -1374,25 +1391,52 @@
             if ($('waBtn')) $('waBtn').onclick = shareToWA;
             if ($('refreshBtn')) $('refreshBtn').onclick = () => window.location.reload();
             
-            // Listener Modal Reset Laporan
             if ($('cancelReset')) $('cancelReset').onclick = () => toggleModal(false);
             if ($('confirmReset')) $('confirmReset').onclick = resetLaporanOnly;
-
-            // Listener Modal Hapus Pasien Handover
             if ($('cancelDeletePatient')) $('cancelDeletePatient').onclick = () => toggleDeletePatientModal(false);
             if ($('confirmDeletePatient')) {
                 $('confirmDeletePatient').onclick = () => {
                     if (patientIdToDelete) {
                         handoverPatients = handoverPatients.filter(p => p.id !== patientIdToDelete);
                         renderHandovers();
-                        processData(true); // Kirim perubahan ke Firebase secara real-time
+                        processData(true);
                         patientIdToDelete = null;
                         showToast('Pasien Berhasil Dihapus!');
                     }
                     toggleDeletePatientModal(false);
                 };
             }
-        };
+
+            if ($('inputDate')) {
+                $('inputDate').addEventListener('change', () => {
+                    if (isInitialized) setupRealtimeSync();
+                });
+                $('inputDate').addEventListener('blur', () => {
+                    if (isInitialized) setupRealtimeSync();
+                });
+            }
+        }
+
+        // PERBAIKAN 8: Gunakan DOMContentLoaded, bukan window.onload
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeApp2();
+            
+            onAuthStateChanged(auth, (user) => {
+                currentUser = user;
+                if (user) {
+                    console.log("Login sukses sebagai UID:", user.uid);
+                    setupRealtimeSync();
+                    setupThemeSync(user.uid);
+                    isInitialized = true;
+                } else {
+                    console.warn("User belum login, menjalankan auth...");
+                    updateSyncBadge('error', 'Auth Diperlukan');
+                    initAuth();
+                }
+            });
+
+            initAuth();
+        });
     </script>
 </body>
 </html>
