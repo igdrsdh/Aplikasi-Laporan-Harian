@@ -14,15 +14,15 @@
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
                     },
                     animation: {
-                        'ecg-scan': 'ecg-draw 3s linear infinite',
+                        'ecg-scan': 'ecg-draw 2s linear infinite',
                         'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         'ecg-draw': {
-                            '0%': { 'stroke-dashoffset': '200', 'opacity': '0' },
+                            '0%': { 'stroke-dashoffset': '100', 'opacity': '0' },
                             '10%': { 'opacity': '1' },
                             '90%': { 'opacity': '1' },
-                            '100%': { 'stroke-dashoffset': '-200', 'opacity': '0' },
+                            '100%': { 'stroke-dashoffset': '-100', 'opacity': '0' },
                         }
                     }
                 }
@@ -88,8 +88,7 @@
         }
 
         .ecg-path {
-            stroke-dasharray: 200;
-            animation: ecg-draw 3s linear infinite;
+            stroke-dasharray: 100;
         }
 
         .collapsible-content {
@@ -137,9 +136,9 @@
                     <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 mt-1">
                         <div class="flex items-center gap-1.5">
                             <div class="w-10 h-4 flex items-center overflow-hidden">
-                                <svg viewBox="0 0 200 20" class="w-full h-full text-emerald-500 dark:text-emerald-400">
-                                    <path class="ecg-path" 
-                                          d="M0 10 h20 l5 -8 l5 12 l5 -20 l5 25 l5 -15 h20 l5 8 l5 -10 h95" 
+                                <svg viewBox="0 0 50 20" class="w-full h-full text-emerald-500 dark:text-emerald-400">
+                                    <path class="ecg-path animate-ecg-scan" 
+                                          d="M0 10 h8 l2 -4 l2 4 h2 l2 -12 l2 18 l2 -6 h2 l2 3 l2 -3 h14" 
                                           fill="none" 
                                           stroke="currentColor" 
                                           stroke-width="1.5" 
@@ -331,21 +330,6 @@
                             <div id="handoverEmptyState" class="text-center py-6 text-slate-400 dark:text-slate-500 text-xs italic">
                                 Belum ada pasien operan. Klik "Tambah Pasien" untuk membuat daftar operan jaga.
                             </div>
-
-                            <div id="handoverActions" class="hidden pt-4 border-t border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row gap-3">
-                                <button type="button" onclick="copyHandover()" class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold text-xs transition-all shadow flex items-center justify-center gap-2 active:scale-95">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2" />
-                                    </svg>
-                                    Salin Handover
-                                </button>
-                                <button type="button" onclick="shareHandoverToWA()" class="flex-1 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs transition-all shadow flex items-center justify-center gap-2 active:scale-95">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                                    </svg>
-                                    Kirim WA Handover
-                                </button>
-                            </div>
                         </section>
                     </div>
                 </div>
@@ -460,6 +444,7 @@
         let isSyncingFromDb = false;
         let patientIdToDelete = null;
         let isInitialized = false;
+        let cachedShiftHTML = null;
 
         const $ = (id) => document.getElementById(id);
         const getVal = (id) => $(id) ? $(id).value : '';
@@ -487,6 +472,13 @@
         function renderShifts() {
             const container = $('shiftsContainer');
             if (!container) return;
+            
+            if (cachedShiftHTML) {
+                container.innerHTML = cachedShiftHTML;
+                attachInputListeners();
+                return;
+            }
+            
             let html = '';
 
             SHIFTS_CONFIG.forEach(shift => {
@@ -624,6 +616,8 @@
                 </div>
                 `;
             });
+            
+            cachedShiftHTML = html;
             container.innerHTML = html;
             attachInputListeners();
         }
@@ -736,6 +730,32 @@
             }
         }
 
+        async function saveToFirestore(dataToSave) {
+            const dateId = getSanitizedDateId();
+            if (!dateId) return;
+            
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
+            
+            const dataSize = new Blob([JSON.stringify(dataToSave)]).size;
+            if (dataSize > 900000) {
+                console.warn(`Ukuran data besar: ${(dataSize/1024).toFixed(1)}KB`);
+                updateSyncBadge('error', 'Data Terlalu Besar!');
+                return;
+            }
+
+            try {
+                await setDoc(docRef, dataToSave, { merge: true });
+                updateSyncBadge('connected');
+            } catch (err) {
+                console.error("Firestore Write Error:", err);
+                if (err.code === 'permission-denied') {
+                    updateSyncBadge('error', 'Aktifkan Firestore Database!');
+                } else {
+                    updateSyncBadge('error', 'Gagal Tulis Cloud');
+                }
+            }
+        }
+
         function triggerDbUpdate() {
             if (isSyncingFromDb || !currentUser) return;
             
@@ -743,13 +763,8 @@
             clearTimeout(writeTimeout);
             
             writeTimeout = setTimeout(async () => {
-                const dateId = getSanitizedDateId();
-                if (!dateId) return;
-
                 updateSyncBadge('syncing', 'Menyimpan...');
 
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
-                
                 const dataToSave = {
                     handovers: handoverPatients
                 };
@@ -761,45 +776,54 @@
                     }
                 });
 
-                try {
-                    await setDoc(docRef, dataToSave, { merge: true });
-                    updateSyncBadge('connected');
-                } catch (err) {
-                    console.error("Firestore Write Error:", err);
-                    if (err.code === 'permission-denied') {
-                        updateSyncBadge('error', 'Aktifkan Firestore Database di Firebase Console!');
-                    } else {
-                        updateSyncBadge('error', 'Gagal Tulis Cloud');
-                    }
+                await saveToFirestore(dataToSave);
+            }, 1500);
+        }
+
+        async function triggerDbUpdateImmediate() {
+            if (!currentUser) return;
+            
+            const dataToSave = {
+                handovers: handoverPatients
+            };
+            
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(el => {
+                if (el.id && el.id !== 'inputCity' && el.id !== 'inputDate') {
+                    dataToSave[el.id] = el.value;
                 }
-            }, 3000); 
+            });
+
+            await saveToFirestore(dataToSave);
         }
 
         function updateInputsFromFirestore(data) {
             isSyncingFromDb = true;
 
-            if (data.handovers) {
-                handoverPatients = data.handovers;
-                renderHandovers();
-            }
+            requestAnimationFrame(() => {
+                if (data.handovers) {
+                    handoverPatients = data.handovers;
+                    renderHandovers();
+                }
 
-            const inputs = document.querySelectorAll('input, select, textarea');
-            inputs.forEach(el => {
-                if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity' && data[el.id] !== undefined) {
-                    if (document.activeElement !== el) {
-                        el.value = data[el.id];
-                        
-                        const mirror = $(`mirror-${el.id}`);
-                        if (mirror) {
-                            mirror.textContent = data[el.id] + '\n';
-                            el.dispatchEvent(new Event('input', { bubbles: true }));
+                const inputs = document.querySelectorAll('input, select, textarea');
+                inputs.forEach(el => {
+                    if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity' && data[el.id] !== undefined) {
+                        if (document.activeElement !== el) {
+                            el.value = data[el.id];
+                            
+                            const mirror = $(`mirror-${el.id}`);
+                            if (mirror) {
+                                mirror.textContent = data[el.id] + '\n';
+                                el.dispatchEvent(new Event('input', { bubbles: true }));
+                            }
                         }
                     }
-                }
-            });
+                });
 
-            processData(false);
-            isSyncingFromDb = false;
+                processData(false);
+                isSyncingFromDb = false;
+            });
         }
 
         function clearLocalInputsForNewDate() {
@@ -834,6 +858,7 @@
 
             if (unsubscribeCurrentReport) {
                 unsubscribeCurrentReport();
+                unsubscribeCurrentReport = null;
             }
 
             const dateId = getSanitizedDateId();
@@ -861,6 +886,7 @@
         function setupThemeSync(userId) {
             if (unsubscribeTheme) {
                 unsubscribeTheme();
+                unsubscribeTheme = null;
             }
 
             const themeRef = doc(db, 'artifacts', appId, 'users', userId, 'settings', 'themePreference');
@@ -887,7 +913,7 @@
             }
         }
 
-        // ================= LOGIC HANDOVER (DIPERBAIKI) =================
+        // ================= LOGIC HANDOVER =================
         function addHandoverRow(bed = '', name = '', consul = '', reply = '') {
             const uniqueId = 'ho-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
             const newPatient = { id: uniqueId, bed, name, consul, reply };
@@ -927,24 +953,19 @@
             }
         }
 
-        // PERBAIKAN TOTAL: renderHandovers() dengan DOM reconciliation
         function renderHandovers() {
             const container = $('handoverContainer');
             const emptyState = $('handoverEmptyState');
-            const handoverActions = $('handoverActions');
             if (!container) return;
 
             if (handoverPatients.length === 0) {
                 container.innerHTML = '';
                 if (emptyState) emptyState.classList.remove('hidden');
-                if (handoverActions) handoverActions.classList.add('hidden');
                 return;
             }
 
             if (emptyState) emptyState.classList.add('hidden');
-            if (handoverActions) handoverActions.classList.remove('hidden');
 
-            // 1. Hapus elemen baris yang sudah tidak ada di data
             const existingRows = container.querySelectorAll('[id^="row-"]');
             existingRows.forEach(row => {
                 const id = row.id.replace('row-', '');
@@ -953,17 +974,17 @@
                 }
             });
 
-            // 2. Update atau buat baris baru
             handoverPatients.forEach((patient, idx) => {
                 let row = $(`row-${patient.id}`);
                 
                 if (!row) {
-                    // Buat baris baru
                     row = document.createElement('div');
                     row.id = `row-${patient.id}`;
                     row.className = "relative bg-slate-50 dark:bg-slate-900/40 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all space-y-3 animate-slide-in";
                     
-                    row.innerHTML = `
+                    const fragment = document.createDocumentFragment();
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = `
                         <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
                             <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider label-index">Pasien #${idx + 1}</span>
                             <button type="button" onclick="removeHandoverRow('${patient.id}')" class="text-xs font-bold text-red-500 hover:text-red-600 flex items-center gap-1 transition-all" title="Hapus Pasien">
@@ -1014,16 +1035,19 @@
                             </div>
                         </div>
                     `;
+                    
+                    while (tempDiv.firstChild) {
+                        fragment.appendChild(tempDiv.firstChild);
+                    }
+                    row.appendChild(fragment);
                     container.appendChild(row);
                 } else {
-                    // Update label index saja
                     const labelIndex = row.querySelector('.label-index');
                     if (labelIndex) {
                         labelIndex.textContent = `Pasien #${idx + 1}`;
                     }
                 }
 
-                // Update input fields tanpa merusak fokus (hanya jika bukan dari cloud sync)
                 if (!isSyncingFromDb) {
                     const bedInput = $(`bed-${patient.id}`);
                     const nameInput = $(`name-${patient.id}`);
@@ -1044,55 +1068,8 @@
                     }
                 }
 
-                // Pastikan urutan di DOM
                 container.appendChild(row);
             });
-        }
-
-        function getHandoverReportText() {
-            const dateStr = getVal('inputDate') || new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            let text = `*HANDOVER IGD*\nHari, Tanggal: ${dateStr}\n\n`;
-            
-            if (handoverPatients.length === 0) {
-                text += `Tidak ada operan pasien saat ini.`;
-            } else {
-                handoverPatients.forEach((p, idx) => {
-                    text += `${idx + 1}. *Bed: ${p.bed || '-'}* | *Pasien: ${p.name || '-'}*\n`;
-                    text += `   \u2022 *Konsulan/Masalah:*\n     ${(p.consul || '-').replace(/\n/g, '\n     ')}\n`;
-                    text += `   \u2022 *Tindak Lanjut/Balasan:*\n     ${(p.reply || '-').replace(/\n/g, '\n     ')}\n\n`;
-                });
-            }
-            text += `Terima Kasih.`;
-            return text;
-        }
-
-        function copyHandover() {
-            const text = getHandoverReportText();
-            const tempEl = document.createElement('textarea');
-            tempEl.value = text;
-            document.body.appendChild(tempEl);
-            tempEl.select();
-            try {
-                document.execCommand('copy');
-                showToast('Handover IGD Disalin!');
-            } catch (err) {
-                showToast('Gagal menyalin operan');
-            }
-            document.body.removeChild(tempEl);
-        }
-
-        function shareHandoverToWA() {
-            const text = getHandoverReportText();
-            const encodedText = encodeURIComponent(text);
-            const deepLink = `whatsapp://send?text=${encodedText}`;
-            const universalLink = `https://wa.me/?text=${encodedText}`;
-
-            window.location.assign(deepLink);
-            setTimeout(() => {
-                if (document.hasFocus()) {
-                    window.location.assign(universalLink);
-                }
-            }, 500);
         }
 
         function resetLaporanOnly() {
@@ -1127,9 +1104,12 @@
             showToast('Laporan Jaga Harian Direset!');
         }
 
+        // Cache object untuk processData
+        const valueCache = {};
+
         function processData(shouldTriggerSave = true) {
             let totalAll = 0;
-            const nowTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }); 
+            const nowTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
             
             let reportText = `*LAPORAN JAGA IGD*\n\n${getVal('inputCity')}, ${getVal('inputDate')} Jam ${nowTime} WIB\n\n`;
             let summaryBlock = '';
@@ -1138,14 +1118,21 @@
 
             SHIFTS_CONFIG.forEach(shift => {
                 const sId = shift.id;
-                const drSel = getVal(`dr-${sId}`);
-                const drExt = getVal(`drExtra-${sId}`);
+                
+                // Gunakan cache
+                const cacheKey = (field) => `${field}-${sId}`;
+                if (!valueCache[cacheKey('dr')]) valueCache[cacheKey('dr')] = getVal(`dr-${sId}`);
+                if (!valueCache[cacheKey('drExtra')]) valueCache[cacheKey('drExtra')] = getVal(`drExtra-${sId}`);
+                
+                const drSel = valueCache[cacheKey('dr')];
+                const drExt = valueCache[cacheKey('drExtra')];
                 const drFinal = (drSel && drExt) ? `${drSel} (${drExt})` : (drSel || drExt || '');
                 if (!drFinal) missingDoctors.push(shift.label);
 
                 let shiftMRS = 0; let shiftRJ = 0; let sourcesText = '';
                 SOURCES.forEach(src => {
-                    const ri = getNum(`${src.id}RI-${sId}`); const rj = getNum(`${src.id}RJ-${sId}`);
+                    const ri = getNum(`${src.id}RI-${sId}`); 
+                    const rj = getNum(`${src.id}RJ-${sId}`);
                     shiftMRS += ri; shiftRJ += rj;
                     sourcesText += `-${src.label}:\n\u2022 Rawat inap : ${ri}\n\u2022 Rawat jalan : ${rj}\n`;
                 });
@@ -1178,6 +1165,9 @@
                 detailsBlock += `Rujuk RS Lain :\n${getVal(`rsLain-${sId}`) || '-'}\n`;
                 detailsBlock += `-------------------------------\n\n`;
             });
+
+            // Clear cache
+            Object.keys(valueCache).forEach(key => delete valueCache[key]);
 
             const isValid = missingDoctors.length === 0;
             $('validationBadge').textContent = isValid ? "DATA LENGKAP" : "DOKTER BELUM LENGKAP";
@@ -1258,8 +1248,6 @@
         window.addHandoverRow = addHandoverRow;
         window.removeHandoverRow = removeHandoverRow;
         window.handleHandoverChange = handleHandoverChange;
-        window.copyHandover = copyHandover;
-        window.shareHandoverToWA = shareHandoverToWA;
         window.setDefaultDate = setDefaultDate;
         window.toggleModal = toggleModal;
         window.resetLaporanOnly = resetLaporanOnly;
@@ -1275,7 +1263,7 @@
                 if (isInitialized) processData(false);
             }, 60000);
 
-            // PERBAIKAN KRITIS: Delegasi event untuk input handover
+            // Delegasi event untuk input handover
             const handoverContainer = $('handoverContainer');
             if (handoverContainer) {
                 handoverContainer.addEventListener('input', (e) => {
@@ -1283,23 +1271,19 @@
                     
                     const target = e.target;
                     
-                    // Handle textarea handover (consul & reply)
                     if (target.classList.contains('handover-textarea')) {
                         const patientId = target.id.replace('consul-', '').replace('reply-', '');
                         const field = target.id.startsWith('consul-') ? 'consul' : 'reply';
                         const value = target.value;
                         
-                        // Update mirror
                         const mirror = $(`mirror-${field}-${patientId}`);
                         if (mirror) {
                             mirror.textContent = value + '\n';
                         }
                         
-                        // Update data
                         handleHandoverChange(patientId, field, value);
                     }
                     
-                    // Handle input handover (bed, name)
                     if (target.classList.contains('handover-input')) {
                         const patientId = target.id.replace('bed-', '').replace('name-', '');
                         const field = target.id.startsWith('bed-') ? 'bed' : 'name';
@@ -1307,6 +1291,14 @@
                     }
                 });
             }
+
+            // Simpan data sebelum user menutup tab
+            window.addEventListener('beforeunload', () => {
+                if (writeTimeout) {
+                    clearTimeout(writeTimeout);
+                    triggerDbUpdateImmediate();
+                }
+            });
 
             if ($('darkToggle')) {
                 $('darkToggle').onclick = async () => {
