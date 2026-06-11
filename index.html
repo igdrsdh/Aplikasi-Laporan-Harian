@@ -115,6 +115,20 @@
             background-position: right 12px center;
             padding-right: 32px !important;
         }
+
+        kbd {
+            background: #e2e8f0;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-family: monospace;
+            border: 1px solid #cbd5e1;
+        }
+        .dark kbd {
+            background: #334155;
+            border-color: #475569;
+            color: #e2e8f0;
+        }
     </style>
 </head>
 <body class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
@@ -330,6 +344,48 @@
                             <div id="handoverEmptyState" class="text-center py-6 text-slate-400 dark:text-slate-500 text-xs italic">
                                 Belum ada pasien operan. Klik "Tambah Pasien" untuk membuat daftar operan jaga.
                             </div>
+
+                            <!-- Handover Actions Bar -->
+                            <div id="handoverActions" class="hidden pt-4 border-t border-slate-200 dark:border-slate-700 space-y-3">
+                                <!-- Status Bar -->
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div id="handoverStatusIndicator" class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></div>
+                                        <span id="handoverStatusText" class="text-xs font-bold text-yellow-600 dark:text-yellow-500">
+                                            ⚠️ Ada perubahan belum disimpan
+                                        </span>
+                                    </div>
+                                    <span id="handoverLastSaved" class="text-[10px] text-slate-500 dark:text-slate-500">
+                                        💾 Last save: -
+                                    </span>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <button type="button" id="saveHandoverBtn" onclick="saveHandoverToCloud()" 
+                                            class="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                                        </svg>
+                                        <span id="saveHandoverLabel">💾 Simpan ke Cloud</span>
+                                    </button>
+                                    
+                                    <button type="button" id="toggleAutoSyncBtn" onclick="toggleAutoSync()"
+                                            class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold text-sm transition-all shadow flex items-center justify-center gap-2 active:scale-95">
+                                        <svg id="autoSyncIconOn" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                        </svg>
+                                        <svg id="autoSyncIconOff" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                        </svg>
+                                        <span id="autoSyncLabel">Auto-Sync: ON</span>
+                                    </button>
+                                </div>
+                                
+                                <p class="text-center text-[9px] text-slate-400 dark:text-slate-600">
+                                    💡 Tip: Tekan <kbd>Ctrl+S</kbd> untuk simpan cepat
+                                </p>
+                            </div>
                         </section>
                     </div>
                 </div>
@@ -381,11 +437,11 @@
         <span id="toastMsg">Laporan Disalin!</span>
     </div>
 
-    <!-- Firebase SDK (ES Modules) -->
+    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const DEFAULT_FIREBASE_CONFIG = {
             apiKey: "AIzaSyBX4BETROyo2VacszXnZSpTIyfhh4lwjKg",
@@ -445,6 +501,15 @@
         let patientIdToDelete = null;
         let isInitialized = false;
         let cachedShiftHTML = null;
+        
+        // State Handover Save
+        let isHandoverDirty = false;
+        let autoSyncEnabled = true;
+        let lastHandoverSaveTime = null;
+        let pendingChanges = {};
+        let batchTimeout = null;
+        let lastFirestoreSync = 0;
+        const MIN_SYNC_INTERVAL = 10000;
 
         const $ = (id) => document.getElementById(id);
         const getVal = (id) => $(id) ? $(id).value : '';
@@ -756,44 +821,93 @@
             }
         }
 
+        async function triggerDbUpdateOptimized() {
+            if (!currentUser || Object.keys(pendingChanges).length === 0) return;
+            
+            updateSyncBadge('syncing', 'Menyimpan...');
+            
+            const dateId = getSanitizedDateId();
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
+            
+            try {
+                await updateDoc(docRef, pendingChanges);
+                pendingChanges = {};
+                lastFirestoreSync = Date.now();
+                updateSyncBadge('connected');
+            } catch (err) {
+                if (err.code === 'not-found') {
+                    try {
+                        await setDoc(docRef, pendingChanges);
+                        pendingChanges = {};
+                        lastFirestoreSync = Date.now();
+                        updateSyncBadge('connected');
+                    } catch (err2) {
+                        console.error("Gagal membuat dokumen:", err2);
+                        updateSyncBadge('error', 'Gagal Simpan');
+                    }
+                } else {
+                    console.error("Firestore Update Error:", err);
+                    updateSyncBadge('error', 'Gagal Sinkronisasi');
+                }
+            }
+        }
+
+        function scheduleFirestoreSync() {
+            if (!autoSyncEnabled) {
+                updateSyncBadge('waiting', 'Auto-Sync OFF');
+                return;
+            }
+            
+            const now = Date.now();
+            const timeSinceLastSync = now - lastFirestoreSync;
+            
+            if (timeSinceLastSync >= MIN_SYNC_INTERVAL) {
+                triggerDbUpdateOptimized();
+            } else {
+                clearTimeout(batchTimeout);
+                batchTimeout = setTimeout(() => {
+                    triggerDbUpdateOptimized();
+                }, MIN_SYNC_INTERVAL - timeSinceLastSync);
+            }
+        }
+
         function triggerDbUpdate() {
             if (isSyncingFromDb || !currentUser) return;
             
-            updateSyncBadge('waiting', 'Menunggu...');
-            clearTimeout(writeTimeout);
-            
-            writeTimeout = setTimeout(async () => {
-                updateSyncBadge('syncing', 'Menyimpan...');
-
-                const dataToSave = {
-                    handovers: handoverPatients
-                };
-                
-                const inputs = document.querySelectorAll('input, select, textarea');
-                inputs.forEach(el => {
-                    if (el.id && el.id !== 'inputCity' && el.id !== 'inputDate') {
-                        dataToSave[el.id] = el.value;
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(el => {
+                if (el.id && el.id !== 'inputCity' && el.id !== 'inputDate') {
+                    const currentValue = el.value;
+                    if (currentValue !== el.getAttribute('data-last-saved')) {
+                        pendingChanges[el.id] = currentValue;
+                        el.setAttribute('data-last-saved', currentValue);
                     }
-                });
-
-                await saveToFirestore(dataToSave);
-            }, 1500);
+                }
+            });
+            
+            const handoverJSON = JSON.stringify(handoverPatients);
+            if (handoverJSON !== localStorage.getItem('lastHandoverSync')) {
+                pendingChanges['handovers'] = handoverPatients;
+                localStorage.setItem('lastHandoverSync', handoverJSON);
+            }
+            
+            scheduleFirestoreSync();
         }
 
         async function triggerDbUpdateImmediate() {
             if (!currentUser) return;
             
-            const dataToSave = {
-                handovers: handoverPatients
-            };
+            const dateId = getSanitizedDateId();
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
             
+            const dataToSave = { handovers: handoverPatients };
             const inputs = document.querySelectorAll('input, select, textarea');
             inputs.forEach(el => {
                 if (el.id && el.id !== 'inputCity' && el.id !== 'inputDate') {
                     dataToSave[el.id] = el.value;
                 }
             });
-
+            
             await saveToFirestore(dataToSave);
         }
 
@@ -803,7 +917,10 @@
             requestAnimationFrame(() => {
                 if (data.handovers) {
                     handoverPatients = data.handovers;
+                    isHandoverDirty = false;
+                    lastHandoverSaveTime = new Date();
                     renderHandovers();
+                    updateHandoverStatus();
                 }
 
                 const inputs = document.querySelectorAll('input, select, textarea');
@@ -811,6 +928,7 @@
                     if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity' && data[el.id] !== undefined) {
                         if (document.activeElement !== el) {
                             el.value = data[el.id];
+                            el.setAttribute('data-last-saved', data[el.id]);
                             
                             const mirror = $(`mirror-${el.id}`);
                             if (mirror) {
@@ -839,6 +957,7 @@
                     } else {
                         el.value = '';
                     }
+                    el.setAttribute('data-last-saved', '');
                     
                     const mirror = $(`mirror-${el.id}`);
                     if (mirror) {
@@ -913,17 +1032,28 @@
             }
         }
 
-        // ================= LOGIC HANDOVER =================
+        // ================= HANDOVER LOGIC =================
         function addHandoverRow(bed = '', name = '', consul = '', reply = '') {
             const uniqueId = 'ho-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
             const newPatient = { id: uniqueId, bed, name, consul, reply };
             handoverPatients.push(newPatient);
             
+            isHandoverDirty = true;
+            updateHandoverStatus();
+            
             renderHandovers();
-            processData(true); 
+            saveToLocalCache();
+            processData(false);
+            
+            if (autoSyncEnabled) {
+                pendingChanges['handovers'] = handoverPatients;
+                scheduleFirestoreSync();
+            }
             
             const newRow = $(`row-${uniqueId}`);
             if (newRow) newRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            showToast('➕ Pasien ditambahkan - jangan lupa simpan!');
         }
 
         function removeHandoverRow(id) {
@@ -945,26 +1075,207 @@
             }
         }
 
+        function confirmDeletePatient() {
+            if (patientIdToDelete) {
+                handoverPatients = handoverPatients.filter(p => p.id !== patientIdToDelete);
+                
+                isHandoverDirty = true;
+                updateHandoverStatus();
+                
+                renderHandovers();
+                saveToLocalCache();
+                processData(false);
+                
+                if (autoSyncEnabled) {
+                    pendingChanges['handovers'] = handoverPatients;
+                    scheduleFirestoreSync();
+                }
+                
+                patientIdToDelete = null;
+                showToast('🗑️ Pasien dihapus - jangan lupa simpan!');
+            }
+            toggleDeletePatientModal(false);
+        }
+
         function handleHandoverChange(id, field, value) {
             const patient = handoverPatients.find(p => p.id === id);
             if (patient) {
                 patient[field] = value;
-                processData(true);
+                
+                isHandoverDirty = true;
+                updateHandoverStatus();
+                
+                saveToLocalCache();
+                processData(false);
+                
+                if (autoSyncEnabled) {
+                    pendingChanges['handovers'] = handoverPatients;
+                    scheduleFirestoreSync();
+                }
+            }
+        }
+
+        function saveToLocalCache() {
+            try {
+                localStorage.setItem('handoverCache', JSON.stringify(handoverPatients));
+                localStorage.setItem('handoverDirty', isHandoverDirty.toString());
+                localStorage.setItem('autoSyncEnabled', autoSyncEnabled.toString());
+            } catch(e) {
+                console.warn("localStorage penuh:", e);
+            }
+        }
+
+        function loadFromLocalCache() {
+            try {
+                const cached = localStorage.getItem('handoverCache');
+                const dirtyFlag = localStorage.getItem('handoverDirty');
+                const autoSyncPref = localStorage.getItem('autoSyncEnabled');
+                
+                if (cached) {
+                    handoverPatients = JSON.parse(cached);
+                    renderHandovers();
+                }
+                
+                if (dirtyFlag) isHandoverDirty = dirtyFlag === 'true';
+                if (autoSyncPref) autoSyncEnabled = autoSyncPref === 'true';
+                
+                updateHandoverStatus();
+            } catch(e) {
+                console.warn("Gagal load cache:", e);
+            }
+        }
+
+        async function saveHandoverToCloud() {
+            if (!currentUser) {
+                showToast('❌ Tidak terhubung ke server');
+                return;
+            }
+            
+            const saveBtn = $('saveHandoverBtn');
+            const saveLabel = $('saveHandoverLabel');
+            
+            if (saveBtn) saveBtn.disabled = true;
+            if (saveLabel) saveLabel.textContent = '⏳ Menyimpan...';
+            
+            updateSyncBadge('syncing', 'Menyimpan Handover...');
+            
+            const dateId = getSanitizedDateId();
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
+            
+            try {
+                await updateDoc(docRef, { handovers: handoverPatients });
+                
+                isHandoverDirty = false;
+                lastHandoverSaveTime = new Date();
+                pendingChanges = {};
+                updateHandoverStatus();
+                updateSyncBadge('connected');
+                showToast('✅ Handover tersimpan!');
+                
+            } catch (err) {
+                if (err.code === 'not-found') {
+                    try {
+                        await setDoc(docRef, { handovers: handoverPatients });
+                        isHandoverDirty = false;
+                        lastHandoverSaveTime = new Date();
+                        pendingChanges = {};
+                        updateHandoverStatus();
+                        updateSyncBadge('connected');
+                        showToast('✅ Handover tersimpan!');
+                    } catch (err2) {
+                        showToast('❌ Gagal menyimpan');
+                        updateSyncBadge('error', 'Gagal Simpan');
+                    }
+                } else {
+                    showToast('❌ Gagal menyimpan');
+                    updateSyncBadge('error', 'Gagal Simpan');
+                }
+            }
+            
+            if (saveBtn) saveBtn.disabled = false;
+            if (saveLabel) saveLabel.textContent = '💾 Simpan ke Cloud';
+        }
+
+        function toggleAutoSync() {
+            autoSyncEnabled = !autoSyncEnabled;
+            
+            const iconOn = $('autoSyncIconOn');
+            const iconOff = $('autoSyncIconOff');
+            const label = $('autoSyncLabel');
+            const toggleBtn = $('toggleAutoSyncBtn');
+            
+            if (autoSyncEnabled) {
+                if (iconOn) iconOn.classList.remove('hidden');
+                if (iconOff) iconOff.classList.add('hidden');
+                if (label) label.textContent = 'Auto-Sync: ON';
+                if (toggleBtn) {
+                    toggleBtn.classList.remove('bg-red-100', 'dark:bg-red-900/30', 'text-red-600', 'dark:text-red-400');
+                    toggleBtn.classList.add('bg-slate-100', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white');
+                }
+                showToast('🔄 Auto-Sync Diaktifkan');
+            } else {
+                if (iconOn) iconOn.classList.add('hidden');
+                if (iconOff) iconOff.classList.remove('hidden');
+                if (label) label.textContent = 'Auto-Sync: OFF';
+                if (toggleBtn) {
+                    toggleBtn.classList.remove('bg-slate-100', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white');
+                    toggleBtn.classList.add('bg-red-100', 'dark:bg-red-900/30', 'text-red-600', 'dark:text-red-400');
+                }
+                showToast('📴 Auto-Sync Dinonaktifkan - Gunakan tombol Save');
+            }
+            
+            localStorage.setItem('autoSyncEnabled', autoSyncEnabled.toString());
+        }
+
+        function updateHandoverStatus() {
+            const indicator = $('handoverStatusIndicator');
+            const statusText = $('handoverStatusText');
+            const lastSaved = $('handoverLastSaved');
+            const saveBtn = $('saveHandoverBtn');
+            const actions = $('handoverActions');
+            const emptyState = $('handoverEmptyState');
+            
+            // Tampilkan/sembunyikan actions bar
+            if (handoverPatients.length > 0) {
+                if (actions) actions.classList.remove('hidden');
+                if (emptyState) emptyState.classList.add('hidden');
+            } else {
+                if (actions) actions.classList.add('hidden');
+                if (emptyState) emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            if (isHandoverDirty) {
+                if (indicator) indicator.className = 'w-2 h-2 rounded-full bg-yellow-500 animate-pulse';
+                if (statusText) {
+                    statusText.textContent = '⚠️ Ada perubahan belum disimpan';
+                    statusText.className = 'text-xs font-bold text-yellow-600 dark:text-yellow-500';
+                }
+                if (saveBtn) saveBtn.disabled = false;
+            } else {
+                if (indicator) indicator.className = 'w-2 h-2 rounded-full bg-emerald-500';
+                if (statusText) {
+                    statusText.textContent = '✅ Semua data tersimpan';
+                    statusText.className = 'text-xs font-bold text-emerald-600 dark:text-emerald-400';
+                }
+                if (saveBtn) saveBtn.disabled = true;
+            }
+            
+            if (lastSaved && lastHandoverSaveTime) {
+                const timeStr = lastHandoverSaveTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                lastSaved.textContent = `💾 Last save: ${timeStr} WIB`;
             }
         }
 
         function renderHandovers() {
             const container = $('handoverContainer');
-            const emptyState = $('handoverEmptyState');
             if (!container) return;
 
             if (handoverPatients.length === 0) {
                 container.innerHTML = '';
-                if (emptyState) emptyState.classList.remove('hidden');
+                updateHandoverStatus();
                 return;
             }
-
-            if (emptyState) emptyState.classList.add('hidden');
 
             const existingRows = container.querySelectorAll('[id^="row-"]');
             existingRows.forEach(row => {
@@ -1070,6 +1381,8 @@
 
                 container.appendChild(row);
             });
+            
+            updateHandoverStatus();
         }
 
         function resetLaporanOnly() {
@@ -1104,7 +1417,6 @@
             showToast('Laporan Jaga Harian Direset!');
         }
 
-        // Cache object untuk processData
         const valueCache = {};
 
         function processData(shouldTriggerSave = true) {
@@ -1119,7 +1431,6 @@
             SHIFTS_CONFIG.forEach(shift => {
                 const sId = shift.id;
                 
-                // Gunakan cache
                 const cacheKey = (field) => `${field}-${sId}`;
                 if (!valueCache[cacheKey('dr')]) valueCache[cacheKey('dr')] = getVal(`dr-${sId}`);
                 if (!valueCache[cacheKey('drExtra')]) valueCache[cacheKey('drExtra')] = getVal(`drExtra-${sId}`);
@@ -1166,7 +1477,6 @@
                 detailsBlock += `-------------------------------\n\n`;
             });
 
-            // Clear cache
             Object.keys(valueCache).forEach(key => delete valueCache[key]);
 
             const isValid = missingDoctors.length === 0;
@@ -1252,16 +1562,36 @@
         window.toggleModal = toggleModal;
         window.resetLaporanOnly = resetLaporanOnly;
         window.toggleDeletePatientModal = toggleDeletePatientModal;
+        window.saveHandoverToCloud = saveHandoverToCloud;
+        window.toggleAutoSync = toggleAutoSync;
 
         function initializeApp2() {
             renderShifts();
             setDefaultDate();
             
+            loadFromLocalCache();
+            updateHandoverStatus();
+            
+            if (!autoSyncEnabled) {
+                const iconOn = $('autoSyncIconOn');
+                const iconOff = $('autoSyncIconOff');
+                const label = $('autoSyncLabel');
+                const toggleBtn = $('toggleAutoSyncBtn');
+                
+                if (iconOn) iconOn.classList.add('hidden');
+                if (iconOff) iconOff.classList.remove('hidden');
+                if (label) label.textContent = 'Auto-Sync: OFF';
+                if (toggleBtn) {
+                    toggleBtn.classList.remove('bg-slate-100', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white');
+                    toggleBtn.classList.add('bg-red-100', 'dark:bg-red-900/30', 'text-red-600', 'dark:text-red-400');
+                }
+            }
+            
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
             setInterval(() => {
                 if (isInitialized) processData(false);
-            }, 60000);
+            }, 300000);
 
             // Delegasi event untuk input handover
             const handoverContainer = $('handoverContainer');
@@ -1292,11 +1622,27 @@
                 });
             }
 
-            // Simpan data sebelum user menutup tab
-            window.addEventListener('beforeunload', () => {
-                if (writeTimeout) {
-                    clearTimeout(writeTimeout);
+            // Keyboard shortcut Ctrl+S
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    
+                    const section2 = $('section2Content');
+                    if (section2 && section2.classList.contains('expanded') && isHandoverDirty) {
+                        saveHandoverToCloud();
+                    }
+                }
+            });
+
+            // Peringatan sebelum tutup tab
+            window.addEventListener('beforeunload', (e) => {
+                if (isHandoverDirty) {
+                    if (writeTimeout) clearTimeout(writeTimeout);
                     triggerDbUpdateImmediate();
+                    
+                    const message = 'Ada perubahan handover yang belum disimpan. Data akan tetap disimpan otomatis.';
+                    e.returnValue = message;
+                    return message;
                 }
             });
 
@@ -1347,18 +1693,7 @@
             if ($('cancelReset')) $('cancelReset').onclick = () => toggleModal(false);
             if ($('confirmReset')) $('confirmReset').onclick = resetLaporanOnly;
             if ($('cancelDeletePatient')) $('cancelDeletePatient').onclick = () => toggleDeletePatientModal(false);
-            if ($('confirmDeletePatient')) {
-                $('confirmDeletePatient').onclick = () => {
-                    if (patientIdToDelete) {
-                        handoverPatients = handoverPatients.filter(p => p.id !== patientIdToDelete);
-                        renderHandovers();
-                        processData(true);
-                        patientIdToDelete = null;
-                        showToast('Pasien Berhasil Dihapus!');
-                    }
-                    toggleDeletePatientModal(false);
-                };
-            }
+            if ($('confirmDeletePatient')) $('confirmDeletePatient').onclick = confirmDeletePatient;
 
             if ($('inputDate')) {
                 $('inputDate').addEventListener('change', () => {
