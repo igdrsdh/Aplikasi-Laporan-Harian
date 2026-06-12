@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Jaga IGD - Optimized</title>
+    <title>Laporan Jaga IGD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -16,7 +16,6 @@
                     animation: {
                         'ecg-scan': 'ecg-draw 2s linear infinite',
                         'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'skeleton-pulse': 'skeleton-pulse 1.5s ease-in-out infinite',
                     },
                     keyframes: {
                         'ecg-draw': {
@@ -24,10 +23,6 @@
                             '10%': { 'opacity': '1' },
                             '90%': { 'opacity': '1' },
                             '100%': { 'stroke-dashoffset': '-100', 'opacity': '0' },
-                        },
-                        'skeleton-pulse': {
-                            '0%, 100%': { opacity: 0.3 },
-                            '50%': { opacity: 0.6 },
                         }
                     }
                 }
@@ -127,23 +122,6 @@
             border-color: #475569;
             color: #e2e8f0;
         }
-
-        /* Skeleton Loading */
-        .skeleton {
-            background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
-            background-size: 200% 100%;
-            animation: skeleton-pulse 1.5s ease-in-out infinite;
-            border-radius: 0.75rem;
-        }
-        .dark .skeleton {
-            background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
-            background-size: 200% 100%;
-        }
-
-        /* Offline Indicator */
-        .offline-indicator {
-            transition: all 0.3s ease;
-        }
     </style>
 </head>
 <body class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
@@ -185,9 +163,6 @@
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <div id="offlineIndicator" class="hidden fixed top-16 left-1/2 transform -translate-x-1/2 z-50 bg-red-500 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-lg offline-indicator">
-                    📡 Koneksi terputus - Menyimpan secara lokal
-                </div>
                 <button id="darkToggle" class="w-10 h-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all border border-slate-300 dark:border-slate-700 shadow-sm" title="Ubah Tema">
                     <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="4" />
@@ -217,206 +192,195 @@
     <main class="max-w-3xl mx-auto pt-24 pb-20 px-4">
         <div class="space-y-6">
             
-            <!-- Skeleton Loading -->
-            <div id="skeletonLoader" class="space-y-4">
-                <div class="skeleton h-24 w-full"></div>
-                <div class="skeleton h-96 w-full"></div>
-                <div class="skeleton h-32 w-full"></div>
-            </div>
-
-            <!-- Main Content (Initially Hidden) -->
-            <div id="mainContent" class="hidden space-y-6">
-                <!-- ================= BAGIAN 1: LAPORAN HARIAN ================= -->
-                <div class="space-y-4">
-                    <button type="button" onclick="window.toggleMainSection('section1')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-755 border border-slate-300 dark:border-slate-700 rounded-2xl transition-all shadow-sm focus:outline-none">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 flex items-center justify-center bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 rounded-xl transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5.5 h-5.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                            </div>
-                            <h2 class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white uppercase tracking-wider">Laporan Jaga Harian</h2>
+            <!-- ================= BAGIAN 1: LAPORAN HARIAN ================= -->
+            <div class="space-y-4">
+                <button type="button" onclick="toggleMainSection('section1')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-755 border border-slate-300 dark:border-slate-700 rounded-2xl transition-all shadow-sm focus:outline-none">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 flex items-center justify-center bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 rounded-xl transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5.5 h-5.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
                         </div>
-                        <svg id="arrow-section1" class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
+                        <h2 class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white uppercase tracking-wider">Laporan Jaga Harian</h2>
+                    </div>
+                    <svg id="arrow-section1" class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
 
-                    <div id="section1Content" class="collapsible-content expanded">
-                        <div class="collapsible-inner pt-4 space-y-6">
-                            <!-- Informasi Umum -->
-                            <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
-                                <div class="flex items-center justify-between mb-4">
-                                    <div class="flex items-center gap-2 text-sky-600 dark:text-sky-400 font-bold uppercase text-xs tracking-widest">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                <div id="section1Content" class="collapsible-content expanded">
+                    <div class="collapsible-inner pt-4 space-y-6">
+                        <!-- Informasi Umum -->
+                        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-2 text-sky-600 dark:text-sky-400 font-bold uppercase text-xs tracking-widest">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    Informasi Umum
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <button onclick="setDefaultDate()" class="text-[10px] font-bold text-sky-500 hover:text-sky-600 uppercase">Set Hari Ini</button>
+                                    <span class="text-slate-300 dark:text-slate-700">|</span>
+                                    <button onclick="toggleModal(true)" class="text-[10px] font-bold text-red-500 hover:text-red-600 uppercase flex items-center gap-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                         </svg>
-                                        Informasi Umum
+                                        Reset Laporan
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="space-y-1">
+                                    <label class="text-xs font-bold text-slate-600 dark:text-slate-400 ml-1">Hari & Tanggal</label>
+                                    <input type="text" id="inputDate" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all dark:text-white input-focus-ring" />
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-xs font-bold text-slate-600 dark:text-slate-400 ml-1">Kota</label>
+                                    <input type="text" id="inputCity" value="Mojokerto" readonly class="w-full p-3 rounded-xl bg-slate-200 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 text-slate-500 cursor-not-allowed" />
+                                </div>
+                            </div>
+                        </section>
+
+                        <div id="shiftsContainer" class="space-y-4"></div>
+
+                        <!-- Kendala -->
+                        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
+                            <div class="flex items-center gap-2 mb-4 text-amber-600 dark:text-amber-500 font-bold uppercase text-xs tracking-widest">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                Kendala / Masalah Operasional
+                            </div>
+                            <div class="grid-textarea-container relative">
+                                <div id="mirror-inputKendala" class="grid-textarea-mirror text-sm p-4 min-h-[80px] border border-transparent"></div>
+                                <textarea id="inputKendala" oninput="mirrorKendala()" class="grid-textarea-input w-full h-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all placeholder:text-slate-400 dark:text-white input-focus-ring" placeholder="Tuliskan kendala hari ini..."></textarea>
+                            </div>
+                        </section>
+
+                        <!-- Preview Section -->
+                        <section class="bg-slate-900 dark:bg-black rounded-2xl shadow-2xl overflow-hidden border border-slate-800">
+                            <button type="button" onclick="togglePreviewSection()" class="w-full px-6 py-4 bg-slate-800 hover:bg-slate-700/80 dark:bg-slate-950 dark:hover:bg-slate-900/80 border-b border-slate-700 flex justify-between items-center text-left focus:outline-none transition-all duration-200">
+                                <div class="flex items-center gap-2 text-white font-bold text-xs sm:text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    PREVIEW LAPORAN HARIAN
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div id="validationBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30">
+                                        DOKTER BELUM LENGKAP
                                     </div>
-                                    <div class="flex items-center gap-3">
-                                        <button onclick="window.setDefaultDate()" class="text-[10px] font-bold text-sky-500 hover:text-sky-600 uppercase">Set Hari Ini</button>
-                                        <span class="text-slate-300 dark:text-slate-700">|</span>
-                                        <button onclick="window.toggleModal(true)" class="text-[10px] font-bold text-red-500 hover:text-red-600 uppercase flex items-center gap-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    <svg id="arrow-preview" class="w-4 h-4 text-white transform transition-transform duration-300 -rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                            </button>
+
+                            <div id="previewContent" class="collapsible-content">
+                                <textarea id="outputReport" readonly class="w-full p-6 bg-transparent text-emerald-400 font-mono text-xs md:text-sm resize-none outline-none custom-scrollbar" spellcheck="false"></textarea>
+                                <div class="p-4 bg-slate-800 dark:bg-slate-950 flex flex-col gap-3 border-t border-slate-800">
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <button id="copyBtn" disabled class="py-3 rounded-xl bg-slate-700 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-1 4h.01M9 16h.01" />
                                             </svg>
-                                            Reset Laporan
+                                            Salin Laporan
+                                        </button>
+                                        <button id="waBtn" disabled class="py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                                            </svg>
+                                            Kirim WhatsApp
                                         </button>
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div class="space-y-1">
-                                        <label class="text-xs font-bold text-slate-600 dark:text-slate-400 ml-1">Hari & Tanggal</label>
-                                        <input type="text" id="inputDate" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all dark:text-white input-focus-ring" />
-                                    </div>
-                                    <div class="space-y-1">
-                                        <label class="text-xs font-bold text-slate-600 dark:text-slate-400 ml-1">Kota</label>
-                                        <input type="text" id="inputCity" value="Mojokerto" readonly class="w-full p-3 rounded-xl bg-slate-200 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 text-slate-500 cursor-not-allowed" />
-                                    </div>
-                                </div>
-                            </section>
-
-                            <!-- Shifts Container -->
-                            <div id="shiftsContainer" class="space-y-4"></div>
-
-                            <!-- Kendala -->
-                            <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
-                                <div class="flex items-center gap-2 mb-4 text-amber-600 dark:text-amber-500 font-bold uppercase text-xs tracking-widest">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                    </svg>
-                                    Kendala / Masalah Operasional
-                                </div>
-                                <div class="grid-textarea-container relative">
-                                    <div id="mirror-inputKendala" class="grid-textarea-mirror text-sm p-4 min-h-[80px] border border-transparent"></div>
-                                    <textarea id="inputKendala" placeholder="Tuliskan kendala hari ini..." class="grid-textarea-input w-full h-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all placeholder:text-slate-400 dark:text-white input-focus-ring"></textarea>
-                                </div>
-                            </section>
-
-                            <!-- Preview Section -->
-                            <section class="bg-slate-900 dark:bg-black rounded-2xl shadow-2xl overflow-hidden border border-slate-800">
-                                <button type="button" onclick="window.togglePreviewSection()" class="w-full px-6 py-4 bg-slate-800 hover:bg-slate-700/80 dark:bg-slate-950 dark:hover:bg-slate-900/80 border-b border-slate-700 flex justify-between items-center text-left focus:outline-none transition-all duration-200">
-                                    <div class="flex items-center gap-2 text-white font-bold text-xs sm:text-sm">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                        </svg>
-                                        PREVIEW LAPORAN HARIAN
-                                    </div>
-                                    <div class="flex items-center gap-3">
-                                        <div id="validationBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30">
-                                            DOKTER BELUM LENGKAP
-                                        </div>
-                                        <svg id="arrow-preview" class="w-4 h-4 text-white transform transition-transform duration-300 -rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                    </div>
-                                </button>
-
-                                <div id="previewContent" class="collapsible-content">
-                                    <textarea id="outputReport" readonly class="w-full p-6 bg-transparent text-emerald-400 font-mono text-xs md:text-sm resize-none outline-none custom-scrollbar" spellcheck="false"></textarea>
-                                    <div class="p-4 bg-slate-800 dark:bg-slate-950 flex flex-col gap-3 border-t border-slate-800">
-                                        <div class="grid grid-cols-2 gap-3">
-                                            <button id="copyBtn" disabled class="py-3 rounded-xl bg-slate-700 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-1 4h.01M9 16h.01" />
-                                                </svg>
-                                                Salin Laporan
-                                            </button>
-                                            <button id="waBtn" disabled class="py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                                                </svg>
-                                                Kirim WhatsApp
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </section>
-                        </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
+            </div>
 
-                <!-- ================= BAGIAN 2: HANDOVER JAGA ================= -->
-                <div class="space-y-4 pt-6 border-t border-slate-300 dark:border-slate-800">
-                    <button type="button" onclick="window.toggleMainSection('section2')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-755 border border-slate-300 dark:border-slate-700 rounded-2xl transition-all shadow-sm focus:outline-none">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 flex items-center justify-center bg-violet-500/10 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400 rounded-xl transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5.5 h-5.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                                </svg>
-                            </div>
-                            <h2 class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white uppercase tracking-wider">Handover IGD</h2>
+            <!-- ================= BAGIAN 2: HANDOVER JAGA ================= -->
+            <div class="space-y-4 pt-6 border-t border-slate-300 dark:border-slate-800">
+                <button type="button" onclick="toggleMainSection('section2')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-755 border border-slate-300 dark:border-slate-700 rounded-2xl transition-all shadow-sm focus:outline-none">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 flex items-center justify-center bg-violet-500/10 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400 rounded-xl transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5.5 h-5.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                            </svg>
                         </div>
-                        <svg id="arrow-section2" class="w-5 h-5 transform transition-transform duration-300 -rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
+                        <h2 class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white uppercase tracking-wider">Handover IGD</h2>
+                    </div>
+                    <svg id="arrow-section2" class="w-5 h-5 transform transition-transform duration-300 -rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
 
-                    <div id="section2Content" class="collapsible-content">
-                        <div class="collapsible-inner pt-4 space-y-6">
-                            <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors space-y-4">
-                                <div class="flex items-center justify-between mb-2">
-                                    <div class="flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold uppercase text-xs tracking-widest">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                                        </svg>
-                                        Handover IGD
+                <div id="section2Content" class="collapsible-content">
+                    <div class="collapsible-inner pt-4 space-y-6">
+                        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors space-y-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold uppercase text-xs tracking-widest">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                    </svg>
+                                    Handover IGD
+                                </div>
+                                <button type="button" onclick="addHandoverRow()" class="px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 transition-all">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                    Tambah Pasien
+                                </button>
+                            </div>
+                            
+                            <div id="handoverContainer" class="space-y-4"></div>
+                            
+                            <div id="handoverEmptyState" class="text-center py-6 text-slate-400 dark:text-slate-500 text-xs italic">
+                                Belum ada pasien operan. Klik "Tambah Pasien" untuk membuat daftar operan jaga.
+                            </div>
+
+                            <!-- Handover Actions Bar -->
+                            <div id="handoverActions" class="hidden pt-4 border-t border-slate-200 dark:border-slate-700 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div id="handoverStatusIndicator" class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></div>
+                                        <span id="handoverStatusText" class="text-xs font-bold text-yellow-600 dark:text-yellow-500">
+                                            ⚠️ Ada perubahan belum disimpan
+                                        </span>
                                     </div>
-                                    <button type="button" onclick="window.addHandoverRow()" class="px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 transition-all">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
+                                    <span id="handoverLastSaved" class="text-[10px] text-slate-500 dark:text-slate-500">
+                                        💾 Last save: -
+                                    </span>
+                                </div>
+                                
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <button type="button" id="saveHandoverBtn" onclick="saveHandoverToCloud()" 
+                                            class="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
                                         </svg>
-                                        Tambah Pasien
+                                        <span id="saveHandoverLabel">💾 Simpan ke Cloud</span>
+                                    </button>
+                                    
+                                    <button type="button" id="toggleAutoSyncBtn" onclick="toggleAutoSync()"
+                                            class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold text-sm transition-all shadow flex items-center justify-center gap-2 active:scale-95">
+                                        <svg id="autoSyncIconOn" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                        </svg>
+                                        <svg id="autoSyncIconOff" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                        </svg>
+                                        <span id="autoSyncLabel">Auto-Sync: ON</span>
                                     </button>
                                 </div>
                                 
-                                <div id="handoverContainer" class="space-y-4"></div>
-                                
-                                <div id="handoverEmptyState" class="text-center py-6 text-slate-400 dark:text-slate-500 text-xs italic">
-                                    Belum ada pasien operan. Klik "Tambah Pasien" untuk membuat daftar operan jaga.
-                                </div>
-
-                                <!-- Handover Actions Bar -->
-                                <div id="handoverActions" class="hidden pt-4 border-t border-slate-200 dark:border-slate-700 space-y-3">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center gap-2">
-                                            <div id="handoverStatusIndicator" class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></div>
-                                            <span id="handoverStatusText" class="text-xs font-bold text-yellow-600 dark:text-yellow-500">
-                                                ⚠️ Ada perubahan belum disimpan
-                                            </span>
-                                        </div>
-                                        <span id="handoverLastSaved" class="text-[10px] text-slate-500 dark:text-slate-500">
-                                            💾 Last save: -
-                                        </span>
-                                    </div>
-                                    
-                                    <div class="flex flex-col sm:flex-row gap-3">
-                                        <button type="button" id="saveHandoverBtn" onclick="window.saveHandoverToCloud()" 
-                                                class="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-                                            </svg>
-                                            <span id="saveHandoverLabel">💾 Simpan ke Cloud</span>
-                                        </button>
-                                        
-                                        <button type="button" id="toggleAutoSyncBtn" onclick="window.toggleAutoSync()"
-                                                class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold text-sm transition-all shadow flex items-center justify-center gap-2 active:scale-95">
-                                            <svg id="autoSyncIconOn" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                            </svg>
-                                            <svg id="autoSyncIconOff" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                                            </svg>
-                                            <span id="autoSyncLabel">Auto-Sync: ON</span>
-                                        </button>
-                                    </div>
-                                    
-                                    <p class="text-center text-[9px] text-slate-400 dark:text-slate-600">
-                                        💡 Tip: Tekan <kbd>Ctrl+S</kbd> untuk simpan cepat
-                                    </p>
-                                </div>
-                            </section>
-                        </div>
+                                <p class="text-center text-[9px] text-slate-400 dark:text-slate-600">
+                                    💡 Tip: Tekan <kbd>Ctrl+S</kbd> untuk simpan cepat
+                                </p>
+                            </div>
+                        </section>
                     </div>
                 </div>
             </div>
@@ -432,7 +396,7 @@
                 </svg>
             </div>
             <h3 class="text-xl font-bold text-center mb-2 text-slate-800 dark:text-white">Reset Laporan Harian?</h3>
-            <p class="text-slate-500 dark:text-slate-400 text-center text-sm mb-6">Seluruh inputan Laporan Jaga Harian akan dikosongkan secara real-time. Data Handover IGD Anda tetap tersimpan aman.</p>
+            <p class="text-slate-500 dark:text-slate-400 text-center text-sm mb-6">Seluruh inputan Laporan Jaga Harian akan dikosongkan. Data Handover IGD tetap tersimpan.</p>
             <div class="flex gap-3">
                 <button id="cancelReset" class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 font-bold text-sm dark:text-white">Batal</button>
                 <button id="confirmReset" class="flex-1 py-3 rounded-xl bg-red-500 text-white font-bold text-sm shadow-lg shadow-red-500/20">Ya, Hapus</button>
@@ -449,7 +413,7 @@
                 </svg>
             </div>
             <h3 class="text-xl font-bold text-center mb-2 text-slate-800 dark:text-white">Hapus Pasien?</h3>
-            <p class="text-slate-500 dark:text-slate-400 text-center text-sm mb-6">Data operan pasien ini akan dihapus secara permanen dari penyimpanan cloud semua perangkat dokter.</p>
+            <p class="text-slate-500 dark:text-slate-400 text-center text-sm mb-6">Data operan pasien ini akan dihapus secara permanen.</p>
             <div class="flex gap-3">
                 <button id="cancelDeletePatient" class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 font-bold text-sm dark:text-white">Batal</button>
                 <button id="confirmDeletePatient" class="flex-1 py-3 rounded-xl bg-red-500 text-white font-bold text-sm shadow-lg shadow-red-500/20">Ya, Hapus</button>
@@ -473,7 +437,6 @@
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // ================= KONFIGURASI =================
         const DEFAULT_FIREBASE_CONFIG = {
             apiKey: "AIzaSyBX4BETROyo2VacszXnZSpTIyfhh4lwjKg",
             authDomain: "laporan-harian-igd.firebaseapp.com",
@@ -495,11 +458,11 @@
         }
 
         const appId = (typeof __app_id !== 'undefined' && __app_id) ? __app_id : 'laporan-harian-igd';
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // ================= CONSTANTS =================
         const SHIFTS_CONFIG = [
             { id: 'Pagi1', label: 'Dini Hari', time: '00.00 - 07.00', icon: '🌑', color: 'from-slate-600 to-slate-400' },
             { id: 'Pagi2', label: 'Shift Pagi', time: '07.00 - 14.00', icon: '☀️', color: 'from-sky-600 to-sky-400' },
@@ -522,101 +485,27 @@
             { id: 'sendiri', label: 'Datang Sendiri' }
         ];
 
-        // ================= STATE =================
+        // State Global
         let handoverPatients = [];
         let currentUser = null;
         let unsubscribeCurrentReport = null;
         let unsubscribeTheme = null;
+        let writeTimeout = null;
         let isSyncingFromDb = false;
         let patientIdToDelete = null;
         let isInitialized = false;
         
-        // Optimasi: Debounce timers
-        let saveDebounceTimer = null;
-        let pendingChanges = {};
-        let lastFirestoreSync = 0;
-        const DEBOUNCE_DELAY = 3000; // 3 detik setelah berhenti mengetik
-        const MIN_SYNC_INTERVAL = 5000; // Minimal 5 detik antar sync
-        
-        // Handover state
+        // State Handover Save
         let isHandoverDirty = false;
         let autoSyncEnabled = true;
         let lastHandoverSaveTime = null;
-        let isOnline = navigator.onLine;
-        
-        // Offline queue
-        let offlineQueue = [];
+        let pendingChanges = {};
+        let debounceTimer = null;
+        const DEBOUNCE_DELAY = 2000;
 
-        // ================= DOM HELPERS =================
         const $ = (id) => document.getElementById(id);
         const getVal = (id) => $(id) ? $(id).value : '';
         const getNum = (id) => parseInt(getVal(id)) || 0;
-
-        // ================= UI HELPERS =================
-        function showToast(msg, isError = false) {
-            const toast = $('toast');
-            const msgEl = $('toastMsg');
-            if (toast && msgEl) {
-                msgEl.textContent = msg;
-                toast.classList.remove('translate-y-20');
-                const bgColor = isError ? 'bg-red-500' : 'bg-emerald-500';
-                const iconDiv = toast.querySelector('.bg-emerald-500');
-                if (iconDiv) iconDiv.className = `w-6 h-6 ${bgColor} rounded-full flex items-center justify-center`;
-                setTimeout(() => toast.classList.add('translate-y-20'), 3000);
-                setTimeout(() => {
-                    if (iconDiv) iconDiv.className = 'w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center';
-                }, 3000);
-            }
-        }
-
-        function updateOnlineStatus() {
-            isOnline = navigator.onLine;
-            const indicator = $('offlineIndicator');
-            if (!isOnline) {
-                if (indicator) indicator.classList.remove('hidden');
-                showToast('⚠️ Koneksi terputus, data disimpan secara lokal', true);
-                updateSyncBadge('error', 'Offline Mode');
-            } else {
-                if (indicator) indicator.classList.add('hidden');
-                updateSyncBadge('connected');
-                // Coba kirim queue offline
-                processOfflineQueue();
-            }
-        }
-
-        async function processOfflineQueue() {
-            if (offlineQueue.length > 0 && isOnline && currentUser) {
-                showToast(`🔄 Mengirim ${offlineQueue.length} perubahan yang tertunda...`);
-                for (const change of offlineQueue) {
-                    try {
-                        await saveToFirestore(change.data);
-                    } catch (err) {
-                        console.error("Gagal mengirim queue:", err);
-                    }
-                }
-                offlineQueue = [];
-                showToast('✅ Semua perubahan tersimpan!');
-            }
-        }
-
-        function updateSyncBadge(status, customMsg = '') {
-            const badge = $('syncStatus');
-            if (!badge) return;
-
-            if (status === 'waiting') {
-                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 opacity-60"></span>${customMsg || 'Menunggu...'}`;
-                badge.className = "flex items-center gap-1 text-[9px] font-bold text-amber-600 dark:text-amber-500 uppercase tracking-wider";
-            } else if (status === 'syncing') {
-                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>${customMsg || 'Menyinkronkan...'}`;
-                badge.className = "flex items-center gap-1 text-[9px] font-bold text-amber-500 uppercase tracking-wider";
-            } else if (status === 'connected') {
-                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>Terhubung & Sinkron`;
-                badge.className = "flex items-center gap-1 text-[9px] font-bold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider";
-            } else if (status === 'error') {
-                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>${customMsg || 'Offline / Error'}`;
-                badge.className = "flex items-center gap-1 text-[9px] font-bold text-red-500 uppercase tracking-wider animate-pulse";
-            }
-        }
 
         function updateLiveClock() {
             const now = new Date();
@@ -637,439 +526,24 @@
             }
         }
 
-        // ================= FIREBASE OPERATIONS =================
-        async function saveToFirestore(dataToSave, isRetry = false) {
-            if (!currentUser) return false;
-            
-            const dateId = getSanitizedDateId();
-            if (!dateId) return false;
-            
-            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
-            
-            const dataSize = new Blob([JSON.stringify(dataToSave)]).size;
-            if (dataSize > 900000) {
-                console.warn(`Ukuran data besar: ${(dataSize/1024).toFixed(1)}KB`);
-                updateSyncBadge('error', 'Data Terlalu Besar!');
-                return false;
-            }
-
-            try {
-                await setDoc(docRef, dataToSave, { merge: true });
-                if (!isRetry) updateSyncBadge('connected');
-                return true;
-            } catch (err) {
-                console.error("Firestore Write Error:", err);
-                if (err.code === 'permission-denied') {
-                    updateSyncBadge('error', 'Aktifkan Firestore Database!');
-                } else if (!isOnline) {
-                    // Simpan ke offline queue
-                    offlineQueue.push({ data: dataToSave, timestamp: Date.now() });
-                    updateSyncBadge('error', 'Offline - Antri');
-                } else {
-                    updateSyncBadge('error', 'Gagal Tulis Cloud');
-                }
-                return false;
+        function mirrorKendala() {
+            const input = $('inputKendala');
+            const mirror = $('mirror-inputKendala');
+            if (input && mirror) {
+                mirror.textContent = input.value + '\n';
             }
         }
 
-        async function flushPendingChanges() {
-            if (!currentUser || Object.keys(pendingChanges).length === 0) return;
-            
-            updateSyncBadge('syncing', 'Menyimpan...');
-            
-            const dateId = getSanitizedDateId();
-            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
-            
-            try {
-                await updateDoc(docRef, pendingChanges);
-                pendingChanges = {};
-                lastFirestoreSync = Date.now();
-                updateSyncBadge('connected');
-            } catch (err) {
-                if (err.code === 'not-found') {
-                    try {
-                        await setDoc(docRef, pendingChanges);
-                        pendingChanges = {};
-                        lastFirestoreSync = Date.now();
-                        updateSyncBadge('connected');
-                    } catch (err2) {
-                        console.error("Gagal membuat dokumen:", err2);
-                        updateSyncBadge('error', 'Gagal Simpan');
-                    }
-                } else {
-                    console.error("Firestore Update Error:", err);
-                    updateSyncBadge('error', 'Gagal Sinkronisasi');
-                }
-            }
-        }
-
-        // DEBOUNCED SAVE - Kunci optimasi!
-        function debouncedSave() {
-            if (!autoSyncEnabled) {
-                updateSyncBadge('waiting', 'Auto-Sync OFF');
-                return;
-            }
-            
-            clearTimeout(saveDebounceTimer);
-            saveDebounceTimer = setTimeout(() => {
-                const now = Date.now();
-                if (now - lastFirestoreSync >= MIN_SYNC_INTERVAL) {
-                    flushPendingChanges();
-                }
-            }, DEBOUNCE_DELAY);
-        }
-
-        function triggerDbUpdate() {
-            if (isSyncingFromDb || !currentUser) return;
-            
-            // Kumpulkan perubahan dari semua input
-            const inputs = document.querySelectorAll('input, select, textarea');
-            inputs.forEach(el => {
-                if (el.id && el.id !== 'inputCity' && el.id !== 'inputDate') {
-                    const currentValue = el.value;
-                    if (currentValue !== el.getAttribute('data-last-saved')) {
-                        pendingChanges[el.id] = currentValue;
-                        el.setAttribute('data-last-saved', currentValue);
-                    }
-                }
-            });
-            
-            // Handover changes
-            const handoverJSON = JSON.stringify(handoverPatients);
-            if (handoverJSON !== localStorage.getItem('lastHandoverSync')) {
-                pendingChanges['handovers'] = handoverPatients;
-                localStorage.setItem('lastHandoverSync', handoverJSON);
-            }
-            
-            debouncedSave();
-        }
-
-        // Immediate save untuk handover
-        async function saveHandoverToCloud() {
-            if (!currentUser) {
-                showToast('❌ Tidak terhubung ke server');
-                return;
-            }
-            
-            const saveBtn = $('saveHandoverBtn');
-            const saveLabel = $('saveHandoverLabel');
-            
-            if (saveBtn) saveBtn.disabled = true;
-            if (saveLabel) saveLabel.textContent = '⏳ Menyimpan...';
-            
-            updateSyncBadge('syncing', 'Menyimpan Handover...');
-            
-            const success = await saveToFirestore({ handovers: handoverPatients }, true);
-            
-            if (success) {
-                isHandoverDirty = false;
-                lastHandoverSaveTime = new Date();
-                updateHandoverStatus();
-                updateSyncBadge('connected');
-                showToast('✅ Handover tersimpan!');
-            } else {
-                showToast('❌ Gagal menyimpan - akan dicoba ulang', true);
-            }
-            
-            if (saveBtn) saveBtn.disabled = false;
-            if (saveLabel) saveLabel.textContent = '💾 Simpan ke Cloud';
-        }
-
-        // ================= HANDOVER LOGIC (Optimized - No full re-render) =================
-        function addHandoverRow(bed = '', name = '', consul = '', reply = '') {
-            const uniqueId = 'ho-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
-            const newPatient = { id: uniqueId, bed, name, consul, reply };
-            handoverPatients.push(newPatient);
-            
-            isHandoverDirty = true;
-            updateHandoverStatus();
-            
-            // OPTIMASI: Append row baru, bukan re-render semua
-            appendHandoverRow(newPatient, handoverPatients.length - 1);
-            saveToLocalCache();
-            processData(false);
-            
-            if (autoSyncEnabled) {
-                pendingChanges['handovers'] = handoverPatients;
-                debouncedSave();
-            }
-            
-            const newRow = $(`row-${uniqueId}`);
-            if (newRow) newRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            
-            showToast('➕ Pasien ditambahkan - akan tersimpan otomatis');
-        }
-
-        function appendHandoverRow(patient, index) {
-            const container = $('handoverContainer');
-            if (!container) return;
-            
-            // Sembunyikan empty state jika ada
-            const emptyState = $('handoverEmptyState');
-            if (emptyState) emptyState.classList.add('hidden');
-            
-            // Tampilkan actions bar
-            const actions = $('handoverActions');
-            if (actions) actions.classList.remove('hidden');
-            
-            const row = document.createElement('div');
-            row.id = `row-${patient.id}`;
-            row.className = "relative bg-slate-50 dark:bg-slate-900/40 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all space-y-3 animate-slide-in";
-            
-            row.innerHTML = `
-                <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
-                    <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider label-index">Pasien #${index + 1}</span>
-                    <button type="button" onclick="window.removeHandoverRow('${patient.id}')" class="text-xs font-bold text-red-500 hover:text-red-600 flex items-center gap-1 transition-all" title="Hapus Pasien">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                        Hapus
-                    </button>
-                </div>
-
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="col-span-1">
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">No. Bed</label>
-                        <input type="text" 
-                               id="bed-${patient.id}"
-                               value="${escapeHtml(patient.bed || '')}" 
-                               placeholder="Bed 1" 
-                               class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none handover-input" />
-                    </div>
-                    <div class="col-span-2">
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Nama Pasien</label>
-                        <input type="text" 
-                               id="name-${patient.id}"
-                               value="${escapeHtml(patient.name || '')}" 
-                               placeholder="Contoh: Ny. S (45th)" 
-                               class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none handover-input" />
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Konsulan & Diagnosa / Masalah</label>
-                        <div class="grid-textarea-container relative">
-                            <div id="mirror-consul-${patient.id}" class="grid-textarea-mirror text-xs p-2.5 min-h-[140px] border border-transparent whitespace-pre-wrap break-all">${escapeHtml(patient.consul || '')}\n</div>
-                            <textarea id="consul-${patient.id}"
-                                      placeholder="Tulis diagnosa lengkap..." 
-                                      class="grid-textarea-input handover-textarea w-full h-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none">${escapeHtml(patient.consul || '')}</textarea>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Balasan Konsulan / Tindak Lanjut</label>
-                        <div class="grid-textarea-container relative">
-                            <div id="mirror-reply-${patient.id}" class="grid-textarea-mirror text-xs p-2.5 min-h-[140px] border border-transparent whitespace-pre-wrap break-all">${escapeHtml(patient.reply || '')}\n</div>
-                            <textarea id="reply-${patient.id}"
-                                      placeholder="Tulis rencana terapi..." 
-                                      class="grid-textarea-input handover-textarea w-full h-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none">${escapeHtml(patient.reply || '')}</textarea>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            container.appendChild(row);
-            
-            // Update semua nomor index
-            updateHandoverIndices();
-        }
-
-        function updateHandoverIndices() {
-            const rows = document.querySelectorAll('[id^="row-"]');
-            rows.forEach((row, idx) => {
-                const label = row.querySelector('.label-index');
-                if (label) {
-                    label.textContent = `Pasien #${idx + 1}`;
-                }
-            });
-        }
-
-        function removeHandoverRow(id) {
-            patientIdToDelete = id;
-            toggleDeletePatientModal(true);
-        }
-
-        function confirmDeletePatient() {
-            if (patientIdToDelete) {
-                const rowToRemove = $(`row-${patientIdToDelete}`);
-                if (rowToRemove) {
-                    rowToRemove.remove();
-                }
-                
-                handoverPatients = handoverPatients.filter(p => p.id !== patientIdToDelete);
-                
-                isHandoverDirty = true;
-                updateHandoverStatus();
-                updateHandoverIndices();
-                saveToLocalCache();
-                processData(false);
-                
-                if (autoSyncEnabled) {
-                    pendingChanges['handovers'] = handoverPatients;
-                    debouncedSave();
-                }
-                
-                // Cek jika tidak ada pasien
-                if (handoverPatients.length === 0) {
-                    const emptyState = $('handoverEmptyState');
-                    const actions = $('handoverActions');
-                    if (emptyState) emptyState.classList.remove('hidden');
-                    if (actions) actions.classList.add('hidden');
-                }
-                
-                patientIdToDelete = null;
-                showToast('🗑️ Pasien dihapus');
-            }
-            toggleDeletePatientModal(false);
-        }
-
-        function handleHandoverChange(id, field, value) {
-            const patient = handoverPatients.find(p => p.id === id);
-            if (patient) {
-                patient[field] = value;
-                
-                isHandoverDirty = true;
-                updateHandoverStatus();
-                
-                saveToLocalCache();
-                processData(false);
-                
-                if (autoSyncEnabled) {
-                    pendingChanges['handovers'] = handoverPatients;
-                    debouncedSave();
-                }
-            }
-        }
-
-        function saveToLocalCache() {
-            try {
-                localStorage.setItem('handoverCache', JSON.stringify(handoverPatients));
-                localStorage.setItem('handoverDirty', isHandoverDirty.toString());
-                localStorage.setItem('autoSyncEnabled', autoSyncEnabled.toString());
-            } catch(e) {
-                console.warn("localStorage penuh:", e);
-            }
-        }
-
-        function loadFromLocalCache() {
-            try {
-                const cached = localStorage.getItem('handoverCache');
-                const dirtyFlag = localStorage.getItem('handoverDirty');
-                const autoSyncPref = localStorage.getItem('autoSyncEnabled');
-                
-                if (cached) {
-                    handoverPatients = JSON.parse(cached);
-                    renderAllHandovers(); // Full render hanya sekali saat load
-                }
-                
-                if (dirtyFlag) isHandoverDirty = dirtyFlag === 'true';
-                if (autoSyncPref) autoSyncEnabled = autoSyncPref === 'true';
-                
-                updateHandoverStatus();
-            } catch(e) {
-                console.warn("Gagal load cache:", e);
-            }
-        }
-
-        function renderAllHandovers() {
-            const container = $('handoverContainer');
-            if (!container) return;
-
-            container.innerHTML = '';
-            
-            if (handoverPatients.length === 0) {
-                const emptyState = $('handoverEmptyState');
-                const actions = $('handoverActions');
-                if (emptyState) emptyState.classList.remove('hidden');
-                if (actions) actions.classList.add('hidden');
-                return;
-            }
-            
-            const emptyState = $('handoverEmptyState');
-            const actions = $('handoverActions');
-            if (emptyState) emptyState.classList.add('hidden');
-            if (actions) actions.classList.remove('hidden');
-            
-            handoverPatients.forEach((patient, idx) => {
-                appendHandoverRow(patient, idx);
-            });
-        }
-
-        function updateHandoverStatus() {
-            const indicator = $('handoverStatusIndicator');
-            const statusText = $('handoverStatusText');
-            const lastSaved = $('handoverLastSaved');
-            const saveBtn = $('saveHandoverBtn');
-            
-            if (handoverPatients.length === 0) return;
-            
-            if (isHandoverDirty) {
-                if (indicator) indicator.className = 'w-2 h-2 rounded-full bg-yellow-500 animate-pulse';
-                if (statusText) {
-                    statusText.textContent = '⚠️ Ada perubahan belum disimpan';
-                    statusText.className = 'text-xs font-bold text-yellow-600 dark:text-yellow-500';
-                }
-                if (saveBtn) saveBtn.disabled = false;
-            } else {
-                if (indicator) indicator.className = 'w-2 h-2 rounded-full bg-emerald-500';
-                if (statusText) {
-                    statusText.textContent = '✅ Semua data tersimpan';
-                    statusText.className = 'text-xs font-bold text-emerald-600 dark:text-emerald-400';
-                }
-                if (saveBtn) saveBtn.disabled = true;
-            }
-            
-            if (lastSaved && lastHandoverSaveTime) {
-                const timeStr = lastHandoverSaveTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-                lastSaved.textContent = `💾 Last save: ${timeStr} WIB`;
-            }
-        }
-
-        function toggleAutoSync() {
-            autoSyncEnabled = !autoSyncEnabled;
-            
-            const iconOn = $('autoSyncIconOn');
-            const iconOff = $('autoSyncIconOff');
-            const label = $('autoSyncLabel');
-            const toggleBtn = $('toggleAutoSyncBtn');
-            
-            if (autoSyncEnabled) {
-                if (iconOn) iconOn.classList.remove('hidden');
-                if (iconOff) iconOff.classList.add('hidden');
-                if (label) label.textContent = 'Auto-Sync: ON';
-                if (toggleBtn) {
-                    toggleBtn.classList.remove('bg-red-100', 'dark:bg-red-900/30', 'text-red-600', 'dark:text-red-400');
-                    toggleBtn.classList.add('bg-slate-100', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white');
-                }
-                showToast('🔄 Auto-Sync Diaktifkan - Data akan tersimpan otomatis');
-                // Flush pending changes saat auto-sync diaktifkan
-                if (Object.keys(pendingChanges).length > 0 || isHandoverDirty) {
-                    debouncedSave();
-                }
-            } else {
-                if (iconOn) iconOn.classList.add('hidden');
-                if (iconOff) iconOff.classList.remove('hidden');
-                if (label) label.textContent = 'Auto-Sync: OFF';
-                if (toggleBtn) {
-                    toggleBtn.classList.remove('bg-slate-100', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white');
-                    toggleBtn.classList.add('bg-red-100', 'dark:bg-red-900/30', 'text-red-600', 'dark:text-red-400');
-                }
-                showToast('📴 Auto-Sync Dinonaktifkan - Gunakan tombol Save manual');
-            }
-            
-            localStorage.setItem('autoSyncEnabled', autoSyncEnabled.toString());
-        }
-
-        // ================= SHIFT RENDERING =================
         function renderShifts() {
             const container = $('shiftsContainer');
             if (!container) return;
             
             let html = '';
+
             SHIFTS_CONFIG.forEach(shift => {
                 html += `
                 <div class="shift-block bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 overflow-hidden transition-colors">
-                    <button type="button" onclick="window.toggleShift('${shift.id}')" class="w-full flex items-center justify-between p-4 bg-gradient-to-r ${shift.color} text-white transition-all active:scale-[0.98] shadow-inner">
+                    <button type="button" onclick="toggleShift('${shift.id}')" class="w-full flex items-center justify-between p-4 bg-gradient-to-r ${shift.color} text-white transition-all active:scale-[0.98] shadow-inner">
                         <div class="flex items-center gap-3">
                             <span class="text-xl">${shift.icon}</span>
                             <div class="text-left">
@@ -1203,67 +677,24 @@
             });
             
             container.innerHTML = html;
-        }
-
-        // ================= EVENT HANDLERS (Event Delegation) =================
-        function setupEventDelegation() {
-            // Event delegation untuk semua input di shifts container
-            const shiftsContainer = $('shiftsContainer');
-            if (shiftsContainer) {
-                shiftsContainer.addEventListener('input', (e) => {
-                    if (isSyncingFromDb) return;
-                    const target = e.target;
-                    if (target.id && target.id !== 'inputDate') {
-                        const mirror = $(`mirror-${target.id}`);
-                        if (mirror) {
-                            mirror.textContent = target.value + '\n';
-                        }
-                        processData(true);
-                    }
-                });
-            }
             
-            // Event delegation untuk handover container
-            const handoverContainer = $('handoverContainer');
-            if (handoverContainer) {
-                handoverContainer.addEventListener('input', (e) => {
-                    if (isSyncingFromDb) return;
-                    
-                    const target = e.target;
-                    
-                    if (target.classList.contains('handover-textarea')) {
-                        const idParts = target.id.split('-');
-                        const patientId = idParts[1];
-                        const field = target.id.startsWith('consul-') ? 'consul' : 'reply';
-                        const value = target.value;
-                        
-                        const mirror = $(`mirror-${field}-${patientId}`);
-                        if (mirror) {
-                            mirror.textContent = value + '\n';
-                        }
-                        
-                        handleHandoverChange(patientId, field, value);
-                    }
-                    
-                    if (target.classList.contains('handover-input')) {
-                        const idParts = target.id.split('-');
-                        const patientId = idParts[1];
-                        const field = target.id.startsWith('bed-') ? 'bed' : 'name';
-                        handleHandoverChange(patientId, field, target.value);
-                    }
-                });
-            }
-        }
-
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-                return c;
+            // Attach event listeners untuk mirror textarea
+            document.querySelectorAll('textarea[id^="bpjsKet-"], textarea[id^="umumKet-"], textarea[id^="doa-"], textarea[id^="meninggal-"], textarea[id^="mcu-"], textarea[id^="pkmRujukKet-"], textarea[id^="rsLain-"]').forEach(ta => {
+                const mirrorId = `mirror-${ta.id}`;
+                const mirror = $(mirrorId);
+                if (mirror) {
+                    ta.addEventListener('input', function() {
+                        mirror.textContent = this.value + '\n';
+                        processData(true);
+                    });
+                }
+            });
+            
+            document.querySelectorAll('input, select').forEach(el => {
+                if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity') {
+                    el.addEventListener('change', () => processData(true));
+                    el.addEventListener('input', () => processData(true));
+                }
             });
         }
 
@@ -1274,15 +705,6 @@
 
             const isExpanded = content.classList.contains('expanded');
             
-            SHIFTS_CONFIG.forEach(s => {
-                const c = $(`content-${s.id}`);
-                const i = $(`icon-${s.id}`);
-                if (c && c.classList.contains('expanded')) {
-                    c.classList.remove('expanded');
-                    if (i) i.classList.remove('rotate-180');
-                }
-            });
-
             if (isExpanded) {
                 content.classList.remove('expanded');
                 icon.classList.remove('rotate-180');
@@ -1333,7 +755,98 @@
             return dateVal.trim().replace(/\//g, '_').replace(/\s+/g, '_');
         }
 
-        // ================= FIREBASE SYNC =================
+        function updateSyncBadge(status, customMsg = '') {
+            const badge = $('syncStatus');
+            if (!badge) return;
+
+            if (status === 'syncing') {
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>${customMsg || 'Menyinkronkan...'}`;
+                badge.className = "flex items-center gap-1 text-[9px] font-bold text-amber-500 uppercase tracking-wider";
+            } else if (status === 'connected') {
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>Terhubung & Sinkron`;
+                badge.className = "flex items-center gap-1 text-[9px] font-bold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider";
+            } else if (status === 'error') {
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>${customMsg || 'Error'}`;
+                badge.className = "flex items-center gap-1 text-[9px] font-bold text-red-500 uppercase tracking-wider animate-pulse";
+            }
+        }
+
+        async function saveToFirestore(dataToSave) {
+            const dateId = getSanitizedDateId();
+            if (!dateId) return false;
+            
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
+            
+            try {
+                await setDoc(docRef, dataToSave, { merge: true });
+                updateSyncBadge('connected');
+                return true;
+            } catch (err) {
+                console.error("Firestore Write Error:", err);
+                updateSyncBadge('error', 'Gagal Simpan');
+                return false;
+            }
+        }
+
+        function debouncedSave() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                flushPendingChanges();
+            }, DEBOUNCE_DELAY);
+        }
+
+        async function flushPendingChanges() {
+            if (!currentUser || Object.keys(pendingChanges).length === 0) return;
+            
+            updateSyncBadge('syncing', 'Menyimpan...');
+            
+            const dateId = getSanitizedDateId();
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
+            
+            try {
+                await updateDoc(docRef, pendingChanges);
+                pendingChanges = {};
+                updateSyncBadge('connected');
+            } catch (err) {
+                if (err.code === 'not-found') {
+                    try {
+                        await setDoc(docRef, pendingChanges);
+                        pendingChanges = {};
+                        updateSyncBadge('connected');
+                    } catch (err2) {
+                        console.error("Gagal membuat dokumen:", err2);
+                        updateSyncBadge('error', 'Gagal Simpan');
+                    }
+                } else {
+                    console.error("Firestore Update Error:", err);
+                    updateSyncBadge('error', 'Gagal Sinkronisasi');
+                }
+            }
+        }
+
+        function triggerDbUpdate() {
+            if (isSyncingFromDb || !currentUser) return;
+            
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(el => {
+                if (el.id && el.id !== 'inputCity' && el.id !== 'inputDate') {
+                    const currentValue = el.value;
+                    if (currentValue !== el.getAttribute('data-last-saved')) {
+                        pendingChanges[el.id] = currentValue;
+                        el.setAttribute('data-last-saved', currentValue);
+                    }
+                }
+            });
+            
+            const handoverJSON = JSON.stringify(handoverPatients);
+            if (handoverJSON !== localStorage.getItem('lastHandoverSync')) {
+                pendingChanges['handovers'] = handoverPatients;
+                localStorage.setItem('lastHandoverSync', handoverJSON);
+            }
+            
+            debouncedSave();
+        }
+
         function updateInputsFromFirestore(data) {
             isSyncingFromDb = true;
 
@@ -1341,7 +854,7 @@
                 handoverPatients = data.handovers;
                 isHandoverDirty = false;
                 lastHandoverSaveTime = new Date();
-                renderAllHandovers();
+                renderHandovers();
                 updateHandoverStatus();
             }
 
@@ -1386,7 +899,7 @@
                 }
             });
             handoverPatients = [];
-            renderAllHandovers();
+            renderHandovers();
             processData(false);
             
             isSyncingFromDb = false;
@@ -1414,11 +927,7 @@
                 updateSyncBadge('connected');
             }, (error) => {
                 console.error("Firestore Listener Error:", error);
-                if (error.code === 'permission-denied') {
-                    updateSyncBadge('error', 'Aktifkan Firestore Database!');
-                } else {
-                    updateSyncBadge('error', 'Gagal Sinkronisasi');
-                }
+                updateSyncBadge('error', 'Gagal Koneksi');
             });
         }
 
@@ -1452,12 +961,389 @@
             }
         }
 
-        // ================= REPORT GENERATION =================
+        // ================= HANDOVER LOGIC =================
+        function addHandoverRow(bed = '', name = '', consul = '', reply = '') {
+            const uniqueId = 'ho-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+            const newPatient = { id: uniqueId, bed, name, consul, reply };
+            handoverPatients.push(newPatient);
+            
+            isHandoverDirty = true;
+            updateHandoverStatus();
+            
+            renderHandovers();
+            saveToLocalCache();
+            processData(false);
+            
+            if (autoSyncEnabled) {
+                pendingChanges['handovers'] = handoverPatients;
+                debouncedSave();
+            }
+            
+            showToast('➕ Pasien ditambahkan');
+        }
+
+        function removeHandoverRow(id) {
+            patientIdToDelete = id;
+            toggleDeletePatientModal(true);
+        }
+
+        function toggleDeletePatientModal(show) {
+            const overlay = $('deletePatientModal');
+            const content = $('deletePatientContent');
+            if (!overlay || !content) return;
+            
+            if (show) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => content.classList.remove('scale-95', 'opacity-0'), 10);
+            } else {
+                content.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        }
+
+        function confirmDeletePatient() {
+            if (patientIdToDelete) {
+                handoverPatients = handoverPatients.filter(p => p.id !== patientIdToDelete);
+                
+                isHandoverDirty = true;
+                updateHandoverStatus();
+                
+                renderHandovers();
+                saveToLocalCache();
+                processData(false);
+                
+                if (autoSyncEnabled) {
+                    pendingChanges['handovers'] = handoverPatients;
+                    debouncedSave();
+                }
+                
+                patientIdToDelete = null;
+                showToast('🗑️ Pasien dihapus');
+            }
+            toggleDeletePatientModal(false);
+        }
+
+        function handleHandoverChange(id, field, value) {
+            const patient = handoverPatients.find(p => p.id === id);
+            if (patient) {
+                patient[field] = value;
+                
+                isHandoverDirty = true;
+                updateHandoverStatus();
+                
+                saveToLocalCache();
+                processData(false);
+                
+                if (autoSyncEnabled) {
+                    pendingChanges['handovers'] = handoverPatients;
+                    debouncedSave();
+                }
+            }
+        }
+
+        function saveToLocalCache() {
+            try {
+                localStorage.setItem('handoverCache', JSON.stringify(handoverPatients));
+                localStorage.setItem('handoverDirty', isHandoverDirty.toString());
+                localStorage.setItem('autoSyncEnabled', autoSyncEnabled.toString());
+            } catch(e) {
+                console.warn("localStorage penuh:", e);
+            }
+        }
+
+        function loadFromLocalCache() {
+            try {
+                const cached = localStorage.getItem('handoverCache');
+                const dirtyFlag = localStorage.getItem('handoverDirty');
+                const autoSyncPref = localStorage.getItem('autoSyncEnabled');
+                
+                if (cached) {
+                    handoverPatients = JSON.parse(cached);
+                    renderHandovers();
+                }
+                
+                if (dirtyFlag) isHandoverDirty = dirtyFlag === 'true';
+                if (autoSyncPref) autoSyncEnabled = autoSyncPref === 'true';
+                
+                updateHandoverStatus();
+            } catch(e) {
+                console.warn("Gagal load cache:", e);
+            }
+        }
+
+        async function saveHandoverToCloud() {
+            if (!currentUser) {
+                showToast('❌ Tidak terhubung ke server');
+                return;
+            }
+            
+            const saveBtn = $('saveHandoverBtn');
+            const saveLabel = $('saveHandoverLabel');
+            
+            if (saveBtn) saveBtn.disabled = true;
+            if (saveLabel) saveLabel.textContent = '⏳ Menyimpan...';
+            
+            updateSyncBadge('syncing', 'Menyimpan Handover...');
+            
+            const dateId = getSanitizedDateId();
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_reports', dateId);
+            
+            try {
+                await updateDoc(docRef, { handovers: handoverPatients });
+                
+                isHandoverDirty = false;
+                lastHandoverSaveTime = new Date();
+                pendingChanges = {};
+                updateHandoverStatus();
+                updateSyncBadge('connected');
+                showToast('✅ Handover tersimpan!');
+                
+            } catch (err) {
+                if (err.code === 'not-found') {
+                    try {
+                        await setDoc(docRef, { handovers: handoverPatients });
+                        isHandoverDirty = false;
+                        lastHandoverSaveTime = new Date();
+                        pendingChanges = {};
+                        updateHandoverStatus();
+                        updateSyncBadge('connected');
+                        showToast('✅ Handover tersimpan!');
+                    } catch (err2) {
+                        showToast('❌ Gagal menyimpan');
+                        updateSyncBadge('error', 'Gagal Simpan');
+                    }
+                } else {
+                    showToast('❌ Gagal menyimpan');
+                    updateSyncBadge('error', 'Gagal Simpan');
+                }
+            }
+            
+            if (saveBtn) saveBtn.disabled = false;
+            if (saveLabel) saveLabel.textContent = '💾 Simpan ke Cloud';
+        }
+
+        function toggleAutoSync() {
+            autoSyncEnabled = !autoSyncEnabled;
+            
+            const iconOn = $('autoSyncIconOn');
+            const iconOff = $('autoSyncIconOff');
+            const label = $('autoSyncLabel');
+            const toggleBtn = $('toggleAutoSyncBtn');
+            
+            if (autoSyncEnabled) {
+                if (iconOn) iconOn.classList.remove('hidden');
+                if (iconOff) iconOff.classList.add('hidden');
+                if (label) label.textContent = 'Auto-Sync: ON';
+                if (toggleBtn) {
+                    toggleBtn.classList.remove('bg-red-100', 'dark:bg-red-900/30', 'text-red-600', 'dark:text-red-400');
+                    toggleBtn.classList.add('bg-slate-100', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white');
+                }
+                showToast('🔄 Auto-Sync Diaktifkan');
+            } else {
+                if (iconOn) iconOn.classList.add('hidden');
+                if (iconOff) iconOff.classList.remove('hidden');
+                if (label) label.textContent = 'Auto-Sync: OFF';
+                if (toggleBtn) {
+                    toggleBtn.classList.remove('bg-slate-100', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white');
+                    toggleBtn.classList.add('bg-red-100', 'dark:bg-red-900/30', 'text-red-600', 'dark:text-red-400');
+                }
+                showToast('📴 Auto-Sync Dinonaktifkan');
+            }
+            
+            localStorage.setItem('autoSyncEnabled', autoSyncEnabled.toString());
+        }
+
+        function updateHandoverStatus() {
+            const indicator = $('handoverStatusIndicator');
+            const statusText = $('handoverStatusText');
+            const lastSaved = $('handoverLastSaved');
+            const saveBtn = $('saveHandoverBtn');
+            const actions = $('handoverActions');
+            const emptyState = $('handoverEmptyState');
+            
+            if (handoverPatients.length > 0) {
+                if (actions) actions.classList.remove('hidden');
+                if (emptyState) emptyState.classList.add('hidden');
+            } else {
+                if (actions) actions.classList.add('hidden');
+                if (emptyState) emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            if (isHandoverDirty) {
+                if (indicator) indicator.className = 'w-2 h-2 rounded-full bg-yellow-500 animate-pulse';
+                if (statusText) {
+                    statusText.textContent = '⚠️ Ada perubahan belum disimpan';
+                    statusText.className = 'text-xs font-bold text-yellow-600 dark:text-yellow-500';
+                }
+                if (saveBtn) saveBtn.disabled = false;
+            } else {
+                if (indicator) indicator.className = 'w-2 h-2 rounded-full bg-emerald-500';
+                if (statusText) {
+                    statusText.textContent = '✅ Semua data tersimpan';
+                    statusText.className = 'text-xs font-bold text-emerald-600 dark:text-emerald-400';
+                }
+                if (saveBtn) saveBtn.disabled = true;
+            }
+            
+            if (lastSaved && lastHandoverSaveTime) {
+                const timeStr = lastHandoverSaveTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                lastSaved.textContent = `💾 Last save: ${timeStr} WIB`;
+            }
+        }
+
+        function renderHandovers() {
+            const container = $('handoverContainer');
+            if (!container) return;
+
+            if (handoverPatients.length === 0) {
+                container.innerHTML = '';
+                updateHandoverStatus();
+                return;
+            }
+
+            let html = '';
+            handoverPatients.forEach((patient, idx) => {
+                html += `
+                    <div id="row-${patient.id}" class="relative bg-slate-50 dark:bg-slate-900/40 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all space-y-3 animate-slide-in">
+                        <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
+                            <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Pasien #${idx + 1}</span>
+                            <button type="button" onclick="removeHandoverRow('${patient.id}')" class="text-xs font-bold text-red-500 hover:text-red-600 flex items-center gap-1 transition-all" title="Hapus Pasien">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                Hapus
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="col-span-1">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">No. Bed</label>
+                                <input type="text" 
+                                       id="bed-${patient.id}"
+                                       value="${escapeHtml(patient.bed || '')}" 
+                                       placeholder="Bed 1" 
+                                       class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none" />
+                            </div>
+                            <div class="col-span-2">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Nama Pasien</label>
+                                <input type="text" 
+                                       id="name-${patient.id}"
+                                       value="${escapeHtml(patient.name || '')}" 
+                                       placeholder="Contoh: Ny. S (45th)" 
+                                       class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none" />
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Konsulan & Diagnosa / Masalah</label>
+                                <div class="grid-textarea-container relative">
+                                    <div id="mirror-consul-${patient.id}" class="grid-textarea-mirror text-xs p-2.5 min-h-[140px] border border-transparent whitespace-pre-wrap break-all">${escapeHtml(patient.consul || '')}\n</div>
+                                    <textarea id="consul-${patient.id}"
+                                              placeholder="Tulis diagnosa lengkap..." 
+                                              class="grid-textarea-input w-full h-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none">${escapeHtml(patient.consul || '')}</textarea>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Balasan Konsulan / Tindak Lanjut</label>
+                                <div class="grid-textarea-container relative">
+                                    <div id="mirror-reply-${patient.id}" class="grid-textarea-mirror text-xs p-2.5 min-h-[140px] border border-transparent whitespace-pre-wrap break-all">${escapeHtml(patient.reply || '')}\n</div>
+                                    <textarea id="reply-${patient.id}"
+                                              placeholder="Tulis rencana terapi..." 
+                                              class="grid-textarea-input handover-textarea w-full h-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none">${escapeHtml(patient.reply || '')}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            
+            // Attach event listeners untuk handover inputs
+            handoverPatients.forEach(patient => {
+                const bedInput = $(`bed-${patient.id}`);
+                const nameInput = $(`name-${patient.id}`);
+                const consulInput = $(`consul-${patient.id}`);
+                const replyInput = $(`reply-${patient.id}`);
+                const mirrorConsul = $(`mirror-consul-${patient.id}`);
+                const mirrorReply = $(`mirror-reply-${patient.id}`);
+                
+                if (bedInput) bedInput.addEventListener('change', () => handleHandoverChange(patient.id, 'bed', bedInput.value));
+                if (nameInput) nameInput.addEventListener('change', () => handleHandoverChange(patient.id, 'name', nameInput.value));
+                if (consulInput) {
+                    consulInput.addEventListener('input', () => {
+                        if (mirrorConsul) mirrorConsul.textContent = consulInput.value + '\n';
+                        handleHandoverChange(patient.id, 'consul', consulInput.value);
+                    });
+                }
+                if (replyInput) {
+                    replyInput.addEventListener('input', () => {
+                        if (mirrorReply) mirrorReply.textContent = replyInput.value + '\n';
+                        handleHandoverChange(patient.id, 'reply', replyInput.value);
+                    });
+                }
+            });
+            
+            updateHandoverStatus();
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        function resetLaporanOnly() {
+            if ($('inputKendala')) {
+                $('inputKendala').value = '';
+                const mirror = $('mirror-inputKendala');
+                if (mirror) mirror.textContent = '';
+            }
+            
+            SHIFTS_CONFIG.forEach(shift => {
+                const sId = shift.id;
+                if ($(`dr-${sId}`)) $(`dr-${sId}`).value = '';
+                if ($(`drExtra-${sId}`)) $(`drExtra-${sId}`).value = '';
+                if ($(`bpjs-${sId}`)) $(`bpjs-${sId}`).value = '0';
+                if ($(`umum-${sId}`)) $(`umum-${sId}`).value = '0';
+                if ($(`bpjsKet-${sId}`)) { $(`bpjsKet-${sId}`).value = ''; const m = $(`mirror-bpjsKet-${sId}`); if (m) m.textContent = ''; }
+                if ($(`umumKet-${sId}`)) { $(`umumKet-${sId}`).value = ''; const m = $(`mirror-umumKet-${sId}`); if (m) m.textContent = ''; }
+                if ($(`doa-${sId}`)) { $(`doa-${sId}`).value = ''; const m = $(`mirror-doa-${sId}`); if (m) m.textContent = ''; }
+                if ($(`meninggal-${sId}`)) { $(`meninggal-${sId}`).value = ''; const m = $(`mirror-meninggal-${sId}`); if (m) m.textContent = ''; }
+                if ($(`mcu-${sId}`)) { $(`mcu-${sId}`).value = ''; const m = $(`mirror-mcu-${sId}`); if (m) m.textContent = ''; }
+                if ($(`pkmRujukKet-${sId}`)) { $(`pkmRujukKet-${sId}`).value = ''; const m = $(`mirror-pkmRujukKet-${sId}`); if (m) m.textContent = ''; }
+                if ($(`rsLain-${sId}`)) { $(`rsLain-${sId}`).value = ''; const m = $(`mirror-rsLain-${sId}`); if (m) m.textContent = ''; }
+                
+                SOURCES.forEach(src => {
+                    if ($(`${src.id}RI-${sId}`)) $(`${src.id}RI-${sId}`).value = '0';
+                    if ($(`${src.id}RJ-${sId}`)) $(`${src.id}RJ-${sId}`).value = '0';
+                });
+            });
+
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(el => {
+                if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity') {
+                    el.setAttribute('data-last-saved', el.value);
+                }
+            });
+
+            setDefaultDate();
+            processData(true);
+            toggleModal(false);
+            showToast('Laporan Jaga Harian Direset!');
+        }
+
         const valueCache = {};
 
         function processData(shouldTriggerSave = true) {
             let totalAll = 0;
-            const nowTime = "00.00"; // Statis jam 00.00 WIB
+            const nowTime = "00.00";
             
             let reportText = `*LAPORAN JAGA IGD*\n\n${getVal('inputCity')}, ${getVal('inputDate')} Jam ${nowTime} WIB\n\n`;
             let summaryBlock = '';
@@ -1467,12 +1353,8 @@
             SHIFTS_CONFIG.forEach(shift => {
                 const sId = shift.id;
                 
-                const cacheKey = (field) => `${field}-${sId}`;
-                if (!valueCache[cacheKey('dr')]) valueCache[cacheKey('dr')] = getVal(`dr-${sId}`);
-                if (!valueCache[cacheKey('drExtra')]) valueCache[cacheKey('drExtra')] = getVal(`drExtra-${sId}`);
-                
-                const drSel = valueCache[cacheKey('dr')];
-                const drExt = valueCache[cacheKey('drExtra')];
+                const drSel = getVal(`dr-${sId}`);
+                const drExt = getVal(`drExtra-${sId}`);
                 const drFinal = (drSel && drExt) ? `${drSel} (${drExt})` : (drSel || drExt || '');
                 if (!drFinal) missingDoctors.push(shift.label);
 
@@ -1512,8 +1394,6 @@
                 detailsBlock += `Rujuk RS Lain :\n${getVal(`rsLain-${sId}`) || '-'}\n`;
                 detailsBlock += `-------------------------------\n\n`;
             });
-
-            Object.keys(valueCache).forEach(key => delete valueCache[key]);
 
             const isValid = missingDoctors.length === 0;
             const validationBadge = $('validationBadge');
@@ -1556,6 +1436,16 @@
             }, 500);
         }
 
+        function showToast(msg) {
+            const toast = $('toast');
+            const msgEl = $('toastMsg');
+            if (toast && msgEl) {
+                msgEl.textContent = msg;
+                toast.classList.remove('translate-y-20');
+                setTimeout(() => toast.classList.add('translate-y-20'), 3000);
+            }
+        }
+
         function toggleModal(show) {
             const overlay = $('modalOverlay');
             const content = $('modalContent');
@@ -1570,61 +1460,6 @@
             }
         }
 
-        function toggleDeletePatientModal(show) {
-            const overlay = $('deletePatientModal');
-            const content = $('deletePatientContent');
-            if (!overlay || !content) return;
-            
-            if (show) {
-                overlay.classList.remove('hidden');
-                setTimeout(() => content.classList.remove('scale-95', 'opacity-0'), 10);
-            } else {
-                content.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => overlay.classList.add('hidden'), 300);
-            }
-        }
-
-        function resetLaporanOnly() {
-            if ($('inputKendala')) {
-                $('inputKendala').value = '';
-                const mirror = $('mirror-inputKendala');
-                if (mirror) mirror.textContent = '';
-            }
-            
-            SHIFTS_CONFIG.forEach(shift => {
-                const sId = shift.id;
-                if ($(`dr-${sId}`)) $(`dr-${sId}`).value = '';
-                if ($(`drExtra-${sId}`)) $(`drExtra-${sId}`).value = '';
-                if ($(`bpjs-${sId}`)) $(`bpjs-${sId}`).value = '0';
-                if ($(`umum-${sId}`)) $(`umum-${sId}`).value = '0';
-                if ($(`bpjsKet-${sId}`)) { $(`bpjsKet-${sId}`).value = ''; const m = $(`mirror-bpjsKet-${sId}`); if (m) m.textContent = ''; }
-                if ($(`umumKet-${sId}`)) { $(`umumKet-${sId}`).value = ''; const m = $(`mirror-umumKet-${sId}`); if (m) m.textContent = ''; }
-                if ($(`doa-${sId}`)) { $(`doa-${sId}`).value = ''; const m = $(`mirror-doa-${sId}`); if (m) m.textContent = ''; }
-                if ($(`meninggal-${sId}`)) { $(`meninggal-${sId}`).value = ''; const m = $(`mirror-meninggal-${sId}`); if (m) m.textContent = ''; }
-                if ($(`mcu-${sId}`)) { $(`mcu-${sId}`).value = ''; const m = $(`mirror-mcu-${sId}`); if (m) m.textContent = ''; }
-                if ($(`pkmRujukKet-${sId}`)) { $(`pkmRujukKet-${sId}`).value = ''; const m = $(`mirror-pkmRujukKet-${sId}`); if (m) m.textContent = ''; }
-                if ($(`rsLain-${sId}`)) { $(`rsLain-${sId}`).value = ''; const m = $(`mirror-rsLain-${sId}`); if (m) m.textContent = ''; }
-                
-                SOURCES.forEach(src => {
-                    if ($(`${src.id}RI-${sId}`)) $(`${src.id}RI-${sId}`).value = '0';
-                    if ($(`${src.id}RJ-${sId}`)) $(`${src.id}RJ-${sId}`).value = '0';
-                });
-            });
-
-            // Reset juga nilai data-last-saved
-            const inputs = document.querySelectorAll('input, select, textarea');
-            inputs.forEach(el => {
-                if (el.id && el.id !== 'inputDate' && el.id !== 'inputCity') {
-                    el.setAttribute('data-last-saved', el.value);
-                }
-            });
-
-            setDefaultDate();
-            processData(true);
-            toggleModal(false);
-            showToast('Laporan Jaga Harian Direset!');
-        }
-
         const initAuth = async () => {
             try {
                 updateSyncBadge('syncing', 'Menghubungkan Auth...');
@@ -1635,43 +1470,37 @@
                 }
             } catch (err) {
                 console.error("Gagal melakukan autentikasi:", err);
-                updateSyncBadge('error', 'Gagal Autentikasi');
+                updateSyncBadge('error', 'Gagal Auth');
             }
         };
 
-        // ================= INITIALIZATION =================
-        function initializeApp() {
+        // Global functions
+        window.toggleMainSection = toggleMainSection;
+        window.togglePreviewSection = togglePreviewSection;
+        window.toggleShift = toggleShift;
+        window.addHandoverRow = addHandoverRow;
+        window.removeHandoverRow = removeHandoverRow;
+        window.setDefaultDate = setDefaultDate;
+        window.toggleModal = toggleModal;
+        window.resetLaporanOnly = resetLaporanOnly;
+        window.toggleDeletePatientModal = toggleDeletePatientModal;
+        window.saveHandoverToCloud = saveHandoverToCloud;
+        window.toggleAutoSync = toggleAutoSync;
+        window.mirrorKendala = mirrorKendala;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
             renderShifts();
             setDefaultDate();
-            setupEventDelegation();
-            
             loadFromLocalCache();
-            updateHandoverStatus();
-            
-            if (!autoSyncEnabled) {
-                const iconOn = $('autoSyncIconOn');
-                const iconOff = $('autoSyncIconOff');
-                const label = $('autoSyncLabel');
-                const toggleBtn = $('toggleAutoSyncBtn');
-                
-                if (iconOn) iconOn.classList.add('hidden');
-                if (iconOff) iconOff.classList.remove('hidden');
-                if (label) label.textContent = 'Auto-Sync: OFF';
-                if (toggleBtn) {
-                    toggleBtn.classList.remove('bg-slate-100', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white');
-                    toggleBtn.classList.add('bg-red-100', 'dark:bg-red-900/30', 'text-red-600', 'dark:text-red-400');
-                }
-            }
             
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
-            
-            // Auto-process setiap 5 menit untuk memastikan konsistensi
             setInterval(() => {
                 if (isInitialized) processData(false);
             }, 300000);
 
-            // Keyboard shortcut Ctrl+S
+            // Keyboard shortcut
             document.addEventListener('keydown', (e) => {
                 if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                     e.preventDefault();
@@ -1681,22 +1510,7 @@
                 }
             });
 
-            // Peringatan sebelum tutup tab
-            window.addEventListener('beforeunload', (e) => {
-                if (isHandoverDirty || Object.keys(pendingChanges).length > 0) {
-                    flushPendingChanges();
-                    const message = 'Ada perubahan yang belum disimpan. Data akan tetap tersimpan.';
-                    e.returnValue = message;
-                    return message;
-                }
-            });
-
-            // Online/Offline detection
-            window.addEventListener('online', updateOnlineStatus);
-            window.addEventListener('offline', updateOnlineStatus);
-            updateOnlineStatus();
-
-            // Dark mode toggle
+            // Dark mode
             if ($('darkToggle')) {
                 $('darkToggle').onclick = async () => {
                     const html = document.documentElement;
@@ -1731,62 +1545,29 @@
                         area.select();
                         try {
                             document.execCommand('copy');
-                            showToast('📋 Laporan disalin ke clipboard!');
+                            showToast('Laporan Disalin!');
                         } catch(err) {
-                            showToast('❌ Gagal menyalin', true);
+                            showToast('Gagal menyalin');
                         }
                     }
                 };
             }
 
-            // WA button
             if ($('waBtn')) $('waBtn').onclick = shareToWA;
-            
-            // Refresh button
             if ($('refreshBtn')) $('refreshBtn').onclick = () => window.location.reload();
             
-            // Modal buttons
             if ($('cancelReset')) $('cancelReset').onclick = () => toggleModal(false);
             if ($('confirmReset')) $('confirmReset').onclick = resetLaporanOnly;
             if ($('cancelDeletePatient')) $('cancelDeletePatient').onclick = () => toggleDeletePatientModal(false);
             if ($('confirmDeletePatient')) $('confirmDeletePatient').onclick = confirmDeletePatient;
 
-            // Date change
             if ($('inputDate')) {
                 $('inputDate').addEventListener('change', () => {
                     if (isInitialized) setupRealtimeSync();
                 });
-                $('inputDate').addEventListener('blur', () => {
-                    if (isInitialized) setupRealtimeSync();
-                });
             }
 
-            // Sembunyikan skeleton, tampilkan konten
-            setTimeout(() => {
-                const skeleton = $('skeletonLoader');
-                const mainContent = $('mainContent');
-                if (skeleton) skeleton.style.display = 'none';
-                if (mainContent) mainContent.classList.remove('hidden');
-            }, 500);
-        }
-
-        // Expose globals
-        window.toggleMainSection = toggleMainSection;
-        window.togglePreviewSection = togglePreviewSection;
-        window.toggleShift = toggleShift;
-        window.addHandoverRow = addHandoverRow;
-        window.removeHandoverRow = removeHandoverRow;
-        window.setDefaultDate = setDefaultDate;
-        window.toggleModal = toggleModal;
-        window.resetLaporanOnly = resetLaporanOnly;
-        window.toggleDeletePatientModal = toggleDeletePatientModal;
-        window.saveHandoverToCloud = saveHandoverToCloud;
-        window.toggleAutoSync = toggleAutoSync;
-
-        // Start app
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeApp();
-            
+            // Auth
             onAuthStateChanged(auth, (user) => {
                 currentUser = user;
                 if (user) {
@@ -1794,7 +1575,6 @@
                     setupRealtimeSync();
                     setupThemeSync(user.uid);
                     isInitialized = true;
-                    processOfflineQueue();
                 } else {
                     console.warn("User belum login, menjalankan auth...");
                     updateSyncBadge('error', 'Auth Diperlukan');
