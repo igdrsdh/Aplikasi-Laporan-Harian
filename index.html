@@ -1421,7 +1421,8 @@
 
         function processData(shouldTriggerSave = true) {
             let totalAll = 0;
-            const nowTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            // PERUBAHAN: Jam laporan dibuat statis pada pukul 00.00 WIB
+            const nowTime = "00.00";
             
             let reportText = `*LAPORAN JAGA IGD*\n\n${getVal('inputCity')}, ${getVal('inputDate')} Jam ${nowTime} WIB\n\n`;
             let summaryBlock = '';
@@ -1572,6 +1573,7 @@
             loadFromLocalCache();
             updateHandoverStatus();
             
+            // PERUBAHAN: Memperbaiki tampilan tombol auto-sync saat startup berdasarkan status yang dimuat
             if (!autoSyncEnabled) {
                 const iconOn = $('autoSyncIconOn');
                 const iconOff = $('autoSyncIconOff');
