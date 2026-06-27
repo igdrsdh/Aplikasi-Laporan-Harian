@@ -14,15 +14,23 @@
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
                     },
                     animation: {
-                        'ecg-scan': 'ecg-draw 2s linear infinite',
+                        'ecg-pulse': 'ecg-pulse 2s ease-in-out infinite',
+                        'ecg-beat': 'ecg-beat 1.5s ease-in-out infinite',
                         'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
-                        'ecg-draw': {
-                            '0%': { 'stroke-dashoffset': '100', 'opacity': '0' },
-                            '10%': { 'opacity': '1' },
-                            '90%': { 'opacity': '1' },
-                            '100%': { 'stroke-dashoffset': '-100', 'opacity': '0' },
+                        'ecg-pulse': {
+                            '0%, 100%': { transform: 'scaleX(1)' },
+                            '50%': { transform: 'scaleX(1.02)' },
+                        },
+                        'ecg-beat': {
+                            '0%': { strokeDashoffset: '100', opacity: '0.3' },
+                            '10%': { opacity: '1' },
+                            '20%': { strokeDashoffset: '80' },
+                            '40%': { strokeDashoffset: '60' },
+                            '60%': { strokeDashoffset: '40' },
+                            '80%': { strokeDashoffset: '20' },
+                            '100%': { strokeDashoffset: '0', opacity: '0.3' },
                         }
                     }
                 }
@@ -122,6 +130,76 @@
             border-color: #475569;
             color: #e2e8f0;
         }
+
+        /* ECG Animation Styles */
+        .ecg-container {
+            position: relative;
+            width: 120px;
+            height: 30px;
+            overflow: hidden;
+        }
+        
+        .ecg-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #10b981;
+            transform: translateY(-50%);
+        }
+        
+        .ecg-beat-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            animation: ecg-pulse 2s ease-in-out infinite;
+        }
+        
+        .ecg-beat-svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .ecg-path {
+            stroke: #10b981;
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        
+        .ecg-glow {
+            filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.4));
+        }
+        
+        .ecg-dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: ecg-dot-move 2s linear infinite;
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+        }
+        
+        @keyframes ecg-dot-move {
+            0% { left: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Smooth shift transition */
+        .shift-block {
+            transition: all 0.3s ease;
+        }
+        
+        .shift-block.active {
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.15);
+        }
     </style>
 </head>
 <body class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
@@ -142,15 +220,80 @@
                     <h1 class="font-extrabold text-sm md:text-base leading-none text-slate-900 dark:text-white">Laporan Jaga IGD</h1>
                     <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 mt-1">
                         <div class="flex items-center gap-1.5">
-                            <div class="w-10 h-4 flex items-center overflow-hidden">
-                                <svg viewBox="0 0 50 20" class="w-full h-full text-emerald-500 dark:text-emerald-400">
-                                    <path class="ecg-path animate-ecg-scan" 
-                                          d="M0 10 h8 l2 -4 l2 4 h2 l2 -12 l2 18 l2 -6 h2 l2 3 l2 -3 h14" 
-                                          fill="none" 
-                                          stroke="currentColor" 
-                                          stroke-width="1.5" 
-                                          stroke-linecap="round" 
-                                          stroke-linejoin="round" />
+                            <div class="ecg-container">
+                                <svg viewBox="0 0 120 30" class="ecg-beat-svg">
+                                    <!-- Base line -->
+                                    <line x1="0" y1="15" x2="120" y2="15" stroke="#10b981" stroke-width="1" opacity="0.2"/>
+                                    
+                                    <!-- ECG Complex - multiple beats with realistic pattern -->
+                                    <path class="ecg-path ecg-glow" 
+                                          d="M0,15 L8,15 L10,15 L12,15 L14,15 L16,15 
+                                             L16.5,5 L17,15 L17.5,15 L18,25 L18.5,15 L19,15 
+                                             L20,15 L22,15 L24,15 L26,15 L28,15 L30,15 
+                                             L31,15 L32,15 L33,15 L34,15 L35,15 L35.5,8 L36,15 
+                                             L36.5,15 L37,22 L37.5,15 L38,15 L39,15 L40,15 
+                                             L42,15 L44,15 L46,15 L48,15 L50,15 L52,15 
+                                             L53,15 L54,15 L55,15 L55.5,3 L56,15 L56.5,15 
+                                             L57,27 L57.5,15 L58,15 L59,15 L60,15 L62,15 
+                                             L64,15 L66,15 L68,15 L70,15 L72,15 L74,15 
+                                             L75,15 L76,15 L77,15 L77.5,6 L78,15 L78.5,15 
+                                             L79,20 L79.5,15 L80,15 L81,15 L82,15 L84,15 
+                                             L86,15 L88,15 L90,15 L92,15 L94,15 L96,15 
+                                             L97,15 L98,15 L99,15 L99.5,10 L100,15 L100.5,15 
+                                             L101,18 L101.5,15 L102,15 L103,15 L104,15 L106,15 
+                                             L108,15 L110,15 L112,15 L114,15 L116,15 L118,15 L120,15" 
+                                          stroke-width="2"
+                                          stroke-linecap="round"
+                                          stroke-linejoin="round">
+                                        <animate attributeName="stroke-dashoffset" 
+                                                 from="300" to="0" 
+                                                 dur="2s" 
+                                                 repeatCount="indefinite"/>
+                                        <animate attributeName="opacity"
+                                                 values="0.3;1;0.3"
+                                                 dur="2s"
+                                                 repeatCount="indefinite"/>
+                                    </path>
+                                    
+                                    <!-- R-wave peaks with glow -->
+                                    <circle cx="17" cy="5" r="1.5" fill="#10b981" opacity="0.8">
+                                        <animate attributeName="opacity" 
+                                                 values="0.3;1;0.3" 
+                                                 dur="2s" 
+                                                 repeatCount="indefinite"/>
+                                    </circle>
+                                    <circle cx="55.5" cy="3" r="1.5" fill="#10b981" opacity="0.8">
+                                        <animate attributeName="opacity" 
+                                                 values="0.3;1;0.3" 
+                                                 dur="2s" 
+                                                 repeatCount="indefinite"/>
+                                    </circle>
+                                    <circle cx="77.5" cy="6" r="1.5" fill="#10b981" opacity="0.8">
+                                        <animate attributeName="opacity" 
+                                                 values="0.3;1;0.3" 
+                                                 dur="2s" 
+                                                 repeatCount="indefinite"/>
+                                    </circle>
+                                    
+                                    <!-- Moving dot -->
+                                    <circle r="2" fill="#10b981" opacity="0.8">
+                                        <animateMotion dur="2s" repeatCount="indefinite"
+                                            path="M0,15 L8,15 L10,15 L12,15 L14,15 L16,15 
+                                                  L16.5,5 L17,15 L17.5,15 L18,25 L18.5,15 L19,15 
+                                                  L20,15 L22,15 L24,15 L26,15 L28,15 L30,15 
+                                                  L31,15 L32,15 L33,15 L34,15 L35,15 L35.5,8 L36,15 
+                                                  L36.5,15 L37,22 L37.5,15 L38,15 L39,15 L40,15 
+                                                  L42,15 L44,15 L46,15 L48,15 L50,15 L52,15 
+                                                  L53,15 L54,15 L55,15 L55.5,3 L56,15 L56.5,15 
+                                                  L57,27 L57.5,15 L58,15 L59,15 L60,15 L62,15 
+                                                  L64,15 L66,15 L68,15 L70,15 L72,15 L74,15 
+                                                  L75,15 L76,15 L77,15 L77.5,6 L78,15 L78.5,15 
+                                                  L79,20 L79.5,15 L80,15 L81,15 L82,15 L84,15 
+                                                  L86,15 L88,15 L90,15 L92,15 L94,15 L96,15 
+                                                  L97,15 L98,15 L99,15 L99.5,10 L100,15 L100.5,15 
+                                                  L101,18 L101.5,15 L102,15 L103,15 L104,15 L106,15 
+                                                  L108,15 L110,15 L112,15 L114,15 L116,15 L118,15 L120,15"/>
+                                    </circle>
                                 </svg>
                             </div>
                             <span id="liveClock" class="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400">Loading...</span>
@@ -494,6 +637,7 @@
         let isSyncingFromDb = false;
         let patientIdToDelete = null;
         let isInitialized = false;
+        let currentlyOpenShift = null; // Track currently open shift
         
         // State Handover Save
         let isHandoverDirty = false;
@@ -542,7 +686,7 @@
 
             SHIFTS_CONFIG.forEach(shift => {
                 html += `
-                <div class="shift-block bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 overflow-hidden transition-colors">
+                <div class="shift-block bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 overflow-hidden transition-colors" data-shift-id="${shift.id}">
                     <button type="button" onclick="toggleShift('${shift.id}')" class="w-full flex items-center justify-between p-4 bg-gradient-to-r ${shift.color} text-white transition-all active:scale-[0.98] shadow-inner">
                         <div class="flex items-center gap-3">
                             <span class="text-xl">${shift.icon}</span>
@@ -703,18 +847,36 @@
             const icon = $(`icon-${id}`);
             if (!content || !icon) return;
 
-            const isExpanded = content.classList.contains('expanded');
-            
-            if (isExpanded) {
+            // If this shift is already open, just close it
+            if (currentlyOpenShift === id) {
                 content.classList.remove('expanded');
                 icon.classList.remove('rotate-180');
-            } else {
-                content.classList.add('expanded');
-                icon.classList.add('rotate-180');
-                setTimeout(() => {
-                    content.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 80);
+                currentlyOpenShift = null;
+                return;
             }
+
+            // Close currently open shift if any
+            if (currentlyOpenShift) {
+                const oldContent = $(`content-${currentlyOpenShift}`);
+                const oldIcon = $(`icon-${currentlyOpenShift}`);
+                if (oldContent) {
+                    oldContent.classList.remove('expanded');
+                    oldIcon.classList.remove('rotate-180');
+                }
+            }
+
+            // Open the new shift
+            content.classList.add('expanded');
+            icon.classList.add('rotate-180');
+            currentlyOpenShift = id;
+
+            // Scroll to the opened shift after a short delay
+            setTimeout(() => {
+                const element = document.querySelector(`[data-shift-id="${id}"]`);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
         }
 
         function toggleMainSection(sectionId) {
