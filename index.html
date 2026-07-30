@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan IGD</title>
+    <title>Laporan IGD - HUT RI ke-81</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -13,8 +13,24 @@
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
                     },
+                    colors: {
+                        ri: {
+                            red: '#D32F2F',
+                            bright: '#E53935',
+                            darkred: '#9A0007',
+                            lightred: '#FFEBEE',
+                            gold: '#FFD700'
+                        }
+                    },
                     animation: {
                         'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'wave': 'wave 2s infinite ease-in-out',
+                    },
+                    keyframes: {
+                        wave: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' }
+                        }
                     }
                 }
             }
@@ -31,8 +47,8 @@
         }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e53935; border-radius: 10px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #9a0007; border-radius: 10px; }
         
         @keyframes slideIn {
             from { transform: translateY(10px); opacity: 0; }
@@ -41,8 +57,8 @@
         .animate-slide-in { animation: slideIn 0.3s ease-out forwards; }
 
         .input-focus-ring:focus {
-            border-color: #0ea5e9 !important;
-            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+            border-color: #dc2626 !important;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
         }
 
         .grid-textarea-container {
@@ -94,27 +110,28 @@
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23dc2626' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 12px center;
             padding-right: 32px !important;
         }
 
         kbd {
-            background: #e2e8f0;
+            background: #fecdd3;
             border-radius: 4px;
             padding: 2px 6px;
             font-size: 10px;
             font-family: monospace;
-            border: 1px solid #cbd5e1;
+            border: 1px solid #f43f5e;
+            color: #881337;
         }
         .dark kbd {
-            background: #334155;
-            border-color: #475569;
-            color: #e2e8f0;
+            background: #881337;
+            border-color: #be123c;
+            color: #ffe4e6;
         }
 
-        /* Minimalist Small ECG Style */
+        /* Minimalist Small ECG Style with Kemerdekaan Red Glow */
         .ecg-container {
             position: relative;
             width: 50px;
@@ -122,47 +139,68 @@
             overflow: hidden;
         }
 
-        /* Smooth shift transition */
         .shift-block {
             transition: all 0.3s ease;
         }
         
         .shift-block.active {
-            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.15);
+            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.2);
+        }
+
+        /* Banner Merah Putih Pattern */
+        .merah-putih-stripe {
+            background: linear-gradient(180deg, #dc2626 50%, #ffffff 50%);
+        }
+        .dark .merah-putih-stripe {
+            background: linear-gradient(180deg, #991b1b 50%, #27272a 50%);
         }
     </style>
 </head>
-<body class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+<body class="bg-rose-50/60 dark:bg-stone-950 text-stone-800 dark:text-stone-100 min-h-screen transition-colors duration-300">
+
+    <!-- Pita Kemerdekaan Top Banner -->
+    <div class="h-1.5 w-full bg-gradient-to-r from-red-600 via-rose-500 to-red-700 fixed top-0 left-0 right-0 z-50"></div>
 
     <!-- Header & Kontrol Utama -->
-    <div class="fixed top-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-300 dark:border-slate-800 px-4 py-3">
+    <div class="fixed top-1.5 left-0 right-0 z-40 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border-b border-red-200 dark:border-stone-800 px-4 py-2.5 shadow-sm">
         <div class="max-w-3xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 flex items-center justify-center overflow-hidden rounded-xl bg-white dark:bg-slate-800 shadow-sm border border-slate-300 dark:border-slate-700">
-                    <img 
-                        src="https://raw.githubusercontent.com/igdrsdh/Aplikasi-Laporan-Harian/main/LOGO%20IGD.png" 
-                        alt="Logo IGD" 
-                        class="w-full h-full object-contain p-1"
-                        onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%230ea5e9%22/%3E%3Ctext x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22%3E+%3C/text%3E%3C/svg%3E'"
-                    />
+                <div class="relative">
+                    <div class="w-10 h-10 flex items-center justify-center overflow-hidden rounded-xl bg-gradient-to-b from-red-600 to-red-700 p-0.5 shadow-md">
+                        <div class="w-full h-full bg-white dark:bg-stone-800 rounded-[10px] flex items-center justify-center overflow-hidden">
+                            <img 
+                                src="https://raw.githubusercontent.com/igdrsdh/Aplikasi-Laporan-Harian/main/LOGO%20IGD.png" 
+                                alt="Logo IGD" 
+                                class="w-full h-full object-contain p-1"
+                                onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23dc2626%22/%3E%3Ctext x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22%3E+%3C/text%3E%3C/svg%3E'"
+                            />
+                        </div>
+                    </div>
+                    <!-- Badge 17 Agustus -->
+                    <span class="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[8px] font-extrabold text-white ring-2 ring-white dark:ring-stone-900 animate-pulse">
+                        🇮🇩
+                    </span>
                 </div>
                 <div>
-                    <h1 class="font-extrabold text-sm md:text-base leading-none text-slate-900 dark:text-white">Laporan Jaga IGD</h1>
+                    <div class="flex items-center gap-2">
+                        <h1 class="font-extrabold text-sm md:text-base leading-none text-red-700 dark:text-red-400">Laporan Jaga IGD</h1>
+                        <span class="px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider bg-red-100 dark:bg-red-950/80 text-red-700 dark:text-red-300 rounded border border-red-300 dark:border-red-800">
+                            MERDEKA !! 🇮🇩
+                        </span>
+                    </div>
                     <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 mt-1">
                         <div class="flex items-center gap-1.5">
                             <div class="ecg-container">
                                 <svg viewBox="0 0 50 20" class="w-full h-full">
                                     <defs>
-                                        <!-- Glow Effect for Realistic Monitor Beam -->
                                         <filter id="ecg-glow" x="-20%" y="-20%" width="140%" height="140%">
-                                            <feGaussianBlur stdDeviation="0.6" result="blur" />
+                                            <feGaussianBlur stdDeviation="0.8" result="blur" />
                                             <feMerge>
                                                 <feMergeNode in="blur" />
                                                 <feMergeNode in="SourceGraphic" />
                                             </feMerge>
                                         </filter>
                                         
-                                        <!-- CRT Monitor Sweep Gradient (Trailing Decay) -->
                                         <linearGradient id="ecg-sweep-grad" x1="0%" y1="0%" x2="100%" y2="0%">
                                             <stop offset="0%" stop-color="black" />
                                             <stop offset="65%" stop-color="white" stop-opacity="0.05" />
@@ -171,66 +209,58 @@
                                             <stop offset="100%" stop-color="black" />
                                         </linearGradient>
                                         
-                                        <!-- Moving Mask to translate sweep across the SVG -->
                                         <mask id="ecg-sweep-mask">
                                             <rect x="-50" y="0" width="50" height="20" fill="url(#ecg-sweep-grad)">
                                                 <animate 
                                                     attributeName="x" 
                                                     from="-50" 
                                                     to="50" 
-                                                    dur="1.6s" 
+                                                    dur="1.5s" 
                                                     repeatCount="indefinite" />
                                             </rect>
                                         </mask>
                                     </defs>
                                     
-                                    <!-- Background Faint Trace (Phosphor Memory) -->
+                                    <!-- Background Faint Trace -->
                                     <path d="M 0,10 L 12,10 C 13.5,10 14,8 15,8 C 16,8 16.5,10 18,10 L 21,10 L 22,12 L 24,1 L 26,19 L 27.5,10 L 30,10 C 31.5,10 33,7 34.5,7 C 36,7 37.5,10 39,10 L 50,10" 
                                           fill="none" 
-                                          class="stroke-slate-200 dark:stroke-slate-800" 
+                                          class="stroke-red-200 dark:stroke-stone-700" 
                                           stroke-width="1.1" 
                                           opacity="0.6" />
 
-                                    <!-- Sweeping Single ECG Wave (Medical Normal Sinus Rhythm) -->
+                                    <!-- Sweeping Single ECG Wave (Merah Kemerdekaan) -->
                                     <path d="M 0,10 L 12,10 C 13.5,10 14,8 15,8 C 16,8 16.5,10 18,10 L 21,10 L 22,12 L 24,1 L 26,19 L 27.5,10 L 30,10 C 31.5,10 33,7 34.5,7 C 36,7 37.5,10 39,10 L 50,10" 
                                           fill="none" 
-                                          stroke="#10b981" 
-                                          stroke-width="1.4" 
+                                          stroke="#dc2626" 
+                                          stroke-width="1.6" 
                                           stroke-linecap="round" 
                                           stroke-linejoin="round" 
                                           filter="url(#ecg-glow)" 
                                           mask="url(#ecg-sweep-mask)" />
                                 </svg>
                             </div>
-                            <span id="liveClock" class="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400">Loading...</span>
+                            <span id="liveClock" class="text-[10px] font-mono font-bold text-stone-500 dark:text-stone-400">Loading...</span>
                         </div>
-                        <div id="syncStatus" class="flex items-center gap-1 text-[9px] font-bold text-amber-500 uppercase tracking-wider">
-                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                        <div id="syncStatus" class="flex items-center gap-1 text-[9px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
                             Menghubungkan...
                         </div>
                     </div>
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <button id="darkToggle" class="w-10 h-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all border border-slate-300 dark:border-slate-700 shadow-sm" title="Ubah Tema">
-                    <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <button id="darkToggle" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white dark:bg-stone-800 hover:bg-rose-50 dark:hover:bg-stone-700 transition-all border border-red-200 dark:border-stone-700 shadow-sm" title="Ubah Tema">
+                    <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="4" />
-                        <path d="M12 2v2" />
-                        <path d="M12 20v2" />
-                        <path d="M4.93 4.93l1.41 1.41" />
-                        <path d="M17.66 17.66l1.41 1.41" />
-                        <path d="M2 12h2" />
-                        <path d="M20 12h2" />
-                        <path d="M6.34 17.66l-1.41 1.41" />
-                        <path d="M19.07 4.93l-1.41 1.41" />
+                        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
                     </svg>
-                    <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-700 dark:text-stone-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                     </svg>
                 </button>
-                <button id="refreshBtn" class="w-10 sm:w-auto h-10 px-0 sm:px-4 flex items-center justify-center gap-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-sm font-bold transition-all shadow-md" title="Refresh Halaman">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                <button id="refreshBtn" class="w-10 sm:w-auto h-10 px-0 sm:px-4 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white text-sm font-bold transition-all shadow-md active:scale-95" title="Refresh Halaman">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                     </svg>
                     <span class="hidden sm:inline">Refresh</span>
                 </button>
@@ -239,39 +269,57 @@
     </div>
 
     <main class="max-w-3xl mx-auto pt-24 pb-20 px-4">
+        
+        <!-- Header Salam Kemerdekaan Card -->
+        <div class="mb-6 p-4 rounded-2xl bg-gradient-to-r from-red-700 via-red-600 to-rose-700 text-white shadow-lg relative overflow-hidden flex items-center justify-between">
+            <div class="absolute -right-6 -bottom-6 opacity-10 font-black text-8xl pointer-events-none select-none">
+                81
+            </div>
+            <div class="z-10 flex items-center gap-2">
+                <span class="text-lg">🇮🇩</span>
+                <h2 class="font-extrabold text-sm md:text-base tracking-wide uppercase">Dirgahayu Republik Indonesia ke-81</h2>
+            </div>
+            <div class="hidden sm:flex text-2xl animate-wave">
+                🚩
+            </div>
+        </div>
+
         <div class="space-y-6">
             
             <!-- ================= BAGIAN 1: LAPORAN HARIAN ================= -->
             <div class="space-y-4">
-                <button type="button" onclick="toggleMainSection('section1')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-755 border border-slate-300 dark:border-slate-700 rounded-2xl transition-all shadow-sm focus:outline-none">
+                <button type="button" onclick="toggleMainSection('section1')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-stone-800 hover:bg-rose-50/50 dark:hover:bg-stone-700/80 border border-red-200 dark:border-stone-700 rounded-2xl transition-all shadow-sm focus:outline-none group">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 flex items-center justify-center bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 rounded-xl transition-colors">
+                        <div class="w-10 h-10 flex items-center justify-center bg-red-600/10 dark:bg-red-500/20 text-red-600 dark:text-red-400 rounded-xl transition-colors group-hover:bg-red-600 group-hover:text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5.5 h-5.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                         </div>
-                        <h2 class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white uppercase tracking-wider">Laporan Jaga Harian</h2>
+                        <div class="text-left">
+                            <h2 class="text-xs sm:text-sm font-extrabold text-stone-800 dark:text-white uppercase tracking-wider">Laporan Jaga Harian</h2>
+                            <span class="text-[10px] font-semibold text-stone-500 dark:text-stone-400">Ringkasan Kunjungan & Pasien IGD</span>
+                        </div>
                     </div>
-                    <svg id="arrow-section1" class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg id="arrow-section1" class="w-5 h-5 transform transition-transform duration-300 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
 
                 <div id="section1Content" class="collapsible-content expanded">
-                    <div class="collapsible-inner pt-4 space-y-6">
+                    <div class="collapsible-inner pt-2 space-y-6">
                         <!-- Informasi Umum -->
-                        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center gap-2 text-sky-600 dark:text-sky-400 font-bold uppercase text-xs tracking-widest">
+                        <section class="bg-white dark:bg-stone-800 rounded-2xl shadow-md border border-red-200 dark:border-stone-700 p-6 transition-colors">
+                            <div class="flex items-center justify-between mb-4 pb-2 border-b border-red-100 dark:border-stone-700">
+                                <div class="flex items-center gap-2 text-red-600 dark:text-red-400 font-bold uppercase text-xs tracking-widest">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
                                     Informasi Umum
                                 </div>
                                 <div class="flex items-center gap-3">
-                                    <button onclick="setDefaultDate()" class="text-[10px] font-bold text-sky-500 hover:text-sky-600 uppercase">Set Hari Ini</button>
-                                    <span class="text-slate-300 dark:text-slate-700">|</span>
-                                    <button onclick="toggleModal(true)" class="text-[10px] font-bold text-red-500 hover:text-red-600 uppercase flex items-center gap-1">
+                                    <button onclick="setDefaultDate()" class="text-[10px] font-bold text-red-600 dark:text-red-400 hover:underline uppercase">Set Hari Ini</button>
+                                    <span class="text-stone-300 dark:text-stone-700">|</span>
+                                    <button onclick="toggleModal(true)" class="text-[10px] font-bold text-stone-500 hover:text-red-600 dark:hover:text-red-400 uppercase flex items-center gap-1 transition-colors">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                         </svg>
@@ -281,12 +329,12 @@
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="space-y-1">
-                                    <label class="text-xs font-bold text-slate-600 dark:text-slate-400 ml-1">Hari & Tanggal</label>
-                                    <input type="text" id="inputDate" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all dark:text-white input-focus-ring" />
+                                    <label class="text-xs font-bold text-stone-600 dark:text-stone-400 ml-1">Hari & Tanggal</label>
+                                    <input type="text" id="inputDate" class="w-full p-3 rounded-xl bg-rose-50/50 dark:bg-stone-900 border border-red-200 dark:border-stone-700 focus:ring-2 focus:ring-red-500/20 outline-none transition-all dark:text-white input-focus-ring font-medium" />
                                 </div>
                                 <div class="space-y-1">
-                                    <label class="text-xs font-bold text-slate-600 dark:text-slate-400 ml-1">Kota</label>
-                                    <input type="text" id="inputCity" value="Mojokerto" readonly class="w-full p-3 rounded-xl bg-slate-200 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 text-slate-500 cursor-not-allowed" />
+                                    <label class="text-xs font-bold text-stone-600 dark:text-stone-400 ml-1">Kota</label>
+                                    <input type="text" id="inputCity" value="Mojokerto" readonly class="w-full p-3 rounded-xl bg-stone-200/60 dark:bg-stone-900/50 border border-red-200 dark:border-stone-700 text-stone-500 cursor-not-allowed font-medium" />
                                 </div>
                             </div>
                         </section>
@@ -294,8 +342,8 @@
                         <div id="shiftsContainer" class="space-y-4"></div>
 
                         <!-- Kendala -->
-                        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors">
-                            <div class="flex items-center gap-2 mb-4 text-amber-600 dark:text-amber-500 font-bold uppercase text-xs tracking-widest">
+                        <section class="bg-white dark:bg-stone-800 rounded-2xl shadow-md border border-red-200 dark:border-stone-700 p-6 transition-colors">
+                            <div class="flex items-center gap-2 mb-4 text-red-600 dark:text-red-400 font-bold uppercase text-xs tracking-widest pb-2 border-b border-red-100 dark:border-stone-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                 </svg>
@@ -303,21 +351,19 @@
                             </div>
                             <div class="grid-textarea-container relative">
                                 <div id="mirror-inputKendala" class="grid-textarea-mirror text-sm p-4 min-h-[80px] border border-transparent"></div>
-                                <textarea id="inputKendala" oninput="mirrorKendala()" class="grid-textarea-input w-full h-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all placeholder:text-slate-400 dark:text-white input-focus-ring" placeholder="Tuliskan kendala hari ini..."></textarea>
+                                <textarea id="inputKendala" oninput="mirrorKendala()" class="grid-textarea-input w-full h-full p-4 rounded-xl bg-rose-50/50 dark:bg-stone-900 border border-red-200 dark:border-stone-700 focus:ring-2 focus:ring-red-500/20 outline-none transition-all placeholder:text-stone-400 dark:text-white input-focus-ring" placeholder="Tuliskan kendala operasional hari ini..."></textarea>
                             </div>
                         </section>
 
                         <!-- Preview Section -->
-                        <section class="bg-slate-900 dark:bg-black rounded-2xl shadow-2xl overflow-hidden border border-slate-800">
-                            <button type="button" onclick="togglePreviewSection()" class="w-full px-6 py-4 bg-slate-800 hover:bg-slate-700/80 dark:bg-slate-950 dark:hover:bg-slate-900/80 border-b border-slate-700 flex justify-between items-center text-left focus:outline-none transition-all duration-200">
+                        <section class="bg-stone-900 dark:bg-black rounded-2xl shadow-2xl overflow-hidden border border-red-900/40">
+                            <button type="button" onclick="togglePreviewSection()" class="w-full px-6 py-4 bg-gradient-to-r from-stone-900 via-stone-800 to-stone-900 border-b border-stone-800 flex justify-between items-center text-left focus:outline-none transition-all duration-200">
                                 <div class="flex items-center gap-2 text-white font-bold text-xs sm:text-sm">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                    </svg>
-                                    PREVIEW LAPORAN HARIAN
+                                    <span class="text-base">🇮🇩</span>
+                                    <span>PREVIEW LAPORAN HARIAN</span>
                                 </div>
                                 <div class="flex items-center gap-3">
-                                    <div id="validationBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30">
+                                    <div id="validationBadge" class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30">
                                         DOKTER BELUM LENGKAP
                                     </div>
                                     <svg id="arrow-preview" class="w-4 h-4 text-white transform transition-transform duration-300 -rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -327,16 +373,16 @@
                             </button>
 
                             <div id="previewContent" class="collapsible-content">
-                                <textarea id="outputReport" readonly class="w-full p-6 bg-transparent text-emerald-400 font-mono text-xs md:text-sm resize-none outline-none custom-scrollbar" spellcheck="false"></textarea>
-                                <div class="p-4 bg-slate-800 dark:bg-slate-950 flex flex-col gap-3 border-t border-slate-800">
+                                <textarea id="outputReport" readonly class="w-full p-6 bg-transparent text-red-300 font-mono text-xs md:text-sm resize-none outline-none custom-scrollbar" spellcheck="false"></textarea>
+                                <div class="p-4 bg-stone-900 dark:bg-stone-950 flex flex-col gap-3 border-t border-stone-800">
                                     <div class="grid grid-cols-2 gap-3">
-                                        <button id="copyBtn" disabled class="py-3 rounded-xl bg-slate-700 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
+                                        <button id="copyBtn" disabled class="py-3 rounded-xl bg-stone-800 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95 hover:bg-stone-700 border border-stone-700">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-1 4h.01M9 16h.01" />
                                             </svg>
                                             Salin Laporan
                                         </button>
-                                        <button id="waBtn" disabled class="py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
+                                        <button id="waBtn" disabled class="py-3 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:opacity-50 text-white font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                                             </svg>
@@ -351,32 +397,35 @@
             </div>
 
             <!-- ================= BAGIAN 2: HANDOVER JAGA ================= -->
-            <div class="space-y-4 pt-6 border-t border-slate-300 dark:border-slate-800">
-                <button type="button" onclick="toggleMainSection('section2')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-755 border border-slate-300 dark:border-slate-700 rounded-2xl transition-all shadow-sm focus:outline-none">
+            <div class="space-y-4 pt-6 border-t border-red-200 dark:border-stone-800">
+                <button type="button" onclick="toggleMainSection('section2')" class="w-full flex items-center justify-between p-4 bg-white dark:bg-stone-800 hover:bg-rose-50/50 dark:hover:bg-stone-700/80 border border-red-200 dark:border-stone-700 rounded-2xl transition-all shadow-sm focus:outline-none group">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 flex items-center justify-center bg-violet-500/10 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400 rounded-xl transition-colors">
+                        <div class="w-10 h-10 flex items-center justify-center bg-red-600/10 dark:bg-red-500/20 text-red-600 dark:text-red-400 rounded-xl transition-colors group-hover:bg-red-600 group-hover:text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5.5 h-5.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                             </svg>
                         </div>
-                        <h2 class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white uppercase tracking-wider">Handover IGD</h2>
+                        <div class="text-left">
+                            <h2 class="text-xs sm:text-sm font-extrabold text-stone-800 dark:text-white uppercase tracking-wider">Handover IGD</h2>
+                            <span class="text-[10px] font-semibold text-stone-500 dark:text-stone-400">Daftar Pasien Operan Antar Shift</span>
+                        </div>
                     </div>
-                    <svg id="arrow-section2" class="w-5 h-5 transform transition-transform duration-300 -rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg id="arrow-section2" class="w-5 h-5 transform transition-transform duration-300 -rotate-90 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
 
                 <div id="section2Content" class="collapsible-content">
-                    <div class="collapsible-inner pt-4 space-y-6">
-                        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 p-6 transition-colors space-y-4">
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold uppercase text-xs tracking-widest">
+                    <div class="collapsible-inner pt-2 space-y-6">
+                        <section class="bg-white dark:bg-stone-800 rounded-2xl shadow-md border border-red-200 dark:border-stone-700 p-6 transition-colors space-y-4">
+                            <div class="flex items-center justify-between mb-2 pb-2 border-b border-red-100 dark:border-stone-700">
+                                <div class="flex items-center gap-2 text-red-600 dark:text-red-400 font-bold uppercase text-xs tracking-widest">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                                     </svg>
                                     Handover IGD
                                 </div>
-                                <button type="button" onclick="addHandoverRow()" class="px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 transition-all">
+                                <button type="button" onclick="addHandoverRow()" class="px-3.5 py-1.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm active:scale-95">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
                                     </svg>
@@ -386,27 +435,27 @@
                             
                             <div id="handoverContainer" class="space-y-4"></div>
                             
-                            <div id="handoverEmptyState" class="text-center py-6 text-slate-400 dark:text-slate-500 text-xs italic">
+                            <div id="handoverEmptyState" class="text-center py-8 bg-rose-50/40 dark:bg-stone-900/30 rounded-2xl border border-dashed border-red-200 dark:border-stone-700 text-stone-400 dark:text-stone-500 text-xs italic">
                                 Belum ada pasien operan. Klik "Tambah Pasien" untuk membuat daftar operan jaga.
                             </div>
 
                             <!-- Handover Actions Bar -->
-                            <div id="handoverActions" class="hidden pt-4 border-t border-slate-200 dark:border-slate-700 space-y-3">
+                            <div id="handoverActions" class="hidden pt-4 border-t border-stone-200 dark:border-stone-700 space-y-3">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-2">
-                                        <div id="handoverStatusIndicator" class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></div>
-                                        <span id="handoverStatusText" class="text-xs font-bold text-yellow-600 dark:text-yellow-500">
+                                        <div id="handoverStatusIndicator" class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
+                                        <span id="handoverStatusText" class="text-xs font-bold text-amber-600 dark:text-amber-500">
                                             ⚠️ Ada perubahan belum disimpan
                                         </span>
                                     </div>
-                                    <span id="handoverLastSaved" class="text-[10px] text-slate-500 dark:text-slate-500">
+                                    <span id="handoverLastSaved" class="text-[10px] text-stone-500 dark:text-stone-500">
                                         💾 Last save: -
                                     </span>
                                 </div>
                                 
                                 <div class="flex flex-col sm:flex-row gap-3">
                                     <button type="button" id="saveHandoverBtn" onclick="saveHandoverToCloud()" 
-                                            class="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
+                                            class="flex-1 py-3 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
                                         </svg>
@@ -414,18 +463,18 @@
                                     </button>
                                     
                                     <button type="button" id="toggleAutoSyncBtn" onclick="toggleAutoSync()"
-                                            class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold text-sm transition-all shadow flex items-center justify-center gap-2 active:scale-95">
-                                        <svg id="autoSyncIconOn" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            class="flex-1 py-3 rounded-xl bg-stone-100 dark:bg-stone-700 hover:bg-stone-200 dark:hover:bg-stone-600 text-stone-800 dark:text-white font-bold text-sm transition-all shadow flex items-center justify-center gap-2 active:scale-95">
+                                        <svg id="autoSyncIconOn" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                         </svg>
-                                        <svg id="autoSyncIconOff" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <svg id="autoSyncIconOff" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                                         </svg>
                                         <span id="autoSyncLabel">Auto-Sync: ON</span>
                                     </button>
                                 </div>
                                 
-                                <p class="text-center text-[9px] text-slate-400 dark:text-slate-600">
+                                <p class="text-center text-[9px] text-stone-400 dark:text-stone-600">
                                     💡 Tip: Tekan <kbd>Ctrl+S</kbd> untuk simpan cepat
                                 </p>
                             </div>
@@ -437,42 +486,42 @@
     </main>
 
     <!-- Modal 1: Reset Laporan Harian -->
-    <div id="modalOverlay" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-sm p-6 shadow-2xl scale-95 opacity-0 transition-all duration-300" id="modalContent">
-            <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
+    <div id="modalOverlay" class="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-stone-800 rounded-3xl w-full max-w-sm p-6 shadow-2xl scale-95 opacity-0 transition-all duration-300 border border-red-100 dark:border-stone-700" id="modalContent">
+            <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-red-600 dark:text-red-400">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
             </div>
-            <h3 class="text-xl font-bold text-center mb-2 text-slate-800 dark:text-white">Reset Laporan Harian?</h3>
-            <p class="text-slate-500 dark:text-slate-400 text-center text-sm mb-6">Seluruh inputan Laporan Jaga Harian akan dikosongkan. Data Handover IGD tetap tersimpan.</p>
+            <h3 class="text-xl font-bold text-center mb-2 text-stone-800 dark:text-white">Reset Laporan Harian?</h3>
+            <p class="text-stone-500 dark:text-stone-400 text-center text-sm mb-6">Seluruh inputan Laporan Jaga Harian akan dikosongkan. Data Handover IGD tetap tersimpan.</p>
             <div class="flex gap-3">
-                <button id="cancelReset" class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 font-bold text-sm dark:text-white">Batal</button>
-                <button id="confirmReset" class="flex-1 py-3 rounded-xl bg-red-500 text-white font-bold text-sm shadow-lg shadow-red-500/20">Ya, Hapus</button>
+                <button id="cancelReset" class="flex-1 py-3 rounded-xl bg-stone-100 dark:bg-stone-700 font-bold text-sm dark:text-white hover:bg-stone-200 dark:hover:bg-stone-600 transition-colors">Batal</button>
+                <button id="confirmReset" class="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-sm shadow-lg shadow-red-600/20 transition-colors">Ya, Hapus</button>
             </div>
         </div>
     </div>
 
     <!-- Modal 2: Konfirmasi Hapus Pasien Handover -->
-    <div id="deletePatientModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-sm p-6 shadow-2xl scale-95 opacity-0 transition-all duration-300" id="deletePatientContent">
-            <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
+    <div id="deletePatientModal" class="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-stone-800 rounded-3xl w-full max-w-sm p-6 shadow-2xl scale-95 opacity-0 transition-all duration-300 border border-red-100 dark:border-stone-700" id="deletePatientContent">
+            <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-red-600 dark:text-red-400">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
             </div>
-            <h3 class="text-xl font-bold text-center mb-2 text-slate-800 dark:text-white">Hapus Pasien?</h3>
-            <p class="text-slate-500 dark:text-slate-400 text-center text-sm mb-6">Data operan pasien ini akan dihapus secara permanen.</p>
+            <h3 class="text-xl font-bold text-center mb-2 text-stone-800 dark:text-white">Hapus Pasien?</h3>
+            <p class="text-stone-500 dark:text-stone-400 text-center text-sm mb-6">Data operan pasien ini akan dihapus secara permanen.</p>
             <div class="flex gap-3">
-                <button id="cancelDeletePatient" class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 font-bold text-sm dark:text-white">Batal</button>
-                <button id="confirmDeletePatient" class="flex-1 py-3 rounded-xl bg-red-500 text-white font-bold text-sm shadow-lg shadow-red-500/20">Ya, Hapus</button>
+                <button id="cancelDeletePatient" class="flex-1 py-3 rounded-xl bg-stone-100 dark:bg-stone-700 font-bold text-sm dark:text-white hover:bg-stone-200 dark:hover:bg-stone-600 transition-colors">Batal</button>
+                <button id="confirmDeletePatient" class="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-sm shadow-lg shadow-red-600/20 transition-colors">Ya, Hapus</button>
             </div>
         </div>
     </div>
 
     <!-- Notifikasi Toast -->
-    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-slate-800 text-white rounded-2xl shadow-2xl font-bold text-sm flex items-center gap-3 translate-y-20 transition-all duration-300 pointer-events-none">
-        <div class="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-stone-900 text-white rounded-2xl shadow-2xl font-bold text-sm flex items-center gap-3 translate-y-20 transition-all duration-300 pointer-events-none border border-stone-800">
+        <div class="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center text-white">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
@@ -480,7 +529,7 @@
         <span id="toastMsg">Laporan Disalin!</span>
     </div>
 
-    <!-- Firebase SDK -->
+    <!-- ====== SEMUA SCRIPT ====== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -512,11 +561,12 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // Tema Warna Shift khusus Kemerdekaan RI (Gradasi Merah Putih/Rose khas Banner Dirgahayu RI 81)
         const SHIFTS_CONFIG = [
-            { id: 'Pagi1', label: 'Dini Hari', time: '00.00 - 07.00', icon: '🌑', color: 'from-slate-600 to-slate-400' },
-            { id: 'Pagi2', label: 'Shift Pagi', time: '07.00 - 14.00', icon: '☀️', color: 'from-sky-600 to-sky-400' },
-            { id: 'Siang', label: 'Shift Siang', time: '14.00 - 21.00', icon: '🌤️', color: 'from-amber-600 to-amber-400' },
-            { id: 'Malam', label: 'Shift Malam', time: '21.00 - 00.00', icon: '🌙', color: 'from-indigo-600 to-indigo-400' }
+            { id: 'Pagi1', label: 'Dini Hari', time: '00.00 - 07.00', icon: '🌑', color: 'from-red-800 via-red-700 to-rose-800' },
+            { id: 'Pagi2', label: 'Shift Pagi', time: '07.00 - 14.00', icon: '☀️', color: 'from-red-700 via-red-600 to-rose-700' },
+            { id: 'Siang', label: 'Shift Siang', time: '14.00 - 21.00', icon: '🌤️', color: 'from-rose-700 via-red-600 to-red-700' },
+            { id: 'Malam', label: 'Shift Malam', time: '21.00 - 00.00', icon: '🌙', color: 'from-red-900 via-red-700 to-rose-900' }
         ];
 
         const DOCTORS_LIST = [
@@ -542,7 +592,7 @@
         let isSyncingFromDb = false;
         let patientIdToDelete = null;
         let isInitialized = false;
-        let currentlyOpenShift = null; // Track currently open shift
+        let currentlyOpenShift = null; 
         
         // State Handover Save
         let isHandoverDirty = false;
@@ -591,56 +641,60 @@
 
             SHIFTS_CONFIG.forEach(shift => {
                 html += `
-                <div class="shift-block bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-300 dark:border-slate-700 overflow-hidden transition-colors" data-shift-id="${shift.id}">
-                    <button type="button" onclick="toggleShift('${shift.id}')" class="w-full flex items-center justify-between p-4 bg-gradient-to-r ${shift.color} text-white transition-all active:scale-[0.98] shadow-inner">
-                        <div class="flex items-center gap-3">
+                <div class="shift-block bg-white dark:bg-stone-800 rounded-2xl shadow-md border border-red-200 dark:border-stone-700 overflow-hidden transition-colors" data-shift-id="${shift.id}">
+                    <button type="button" onclick="toggleShift('${shift.id}')" class="w-full flex items-center justify-between p-4 bg-gradient-to-r ${shift.color} text-white transition-all active:scale-[0.98] shadow-md relative overflow-hidden group">
+                        <!-- Ornamen Watermark Bendera/HUT -->
+                        <div class="absolute -right-3 -bottom-4 opacity-15 text-5xl font-black pointer-events-none select-none">🇮🇩</div>
+                        <div class="flex items-center gap-3 relative z-10">
                             <span class="text-xl">${shift.icon}</span>
                             <div class="text-left">
-                                <h3 class="font-extrabold text-sm leading-none">${shift.label}</h3>
+                                <h3 class="font-extrabold text-sm leading-none flex items-center gap-2">
+                                    ${shift.label}
+                                </h3>
                                 <span class="text-[10px] opacity-90 uppercase font-bold tracking-wider">${shift.time}</span>
                             </div>
                         </div>
-                        <svg id="icon-${shift.id}" class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
+                        <svg id="icon-${shift.id}" class="w-5 h-5 transform transition-transform duration-300 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
                     </button>
                     
                     <div id="content-${shift.id}" class="collapsible-content">
                         <div class="collapsible-inner p-6 space-y-6">
                             <div class="space-y-1">
-                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Dokter Jaga</label>
+                                <label class="text-xs font-bold text-stone-500 dark:text-stone-400 uppercase tracking-widest">Dokter Jaga</label>
                                 <div class="flex gap-2">
-                                    <select id="dr-${shift.id}" class="flex-1 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 outline-none text-sm dark:text-white input-focus-ring">
+                                    <select id="dr-${shift.id}" class="flex-1 p-3 rounded-xl bg-white dark:bg-stone-900 border border-red-200 dark:border-stone-700 outline-none text-sm dark:text-white input-focus-ring">
                                         <option value="">-- Pilih Dokter --</option>
                                         ${DOCTORS_LIST.map(d => `<option value="${d}">${d}</option>`).join('')}
                                     </select>
-                                    <input type="text" id="drExtra-${shift.id}" placeholder="Pengganti" class="w-1/3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 outline-none text-sm dark:text-white input-focus-ring" />
+                                    <input type="text" id="drExtra-${shift.id}" placeholder="Pengganti" class="w-1/3 p-3 rounded-xl bg-white dark:bg-stone-900 border border-red-200 dark:border-stone-700 outline-none text-sm dark:text-white input-focus-ring" />
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-2 gap-3">
-                                <div class="p-3 bg-sky-100/50 dark:bg-sky-900/20 rounded-xl border border-sky-200 dark:border-sky-800">
-                                    <div class="text-[10px] font-bold text-sky-600 dark:text-sky-400 uppercase tracking-tighter">Total Pasien</div>
-                                    <input type="text" id="summaryTotal-${shift.id}" value="0" readonly class="bg-transparent font-extrabold text-xl outline-none dark:text-sky-400 text-sky-700" />
+                                <div class="p-3 bg-red-50 dark:bg-red-950/40 rounded-xl border border-red-200 dark:border-red-900/60">
+                                    <div class="text-[10px] font-bold text-red-600 dark:text-red-400 uppercase tracking-tighter">Total Pasien</div>
+                                    <input type="text" id="summaryTotal-${shift.id}" value="0" readonly class="bg-transparent font-extrabold text-xl outline-none dark:text-red-400 text-red-700" />
                                 </div>
-                                <div class="p-3 bg-emerald-100/50 dark:bg-emerald-900/20 rounded-xl border border-emerald-200 dark:border-emerald-800">
-                                    <div class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-tighter">Rawat Inap (MRS)</div>
-                                    <input type="text" id="summaryMrs-${shift.id}" value="0" readonly class="bg-transparent font-extrabold text-xl outline-none dark:text-emerald-400 text-emerald-700" />
+                                <div class="p-3 bg-rose-50 dark:bg-rose-950/40 rounded-xl border border-rose-200 dark:border-rose-900/60">
+                                    <div class="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-tighter">Rawat Inap (MRS)</div>
+                                    <input type="text" id="summaryMrs-${shift.id}" value="0" readonly class="bg-transparent font-extrabold text-xl outline-none dark:text-rose-400 text-rose-700" />
                                 </div>
                             </div>
 
                             <div class="space-y-3">
-                                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Rincian Kedatangan</div>
-                                <div class="grid grid-cols-1 gap-4 bg-slate-100 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-300 dark:border-slate-700 transition-colors shadow-inner">
+                                <div class="text-xs font-bold text-stone-500 dark:text-stone-400 uppercase tracking-widest">Rincian Kedatangan</div>
+                                <div class="grid grid-cols-1 gap-4 bg-stone-50 dark:bg-stone-900/50 p-4 rounded-2xl border border-red-100 dark:border-stone-700 transition-colors shadow-inner">
                                     ${SOURCES.map(src => `
                                         <div class="flex items-center gap-4">
-                                            <div class="flex-1 text-xs font-bold text-slate-600 dark:text-slate-400">${src.label}</div>
+                                            <div class="flex-1 text-xs font-bold text-stone-600 dark:text-stone-400">${src.label}</div>
                                             <div class="flex gap-2">
                                                 <div class="relative w-24">
-                                                    <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] text-slate-500 font-extrabold uppercase pointer-events-none">MRS</span>
-                                                    <input type="number" id="${src.id}RI-${shift.id}" value="0" min="0" class="w-full pl-11 pr-2 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring" />
+                                                    <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] text-stone-500 font-extrabold uppercase pointer-events-none">MRS</span>
+                                                    <input type="number" id="${src.id}RI-${shift.id}" value="0" min="0" class="w-full pl-11 pr-2 py-2 rounded-lg bg-white dark:bg-stone-800 border border-red-200 dark:border-stone-700 text-xs font-bold dark:text-white input-focus-ring" />
                                                 </div>
                                                 <div class="relative w-20">
-                                                    <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] text-slate-500 font-extrabold uppercase pointer-events-none">RJ</span>
-                                                    <input type="number" id="${src.id}RJ-${shift.id}" value="0" min="0" class="w-full pl-8 pr-2 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring" />
+                                                    <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] text-stone-500 font-extrabold uppercase pointer-events-none">RJ</span>
+                                                    <input type="number" id="${src.id}RJ-${shift.id}" value="0" min="0" class="w-full pl-8 pr-2 py-2 rounded-lg bg-white dark:bg-stone-800 border border-red-200 dark:border-stone-700 text-xs font-bold dark:text-white input-focus-ring" />
                                                 </div>
                                             </div>
                                         </div>
@@ -650,72 +704,72 @@
 
                             <div class="grid grid-cols-2 gap-3">
                                 <div class="space-y-1">
-                                    <label class="text-[10px] font-bold text-slate-500 uppercase">Pasien BPJS</label>
-                                    <input type="number" id="bpjs-${shift.id}" value="0" min="0" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 outline-none text-sm font-bold dark:text-white input-focus-ring" />
+                                    <label class="text-[10px] font-bold text-stone-500 uppercase">Pasien BPJS</label>
+                                    <input type="number" id="bpjs-${shift.id}" value="0" min="0" class="w-full p-3 rounded-xl bg-white dark:bg-stone-900 border border-red-200 dark:border-stone-700 outline-none text-sm font-bold dark:text-white input-focus-ring" />
                                 </div>
                                 <div class="space-y-1">
-                                    <label class="text-[10px] font-bold text-slate-500 uppercase">Pasien UMUM</label>
-                                    <input type="number" id="umum-${shift.id}" value="0" min="0" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 outline-none text-sm font-bold dark:text-white input-focus-ring" />
+                                    <label class="text-[10px] font-bold text-stone-500 uppercase">Pasien UMUM</label>
+                                    <input type="number" id="umum-${shift.id}" value="0" min="0" class="w-full p-3 rounded-xl bg-white dark:bg-stone-900 border border-red-200 dark:border-stone-700 outline-none text-sm font-bold dark:text-white input-focus-ring" />
                                 </div>
                             </div>
 
                             <div class="space-y-3">
                                 <div class="space-y-1">
-                                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Keterangan / Kasus Rawat Jalan BPJS</label>
+                                    <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider ml-1">Keterangan / Kasus Rawat Jalan BPJS</label>
                                     <div class="grid-textarea-container relative">
                                         <div id="mirror-bpjsKet-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[100px] border border-transparent"></div>
-                                        <textarea id="bpjsKet-${shift.id}" placeholder="Format: Nama - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
+                                        <textarea id="bpjsKet-${shift.id}" placeholder="Format: Nama - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-stone-900 border border-red-200 dark:border-stone-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
                                     </div>
                                 </div>
                                 <div class="space-y-1">
-                                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Keterangan / Kasus Rawat Jalan UMUM</label>
+                                    <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider ml-1">Keterangan / Kasus Rawat Jalan UMUM</label>
                                     <div class="grid-textarea-container relative">
                                         <div id="mirror-umumKet-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[100px] border border-transparent"></div>
-                                        <textarea id="umumKet-${shift.id}" placeholder="Format: Nama - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
+                                        <textarea id="umumKet-${shift.id}" placeholder="Format: Nama - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-stone-900 border border-red-200 dark:border-stone-700 text-xs outline-none dark:text-white input-focus-ring large-area"></textarea>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-700">
-                                 <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Status Akhir & Kasus Khusus</div>
+                            <div class="space-y-4 pt-4 border-t border-stone-200 dark:border-stone-700">
+                                 <div class="text-[10px] font-bold text-stone-500 dark:text-stone-400 uppercase tracking-widest mb-1">Status Akhir & Kasus Khusus</div>
                                  
                                  <div class="space-y-1">
-                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">DOA (Death on Arrival)</label>
+                                     <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider ml-1">DOA (Death on Arrival)</label>
                                      <div class="grid-textarea-container relative">
                                          <div id="mirror-doa-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[80px] border border-transparent"></div>
-                                         <textarea id="doa-${shift.id}" placeholder="Format: Nama - Jam" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                         <textarea id="doa-${shift.id}" placeholder="Format: Nama - Jam" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-stone-900 border border-red-200 dark:border-stone-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
                                      </div>
                                  </div>
                                  
                                  <div class="space-y-1">
-                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Meninggal di IGD</label>
+                                     <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider ml-1">Meninggal di IGD</label>
                                      <div class="grid-textarea-container relative">
                                          <div id="mirror-meninggal-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[80px] border border-transparent"></div>
-                                         <textarea id="meninggal-${shift.id}" placeholder="Format: Nama - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                         <textarea id="meninggal-${shift.id}" placeholder="Format: Nama - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-stone-900 border border-red-200 dark:border-stone-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
                                      </div>
                                  </div>
                                  
                                  <div class="space-y-1">
-                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">MCU (Medical Check-Up)</label>
+                                     <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider ml-1">MCU (Medical Check-Up)</label>
                                      <div class="grid-textarea-container relative">
                                          <div id="mirror-mcu-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[80px] border border-transparent"></div>
-                                         <textarea id="mcu-${shift.id}" placeholder="Format: Jenis Pemeriksaan" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                         <textarea id="mcu-${shift.id}" placeholder="Format: Jenis Pemeriksaan" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-stone-900 border border-red-200 dark:border-stone-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
                                      </div>
                                  </div>
                                  
                                  <div class="space-y-1">
-                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Rujukan Puskesmas</label>
+                                     <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider ml-1">Rujukan Puskesmas</label>
                                      <div class="grid-textarea-container relative">
                                          <div id="mirror-pkmRujukKet-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[80px] border border-transparent"></div>
-                                         <textarea id="pkmRujukKet-${shift.id}" placeholder="Format: Nama PKM - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                         <textarea id="pkmRujukKet-${shift.id}" placeholder="Format: Nama PKM - Diagnosa" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-stone-900 border border-red-200 dark:border-stone-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
                                      </div>
                                  </div>
                                  
                                  <div class="space-y-1">
-                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">Rujuk ke RS Lain</label>
+                                     <label class="text-[10px] font-bold text-stone-500 uppercase tracking-wider ml-1">Rujuk ke RS Lain</label>
                                      <div class="grid-textarea-container relative">
                                          <div id="mirror-rsLain-${shift.id}" class="grid-textarea-mirror text-xs p-3 min-h-[80px] border border-transparent"></div>
-                                         <textarea id="rsLain-${shift.id}" placeholder="Format: Nama Pasien - RS Tujuan" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
+                                         <textarea id="rsLain-${shift.id}" placeholder="Format: Nama Pasien - RS Tujuan" class="grid-textarea-input w-full h-full p-3 rounded-xl bg-white dark:bg-stone-900 border border-red-200 dark:border-stone-700 text-xs outline-none dark:text-white input-focus-ring"></textarea>
                                      </div>
                                  </div>
                             </div>
@@ -752,7 +806,6 @@
             const icon = $(`icon-${id}`);
             if (!content || !icon) return;
 
-            // If this shift is already open, just close it
             if (currentlyOpenShift === id) {
                 content.classList.remove('expanded');
                 icon.classList.remove('rotate-180');
@@ -760,7 +813,6 @@
                 return;
             }
 
-            // Close currently open shift if any
             if (currentlyOpenShift) {
                 const oldContent = $(`content-${currentlyOpenShift}`);
                 const oldIcon = $(`icon-${currentlyOpenShift}`);
@@ -770,12 +822,10 @@
                 }
             }
 
-            // Open the new shift
             content.classList.add('expanded');
             icon.classList.add('rotate-180');
             currentlyOpenShift = id;
 
-            // Scroll to the opened shift after a short delay
             setTimeout(() => {
                 const element = document.querySelector(`[data-shift-id="${id}"]`);
                 if (element) {
@@ -827,14 +877,14 @@
             if (!badge) return;
 
             if (status === 'syncing') {
-                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>${customMsg || 'Menyinkronkan...'}`;
-                badge.className = "flex items-center gap-1 text-[9px] font-bold text-amber-500 uppercase tracking-wider";
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span>${customMsg || 'Menyinkronkan...'}`;
+                badge.className = "flex items-center gap-1 text-[9px] font-bold text-red-500 uppercase tracking-wider";
             } else if (status === 'connected') {
                 badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>Terhubung & Sinkron`;
-                badge.className = "flex items-center gap-1 text-[9px] font-bold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider";
+                badge.className = "flex items-center gap-1 text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider";
             } else if (status === 'error') {
-                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>${customMsg || 'Error'}`;
-                badge.className = "flex items-center gap-1 text-[9px] font-bold text-red-500 uppercase tracking-wider animate-pulse";
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-stone-500"></span>${customMsg || 'Error'}`;
+                badge.className = "flex items-center gap-1 text-[9px] font-bold text-stone-500 uppercase tracking-wider animate-pulse";
             }
         }
 
@@ -1203,7 +1253,7 @@
                 if (label) label.textContent = 'Auto-Sync: ON';
                 if (toggleBtn) {
                     toggleBtn.classList.remove('bg-red-100', 'dark:bg-red-900/30', 'text-red-600', 'dark:text-red-400');
-                    toggleBtn.classList.add('bg-slate-100', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white');
+                    toggleBtn.classList.add('bg-stone-100', 'dark:bg-stone-700', 'text-stone-800', 'dark:text-white');
                 }
                 showToast('🔄 Auto-Sync Diaktifkan');
             } else {
@@ -1211,7 +1261,7 @@
                 if (iconOff) iconOff.classList.remove('hidden');
                 if (label) label.textContent = 'Auto-Sync: OFF';
                 if (toggleBtn) {
-                    toggleBtn.classList.remove('bg-slate-100', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white');
+                    toggleBtn.classList.remove('bg-stone-100', 'dark:bg-stone-700', 'text-stone-800', 'dark:text-white');
                     toggleBtn.classList.add('bg-red-100', 'dark:bg-red-900/30', 'text-red-600', 'dark:text-red-400');
                 }
                 showToast('📴 Auto-Sync Dinonaktifkan');
@@ -1238,10 +1288,10 @@
             }
             
             if (isHandoverDirty) {
-                if (indicator) indicator.className = 'w-2 h-2 rounded-full bg-yellow-500 animate-pulse';
+                if (indicator) indicator.className = 'w-2 h-2 rounded-full bg-amber-500 animate-pulse';
                 if (statusText) {
                     statusText.textContent = '⚠️ Ada perubahan belum disimpan';
-                    statusText.className = 'text-xs font-bold text-yellow-600 dark:text-yellow-500';
+                    statusText.className = 'text-xs font-bold text-amber-600 dark:text-amber-500';
                 }
                 if (saveBtn) saveBtn.disabled = false;
             } else {
@@ -1272,10 +1322,13 @@
             let html = '';
             handoverPatients.forEach((patient, idx) => {
                 html += `
-                    <div id="row-${patient.id}" class="relative bg-slate-50 dark:bg-slate-900/40 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all space-y-3 animate-slide-in">
-                        <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
-                            <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Pasien #${idx + 1}</span>
-                            <button type="button" onclick="removeHandoverRow('${patient.id}')" class="text-xs font-bold text-red-500 hover:text-red-600 flex items-center gap-1 transition-all" title="Hapus Pasien">
+                    <div id="row-${patient.id}" class="relative bg-white dark:bg-stone-900/60 p-4 rounded-xl border border-red-200 dark:border-stone-700/80 transition-all space-y-3 animate-slide-in shadow-sm">
+                        <div class="flex justify-between items-center pb-2 border-b border-red-100 dark:border-stone-800">
+                            <span class="text-xs font-extrabold text-red-600 dark:text-red-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-red-600"></span>
+                                Pasien Operan #${idx + 1}
+                            </span>
+                            <button type="button" onclick="removeHandoverRow('${patient.id}')" class="text-xs font-bold text-stone-400 hover:text-red-600 flex items-center gap-1 transition-all" title="Hapus Pasien">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
@@ -1285,40 +1338,40 @@
 
                         <div class="grid grid-cols-3 gap-2">
                             <div class="col-span-1">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">No. Bed</label>
+                                <label class="text-[10px] font-bold text-stone-500 uppercase tracking-tighter block mb-1">No. Bed</label>
                                 <input type="text" 
                                        id="bed-${patient.id}"
                                        value="${escapeHtml(patient.bed || '')}" 
                                        placeholder="Bed 1" 
-                                       class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none" />
+                                       class="w-full p-2.5 rounded-lg bg-rose-50/30 dark:bg-stone-800 border border-red-200 dark:border-stone-700 text-xs font-bold dark:text-white input-focus-ring outline-none" />
                             </div>
                             <div class="col-span-2">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Nama Pasien</label>
+                                <label class="text-[10px] font-bold text-stone-500 uppercase tracking-tighter block mb-1">Nama Pasien</label>
                                 <input type="text" 
                                        id="name-${patient.id}"
                                        value="${escapeHtml(patient.name || '')}" 
                                        placeholder="Contoh: Ny. S (45th)" 
-                                       class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold dark:text-white input-focus-ring outline-none" />
+                                       class="w-full p-2.5 rounded-lg bg-rose-50/30 dark:bg-stone-800 border border-red-200 dark:border-stone-700 text-xs font-bold dark:text-white input-focus-ring outline-none" />
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div>
-                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Konsulan & Diagnosa / Masalah</label>
+                                <label class="text-[10px] font-bold text-stone-500 uppercase tracking-tighter block mb-1">Konsulan & Diagnosa / Masalah</label>
                                 <div class="grid-textarea-container relative">
                                     <div id="mirror-consul-${patient.id}" class="grid-textarea-mirror text-xs p-2.5 min-h-[140px] border border-transparent whitespace-pre-wrap break-all">${escapeHtml(patient.consul || '')}\n</div>
                                     <textarea id="consul-${patient.id}"
                                               placeholder="Tulis diagnosa lengkap..." 
-                                              class="grid-textarea-input w-full h-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none">${escapeHtml(patient.consul || '')}</textarea>
+                                              class="grid-textarea-input w-full h-full p-2.5 rounded-lg bg-rose-50/30 dark:bg-stone-800 border border-red-200 dark:border-stone-700 text-xs dark:text-white input-focus-ring outline-none">${escapeHtml(patient.consul || '')}</textarea>
                                 </div>
                             </div>
                             <div>
-                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter block mb-1">Balasan Konsulan / Tindak Lanjut</label>
+                                <label class="text-[10px] font-bold text-stone-500 uppercase tracking-tighter block mb-1">Balasan Konsulan / Tindak Lanjut</label>
                                 <div class="grid-textarea-container relative">
                                     <div id="mirror-reply-${patient.id}" class="grid-textarea-mirror text-xs p-2.5 min-h-[140px] border border-transparent whitespace-pre-wrap break-all">${escapeHtml(patient.reply || '')}\n</div>
                                     <textarea id="reply-${patient.id}"
                                               placeholder="Tulis rencana terapi..." 
-                                              class="grid-textarea-input handover-textarea w-full h-full p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs dark:text-white input-focus-ring outline-none">${escapeHtml(patient.reply || '')}</textarea>
+                                              class="grid-textarea-input handover-textarea w-full h-full p-2.5 rounded-lg bg-rose-50/30 dark:bg-stone-800 border border-red-200 dark:border-stone-700 text-xs dark:text-white input-focus-ring outline-none">${escapeHtml(patient.reply || '')}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -1467,7 +1520,7 @@
             
             if (validationBadge) {
                 validationBadge.textContent = isValid ? "DATA LENGKAP" : "DOKTER BELUM LENGKAP";
-                validationBadge.className = isValid ? "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" : "px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30";
+                validationBadge.className = isValid ? "px-2.5 py-1 rounded-md text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" : "px-2.5 py-1 rounded-md text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30";
             }
             if (copyBtn) copyBtn.disabled = !isValid;
             if (waBtn) waBtn.disabled = !isValid;
@@ -1477,7 +1530,7 @@
             reportText += `\n` + detailsBlock;
             reportText += `*KENDALA / MASALAH HARI INI:*\n`;
             reportText += `${getVal('inputKendala') || '-'}\n\n`;
-            reportText += `Terima Kasih.`;
+            reportText += `Terima Kasih. Merdeka! 🇮🇩`;
 
             const outputReport = $('outputReport');
             if (outputReport) outputReport.value = reportText;
