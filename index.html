@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan IGD - HUT RI ke-81</title>
+    <title>Laporan IGD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -1530,7 +1530,7 @@
             reportText += `\n` + detailsBlock;
             reportText += `*KENDALA / MASALAH HARI INI:*\n`;
             reportText += `${getVal('inputKendala') || '-'}\n\n`;
-            reportText += `Terima Kasih. Merdeka! 🇮🇩`;
+            reportText += `Terima Kasih.`;
 
             const outputReport = $('outputReport');
             if (outputReport) outputReport.value = reportText;
